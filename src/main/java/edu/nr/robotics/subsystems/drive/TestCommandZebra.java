@@ -7,11 +7,11 @@
 
 package edu.nr.robotics.subsystems.drive;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.nr.lib.units.Distance;
 
 
-public class TestCommandZebra extends Command {
+public class TestCommandZebra extends NRCommand {
 
   public TestCommandZebra() {
 

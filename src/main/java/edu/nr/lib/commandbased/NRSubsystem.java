@@ -6,8 +6,9 @@ import java.util.TimerTask;
 
 import edu.nr.lib.interfaces.Periodic;
 import edu.nr.lib.interfaces.SmartDashboardSource;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
  * Every subsystem that extends NRSubsystem should have a singleton.
@@ -16,7 +17,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  * 
  * initDefaultCommand() and setDefaultCommand() should never be called.
  */
-public abstract class NRSubsystem extends Subsystem implements SmartDashboardSource, Periodic {
+public abstract class NRSubsystem extends SubsystemBase implements SmartDashboardSource, Periodic {
 
 	public static ArrayList<NRSubsystem> subsystems = new ArrayList<>();
 
