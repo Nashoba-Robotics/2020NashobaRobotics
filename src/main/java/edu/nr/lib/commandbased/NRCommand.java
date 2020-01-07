@@ -18,21 +18,29 @@ import edu.wpi.first.wpilibj.Timer;
 public class NRCommand extends CommandBase {
 
 	boolean forceCancel = false;
+	boolean inGroup = false;
 
 	//Just FYI this doesn't work you need to copy paste more stuff from WPIOldCommands/.../Commands.java
 	private double m_timeout = -1;
 	//Just FYI this doesn't work you need to copy paste more stuff from WPIOldCommands/.../Commands.java
 	private double m_startTime = -1;
 
-	public NRCommand(ArrayList<NRSubsystem> subsystems) {
+	public NRCommand(ArrayList<NRSubsystem> subsystems, boolean b) {
 		super();
 		requires(subsystems);
+		this.inGroup = b;
 	}
 	
+	public NRCommand(){
+		super();
+		this.inGroup = false;
+	}
 	
-	public NRCommand(NRSubsystem[] subsystems) {
+	public NRCommand(NRSubsystem[] subsystems, boolean b) {
 		super();
 		ArrayList<NRSubsystem> subsystemsArrList = new ArrayList<>();
+		this.inGroup = b;
+
 		for (int i = 0; i < subsystems.length; i++) {
 			subsystemsArrList.add(subsystems[i]);
 		}
@@ -44,30 +52,35 @@ public class NRCommand extends CommandBase {
 	 * 
 	 * @param name
 	 */
-	public NRCommand(ArrayList<NRSubsystem> subsystems, String name) {
+	public NRCommand(ArrayList<NRSubsystem> subsystems, String name, boolean b) {
 		super();
 		setName(name);
 		requires(subsystems);
+		this.inGroup = b;
 	}
 
-	public NRCommand(ArrayList<NRSubsystem> subsystems, String name, double timeout) {
+	public NRCommand(ArrayList<NRSubsystem> subsystems, String name, double timeout, boolean b) {
 		//super(timeout);
 		super();
 		setTimeout(timeout);
 		setName(name);
 		requires(subsystems);
+		this.inGroup = b;
+
 	}
 
-	public NRCommand(ArrayList<NRSubsystem> subsystems, double timeout) {
+	public NRCommand(ArrayList<NRSubsystem> subsystems, double timeout, boolean b) {
 		//super(timeout);
 		super();
 		setTimeout(timeout);
 		requires(subsystems);
+		this.inGroup = b;
 	}
 	
-	public NRCommand(NRSubsystem subsystem) {
+	public NRCommand(NRSubsystem subsystem, boolean b) {
 		super();
 		addRequirements(subsystem);
+		this.inGroup = b;
 	}
 
 	/**
@@ -75,31 +88,35 @@ public class NRCommand extends CommandBase {
 	 * 
 	 * @param name
 	 */
-	public NRCommand(NRSubsystem subsystem, String name) {
+	public NRCommand(NRSubsystem subsystem, String name, boolean b) {
 		super();
 		setName(name);
 		addRequirements(subsystem);
+		this.inGroup = b;
 	}
 
-	public NRCommand(NRSubsystem subsystem, String name, double timeout) {
+	public NRCommand(NRSubsystem subsystem, String name, double timeout, boolean b) {
 		//super(timeout);
 		super();
 		setTimeout(timeout);
 		setName(name);
 		addRequirements(subsystem);
+		this.inGroup = b;
 	}
 
-	public NRCommand(NRSubsystem subsystem, double timeout) {
+	public NRCommand(NRSubsystem subsystem, double timeout, boolean b) {
 		//super(timeout);
 		super();
 		setTimeout(timeout);
 		addRequirements(subsystem);
+		this.inGroup = b;
 	}
 	
 
 	
-	public NRCommand() {
+	public NRCommand(boolean b) {
 		super();
+		this.inGroup = b;
 	}
 
 	/**
@@ -107,21 +124,25 @@ public class NRCommand extends CommandBase {
 	 * 
 	 * @param name
 	 */
-	public NRCommand(String name) {
+	public NRCommand(String name, boolean b) {
 		super();
 		setName(name);
+		this.inGroup = b;
 	}
 
-	public NRCommand(String name, double timeout) {
+	public NRCommand(String name, double timeout, boolean b) {
 		//super(timeout);
 		super();
 		setTimeout(timeout);
 		setName(name);
+		this.inGroup = b;
 	}
+
 	//Ethan has small arms
-	public NRCommand(double timeout) {
+	public NRCommand(double timeout, boolean b) {
 		//super(timeout);
 		setTimeout(timeout);
+		this.inGroup = b;
 	}
 	
 	private void requires(ArrayList<NRSubsystem> subsystems) {

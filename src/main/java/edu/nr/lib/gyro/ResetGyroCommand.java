@@ -7,8 +7,8 @@ import edu.nr.robotics.subsystems.drive.Drive;
 
 public class ResetGyroCommand extends NRCommand {
 
-	public ResetGyroCommand() {
-		
+	public ResetGyroCommand(boolean b) {
+		super(b);
 	}
 
 	@Override

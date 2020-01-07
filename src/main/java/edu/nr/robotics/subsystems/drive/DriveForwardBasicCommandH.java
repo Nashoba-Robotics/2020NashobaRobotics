@@ -13,12 +13,12 @@ public class DriveForwardBasicCommandH extends NRCommand {
 	Distance initialPosition;
 	GyroCorrection gyro;
 
-	public DriveForwardBasicCommandH(Distance distance) {
-		this(distance, Drive.ONE_D_PROFILE_DRIVE_PERCENT);
+	public DriveForwardBasicCommandH(Distance distance, boolean b) {
+		this(distance, Drive.ONE_D_PROFILE_DRIVE_PERCENT, b);
 	}
 
-	public DriveForwardBasicCommandH(Distance distance, double percent) {
-		super(Drive.getInstance());
+	public DriveForwardBasicCommandH(Distance distance, double percent, boolean b) {
+		super(Drive.getInstance(), b);
 		this.driveSpeedPercent = percent;
 		this.distance = distance;
 		gyro = new GyroCorrection();
