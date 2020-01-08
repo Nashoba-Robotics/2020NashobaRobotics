@@ -34,8 +34,8 @@ public class EnableReverseTwoDMotionProfile extends NRCommand {
 		private int index = 0;
 
 		public EnableReverseTwoDMotionProfile(Distance endX, Distance endY, Angle endAngle, Distance xPoint1,
-			Distance yPoint1, Angle anglePoint1Angle, double drivePercent, double accelPercent, String profileName) {
-			super(Drive.getInstance());
+			Distance yPoint1, Angle anglePoint1Angle, double drivePercent, double accelPercent, String profileName, boolean b) {
+			super(Drive.getInstance(), b);
 			this.endX = endX;
 			this.endY = endY;
 			this.endAngle = endAngle;

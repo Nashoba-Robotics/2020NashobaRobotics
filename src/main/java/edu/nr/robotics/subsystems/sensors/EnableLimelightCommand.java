@@ -14,6 +14,10 @@ public class EnableLimelightCommand extends NRCommand {
 
 	}	
 
+	public void start(){
+		onStart();
+	}
+
 	protected void onStart() {
 		EnabledSensors.limelightEnabled = boo;
 

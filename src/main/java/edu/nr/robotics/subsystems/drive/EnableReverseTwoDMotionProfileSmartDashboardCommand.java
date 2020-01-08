@@ -22,8 +22,8 @@ public class EnableReverseTwoDMotionProfileSmartDashboardCommand extends NRComma
 	private double profileStartTimeMs = 0;
 	private int index = 0;
 
-	public EnableReverseTwoDMotionProfileSmartDashboardCommand() {
-		super(Drive.getInstance());
+	public EnableReverseTwoDMotionProfileSmartDashboardCommand(boolean b) {
+		super(Drive.getInstance(), b);
 	}
 
 	@Override

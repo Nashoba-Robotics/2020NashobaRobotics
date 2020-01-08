@@ -34,10 +34,10 @@ public class DriveTuningCommand extends NRCommand {
 		maxSpeedRight = Speed.ZERO;
         counter ++;
         
-		if (counter * percentInterval + minPercent < DIST_CHANGE_THRESHOLD) {
-			new DriveForwardBasicCommand(SLOW_DIST, counter * percentInterval + minPercent).start();
+		if (counter * percentInterval + minPercent < DIST_CHANGE_THRESHOLD) { // this may be very broken
+			new DriveForwardBasicCommand(SLOW_DIST, counter * percentInterval + minPercent, false);
 		} else {
-			new DriveForwardBasicCommand(FAST_DIST, counter * percentInterval + minPercent).start();
+			new DriveForwardBasicCommand(FAST_DIST, counter * percentInterval + minPercent, false);
 		}
 	}
 

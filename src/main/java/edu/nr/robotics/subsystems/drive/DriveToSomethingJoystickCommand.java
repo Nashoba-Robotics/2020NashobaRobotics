@@ -12,8 +12,8 @@ public class DriveToSomethingJoystickCommand extends NRCommand {
 
     Pipeline pipeline;
 
-    public DriveToSomethingJoystickCommand(Pipeline pipeline) {
-        super(Drive.getInstance());
+    public DriveToSomethingJoystickCommand(Pipeline pipeline, boolean b) {
+        super(Drive.getInstance(), b);
         this.pipeline = pipeline;
     }
 

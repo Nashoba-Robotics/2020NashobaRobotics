@@ -33,8 +33,8 @@ public class DriveToTargetCommand extends NRCommand {
     double outputLeft;
     double outputRight;
 
-	public DriveToTargetCommand() {
-		super(Drive.getInstance());
+	public DriveToTargetCommand(boolean b) {
+		super(Drive.getInstance(), b);
 	}
 	
 	@Override

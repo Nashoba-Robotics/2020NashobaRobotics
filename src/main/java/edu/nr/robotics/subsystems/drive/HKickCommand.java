@@ -13,8 +13,8 @@ public class HKickCommand extends NRCommand {
 
     boolean finished = false;
 
-    public HKickCommand(double drivePercent, Time kickTime) {
-        super(Drive.getInstance());
+    public HKickCommand(double drivePercent, Time kickTime, boolean b) {
+        super(Drive.getInstance(), b);
 
         this.drivePercent = drivePercent;
         this.kickTime = kickTime;

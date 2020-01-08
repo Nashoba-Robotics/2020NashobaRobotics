@@ -41,6 +41,7 @@
             "artifactId": "SparkMax-java",
             "groupId": "com.revrobotics.frc",
             "version": "1.5.1"
+        
         }
     ],
     "jniDependencies": [

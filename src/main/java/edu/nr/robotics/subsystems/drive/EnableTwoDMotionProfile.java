@@ -35,8 +35,8 @@ public class EnableTwoDMotionProfile extends NRCommand {
 
 	private final Distance END_THRESHOLD = Drive.END_THRESHOLD;
 
-	public EnableTwoDMotionProfile(Distance endX, Distance endY, Angle endAngle, Distance xPoint1, Distance yPoint1, Angle anglePoint1Angle, double drivePercent, double accelPercent, String profileName) {
-		super(Drive.getInstance());
+	public EnableTwoDMotionProfile(Distance endX, Distance endY, Angle endAngle, Distance xPoint1, Distance yPoint1, Angle anglePoint1Angle, double drivePercent, double accelPercent, String profileName, boolean b) {
+		super(Drive.getInstance(), b);
 		this.endX = endX;
 		this.endY = endY;
 		this.endAngle = endAngle;

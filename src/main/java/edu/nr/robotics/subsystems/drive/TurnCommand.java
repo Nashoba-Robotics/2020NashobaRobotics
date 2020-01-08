@@ -14,8 +14,8 @@ public class TurnCommand extends NRCommand {
 	private double turnPercent;
 	private boolean reachedSetVel = false;
 
-	public TurnCommand(DoublePIDOutput out, Angle angleToTurn, double turnPercent) {
-		super(Drive.getInstance());
+	public TurnCommand(DoublePIDOutput out, Angle angleToTurn, double turnPercent, boolean b) {
+		super(Drive.getInstance(), b);
 		this.out = out;
 		this.angleToTurn = angleToTurn;
 		this.turnPercent = turnPercent;

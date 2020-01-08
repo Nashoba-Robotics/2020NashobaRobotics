@@ -14,8 +14,8 @@ public class TurnToSomethingCommand extends NRCommand {
     private boolean reachedSetVel = false;
     private double initTime;
 
-    public TurnToSomethingCommand(Pipeline pipeline) {
-        super(Drive.getInstance());
+    public TurnToSomethingCommand(Pipeline pipeline, boolean b) {
+        super(Drive.getInstance(), b);
         this.pipeline = pipeline;
     }
 

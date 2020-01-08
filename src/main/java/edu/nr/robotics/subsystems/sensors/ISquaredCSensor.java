@@ -3,6 +3,7 @@ package edu.nr.robotics.subsystems.sensors;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
+import com.revrobotics.ColorSensorV3;
 
 public class ISquaredCSensor implements Sensor {
 
@@ -10,7 +11,7 @@ public class ISquaredCSensor implements Sensor {
 
     private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
    
-   
+    
         Color detectedColor = m_colorSensor.getColor();
 
    
@@ -26,6 +27,10 @@ public class ISquaredCSensor implements Sensor {
         
 
         SmartDashboard.putNumber("Proximity", proximity);
+
+        public boolean get(){
+            return false;
+        }
   
 
 

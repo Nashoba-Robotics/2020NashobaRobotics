@@ -16,9 +16,7 @@ import edu.nr.robotics.subsystems.drive.EnableSniperTurnMode;
 import edu.nr.robotics.subsystems.drive.TurnCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.nr.robotics.subsystems.drive.TestTwoCommand;
 
-import edu.nr.robotics.subsystems.drive.TestCommandZebra;
 
 public class OI implements SmartDashboardSource {
 
@@ -85,10 +83,7 @@ public class OI implements SmartDashboardSource {
     }
 
     public void initDriveLeft() {
-        // hybrid track
-        new JoystickButton(driveLeft, TEST_COMMAND_NUMBER).whenPressed(new TestCommandZebra());
-        new JoystickButton(driveLeft, TEST2_COMMAND_NUMBER).whenPressed(new TurnCommand(Drive.getInstance(), 
-            new Angle(360, Angle.Unit.DEGREE), Drive.MAX_PROFILE_TURN_PERCENT));
+        //buttons go here
     }
 
     public void initDriveRight() {
