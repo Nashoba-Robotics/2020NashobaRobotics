@@ -1,6 +1,6 @@
 package edu.nr.lib.interfaces;
 
-import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.nr.lib.motionprofiling.PIDSourceType;
 
 public interface DoublePIDSource {
   /**

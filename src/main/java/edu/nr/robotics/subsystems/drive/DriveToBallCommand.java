@@ -86,7 +86,7 @@ public class DriveToBallCommand extends NRCommand {
 		outputLeft = moveValue - headingAdjustment;
 		outputRight = moveValue + headingAdjustment;
 		
-		Drive.getInstance().setMotorSpeedInPercent(outputLeft, outputRight, 0);
+		Drive.getInstance().setMotorSpeedInPercent(outputLeft, outputRight);
 	}
 	
 	@Override

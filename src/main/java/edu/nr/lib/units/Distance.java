@@ -19,13 +19,7 @@ public class Distance {
 		/**
 		 * For the drive
 		 */
-		private static final double ENCODER_TICK_DRIVE_PER_INCH = Drive.EFFECTIVE_ENC_TICK_PER_INCH_DRIVE;
-		
-		/**
-		 * For the H drive
-		 */
-		private static final double ENCODER_REV_DRIVE_H_PER_INCH = Drive.EFFECTIVE_ENC_REV_PER_INCH_H_DRIVE;
-		
+		private static final double ENCODER_TICK_DRIVE_PER_INCH = Drive.EFFECTIVE_ENC_TICK_PER_INCH_DRIVE;		
 	
 	
 		
@@ -45,9 +39,6 @@ public class Distance {
 			if(this == Unit.MAGNETIC_ENCODER_TICK_DRIVE) {
 				return val / ENCODER_TICK_DRIVE_PER_INCH;
 			}
-			if(this == Unit.ENCODER_REV_H) {
-				return val / ENCODER_REV_DRIVE_H_PER_INCH;
-			}
 			return 0;
 		}
 		
@@ -63,9 +54,6 @@ public class Distance {
 			}
 			if(this == Unit.MAGNETIC_ENCODER_TICK_DRIVE) {
 				return ENCODER_TICK_DRIVE_PER_INCH * val;
-			}
-			if(this == Unit.ENCODER_REV_H) {
-				return val * ENCODER_REV_DRIVE_H_PER_INCH;
 			}
 			return 0;
 		}

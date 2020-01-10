@@ -9,7 +9,6 @@ import edu.nr.lib.interfaces.DoublePIDOutput;
 import edu.nr.lib.interfaces.DoublePIDSource;
 import edu.nr.lib.interfaces.SmartDashboardSource;
 import edu.nr.robotics.Robot;
-import edu.wpi.first.wpilibj.PIDSourceType;
 
 public class OneDimensionalMotionProfilerTwoMotor extends TimerTask implements OneDimensionalMotionProfiler, SmartDashboardSource {
 

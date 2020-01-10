@@ -38,7 +38,7 @@ public class DriveForwardBasicCommand extends NRCommand {
     }
 
     public void onEnd(){
-        Drive.getInstance().setMotorSpeedInPercent(0,0,0);
+        Drive.getInstance().setMotorSpeedInPercent(0,0);
     }
 
 

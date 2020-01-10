@@ -10,11 +10,11 @@ import edu.nr.robotics.subsystems.drive.CSVSaverDisable;
 import edu.nr.robotics.subsystems.drive.CSVSaverEnable;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.DriveForwardBasicSmartDashboardCommand;
-import edu.nr.robotics.subsystems.drive.DriveForwardSmartDashboardCommandH;
 import edu.nr.robotics.subsystems.drive.EnableMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.EnableReverseTwoDMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.EnableTwoDMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.TurnSmartDashboardCommand;
+import edu.nr.robotics.subsystems.sensors.ISquaredCSensor;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
@@ -28,6 +28,8 @@ public class Robot extends TimedRobot {
     private static Robot singleton;
 
     private static double period = 0.02;
+
+    ISquaredCSensor colorSensor = new ISquaredCSensor();
 
     double dt;
     double dtTot = 0;
@@ -80,7 +82,6 @@ public class Robot extends TimedRobot {
         if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putData(new DriveForwardBasicSmartDashboardCommand(false));
             SmartDashboard.putData(new EnableMotionProfileSmartDashboardCommand(false));
-			SmartDashboard.putData(new DriveForwardSmartDashboardCommandH(false));
 			SmartDashboard.putData(new TurnSmartDashboardCommand(false));
             SmartDashboard.putData(new EnableTwoDMotionProfileSmartDashboardCommand(false));
             SmartDashboard.putData(new EnableReverseTwoDMotionProfileSmartDashboardCommand(false));
@@ -158,6 +159,8 @@ public class Robot extends TimedRobot {
             Periodic.runAll();
             SmartDashboardSource.runAll();
 
+
+            System.out.println(colorSensor.getColor());
         }
 
         public void enabledInit() {

@@ -4,7 +4,7 @@ import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.motionprofiling.OneDimensionalMotionProfilerTwoMotor;
 import edu.nr.lib.units.Distance;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
-import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.nr.lib.motionprofiling.PIDSourceType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class EnableMotionProfileSmartDashboardCommand extends NRCommand {
@@ -21,10 +21,9 @@ public class EnableMotionProfileSmartDashboardCommand extends NRCommand {
 	}
 
 	public void onStart() {
-		Drive.getInstance().enableMotionProfiler(Drive.endX, Drive.endY, Drive.oneDDrivePercent, Drive.oneDAccelPercent);
+		Drive.getInstance().enableMotionProfiler(Drive.endX, Drive.oneDDrivePercent, Drive.oneDAccelPercent);
 		initialLeftPosition = Drive.getInstance().getLeftPosition();
 		initialRightPosition = Drive.getInstance().getRightPosition();
-		initialHPosition = Drive.getInstance().getHPosition();
 	}
 
 	public void onExecute() {
@@ -58,7 +57,7 @@ public class EnableMotionProfileSmartDashboardCommand extends NRCommand {
 
 	public void onEnd() {
 		Drive.getInstance().disableProfiler();
-		Drive.getInstance().setMotorSpeedInPercent(0, 0, 0);
+		Drive.getInstance().setMotorSpeedInPercent(0,0);
 	}
 
 	public boolean isFinishedNR() {

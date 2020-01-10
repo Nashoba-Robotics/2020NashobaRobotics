@@ -28,12 +28,12 @@ public class DriveForwardBasicSmartDashboardCommand extends NRCommand {
     public void onExecute() {
         double turnValue = gyro.getTurnValue(Drive.kP_thetaOneD, false);
         Drive.getInstance().setMotorSpeedInPercent(Drive.oneDDrivePercent * Drive.endX.signum() - turnValue,
-        Drive.oneDDrivePercent * Drive.endX.signum() + turnValue, 0); 
+        Drive.oneDDrivePercent * Drive.endX.signum() + turnValue); 
     
     }
 
     public void onEnd() {
-        Drive.getInstance().setMotorSpeedInPercent(0,0,0);
+        Drive.getInstance().setMotorSpeedInPercent(0,0);
     }
 
     public boolean isFinishedNR() {

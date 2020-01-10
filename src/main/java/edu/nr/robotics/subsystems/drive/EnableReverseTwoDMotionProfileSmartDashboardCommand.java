@@ -7,7 +7,7 @@ import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
 import edu.nr.robotics.Robot;
-import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.nr.lib.motionprofiling.PIDSourceType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -95,7 +95,7 @@ public class EnableReverseTwoDMotionProfileSmartDashboardCommand extends NRComma
 	@Override
 	public void onEnd() {
 		Drive.getInstance().disableProfiler();
-		Drive.getInstance().setMotorSpeedInPercent(0, 0, 0);
+		Drive.getInstance().setMotorSpeedInPercent(0,0);
 		Drive.getInstance().invertDrive();
 	}
 

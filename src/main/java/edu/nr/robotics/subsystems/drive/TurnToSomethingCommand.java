@@ -53,7 +53,7 @@ public class TurnToSomethingCommand extends NRCommand {
 			outputRight = headingAdjustment;
 		}
 		
-		Drive.getInstance().setMotorSpeedInPercent(outputLeft, outputRight, 0);
+		Drive.getInstance().setMotorSpeedInPercent(outputLeft, outputRight);
     }
     
     protected void onEnd() {

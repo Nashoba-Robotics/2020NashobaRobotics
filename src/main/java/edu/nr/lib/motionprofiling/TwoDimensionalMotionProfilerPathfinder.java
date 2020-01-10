@@ -15,7 +15,6 @@ import edu.nr.lib.units.Time;
 import edu.nr.robotics.Robot;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.drive.Drive;
-import edu.wpi.first.wpilibj.PIDSourceType;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Waypoint;

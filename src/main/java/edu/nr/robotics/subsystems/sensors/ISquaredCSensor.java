@@ -1,38 +1,54 @@
 package edu.nr.robotics.subsystems.sensors;
 
 import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import com.revrobotics.ColorSensorV3;
 
 public class ISquaredCSensor implements Sensor {
 
-    private final I2C.Port i2cPort = I2C.Port.kOnboard;
+    private ColorSensorV3 sensor;
 
-    private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
-   
+    private static final I2C.Port i2cPort = I2C.Port.kOnboard;
+
+    private Color color;
+    private Color defaultColor = Color.kLemonChiffon; // the BEST color
+
+    public ISquaredCSensor() {
+        sensor = new ColorSensorV3(i2cPort);
+        color = defaultColor;
+    }
     
-        Color detectedColor = m_colorSensor.getColor();
+    public ISquaredCSensor(Color color) {
+        sensor = new ColorSensorV3(i2cPort);
+        this.color = color;
+    }
 
-   
-        double IR = m_colorSensor.getIR();
+    public ISquaredCSensor(ColorSensorV3 sensor) {
+        this.sensor = sensor;
+        color = defaultColor;
+    }
 
-    
-        SmartDashboard.putNumber("Red", detectedColor.red);
-        SmartDashboard.putNumber("Green", detectedColor.green);
-        SmartDashboard.putNumber("Blue", detectedColor.blue);
-        SmartDashboard.putNumber("IR", IR);
+    public ISquaredCSensor(ColorSensorV3 sensor, Color color) {
+        this.sensor = sensor;
+        this.color = color;
+    }
 
-        int proximity = m_colorSensor.getProximity();
-        
+    public boolean get(){
+        return color == sensor.getColor();
+    }
 
-        SmartDashboard.putNumber("Proximity", proximity);
+    public Color getColor() {
+        return sensor.getColor();
+    }
 
-        public boolean get(){
-            return false;
-        }
+    public int getIRColor(){
+        return sensor.getIR();
+    }
+
+    public double getProximity() {
+        return sensor.getProximity();
+    }
   
-
 
 }
 

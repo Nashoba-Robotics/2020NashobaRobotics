@@ -44,7 +44,7 @@ public class DriveToSomethingJoystickCommand extends NRCommand {
 		double outputLeft = moveValue - headingAdjustment;
         double outputRight = moveValue + headingAdjustment;   
 
-        Drive.getInstance().setMotorSpeedInPercent(outputLeft, outputRight, 0);
+        Drive.getInstance().setMotorSpeedInPercent(outputLeft, outputRight);
 
     }
 

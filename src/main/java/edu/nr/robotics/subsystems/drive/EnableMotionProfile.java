@@ -2,9 +2,9 @@ package edu.nr.robotics.subsystems.drive;
 
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.motionprofiling.OneDimensionalMotionProfilerTwoMotor;
+import edu.nr.lib.motionprofiling.PIDSourceType;
 import edu.nr.lib.units.Distance;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
-import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class EnableMotionProfile extends NRCommand {
@@ -30,10 +30,9 @@ public class EnableMotionProfile extends NRCommand {
 	}
 	
 	public void onStart() {
-		Drive.getInstance().enableMotionProfiler(dist, distH, maxVelPercent, maxAccelPercent);
+		Drive.getInstance().enableMotionProfiler(dist, maxVelPercent, maxAccelPercent);
 		initialLeftPosition = Drive.getInstance().getLeftPosition();
 		initialRightPosition = Drive.getInstance().getRightPosition();
-		initialHPosition = Drive.getInstance().getHPosition();
 	}
 
 	public void onExecute() {
@@ -74,7 +73,7 @@ public class EnableMotionProfile extends NRCommand {
 
 	public void onEnd() {
 		Drive.getInstance().disableProfiler();
-		Drive.getInstance().setMotorSpeedInPercent(0, 0, 0);
+		Drive.getInstance().setMotorSpeedInPercent(0,0);
 	}
 
 	public boolean isFinishedNR() {
@@ -91,8 +90,7 @@ public class EnableMotionProfile extends NRCommand {
 								.get(OneDimensionalMotionProfilerTwoMotor.posPoints.size() - 1)) < Drive.END_THRESHOLD
 										.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)
 				&& Drive.getInstance().getLeftVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD)
-				&& Drive.getInstance().getRightVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD)
-				&& Drive.getInstance().getHVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD);
+				&& Drive.getInstance().getRightVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD);
 
 		return finished;
 	}
