@@ -15,8 +15,8 @@ import edu.nr.robotics.subsystems.drive.EnableReverseTwoDMotionProfileSmartDashb
 import edu.nr.robotics.subsystems.drive.EnableTwoDMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.TurnSmartDashboardCommand;
 import edu.nr.robotics.subsystems.sensors.ISquaredCSensor;
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.CameraServer;
+/*import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;*/
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -140,14 +140,15 @@ public class Robot extends TimedRobot {
         
         }
 
-        public void CameraInit() {
+       /* public void CameraInit() {
             new Thread(() -> {
                 UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
                 camera.setResolution(720, 1080);
                 
             }).start();
             
-        }
+        }*/
+
         @Override
         public void testPeriodic() {
 

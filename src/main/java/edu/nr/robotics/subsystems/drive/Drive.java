@@ -696,8 +696,5 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
         rightDrive.setInverted(!rightDrive.getInverted());
         rightDriveFollow1.setInverted(!rightDriveFollow1.getInverted());
         rightDriveFollow2.setInverted(!rightDriveFollow2.getInverted());
-    }
- 
-    
+    }    
 }
-
