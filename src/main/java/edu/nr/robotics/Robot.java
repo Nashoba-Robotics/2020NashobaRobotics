@@ -76,15 +76,15 @@ public class Robot extends TimedRobot {
     public void smartDashboardInit() {
 
         SmartDashboard.putData(new CSVSaverEnable());
-        SmartDashboard.putData(new CSVSaverDisable(false));
+        SmartDashboard.putData(new CSVSaverDisable());
         SmartDashboard.putNumber("Auto Wait Time", 0);
 
         if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
-            SmartDashboard.putData(new DriveForwardBasicSmartDashboardCommand(false));
-            SmartDashboard.putData(new EnableMotionProfileSmartDashboardCommand(false));
-			SmartDashboard.putData(new TurnSmartDashboardCommand(false));
-            SmartDashboard.putData(new EnableTwoDMotionProfileSmartDashboardCommand(false));
-            SmartDashboard.putData(new EnableReverseTwoDMotionProfileSmartDashboardCommand(false));
+            SmartDashboard.putData(new DriveForwardBasicSmartDashboardCommand());
+            SmartDashboard.putData(new EnableMotionProfileSmartDashboardCommand());
+			SmartDashboard.putData(new TurnSmartDashboardCommand());
+            SmartDashboard.putData(new EnableTwoDMotionProfileSmartDashboardCommand());
+            SmartDashboard.putData(new EnableReverseTwoDMotionProfileSmartDashboardCommand());
         }
 
         

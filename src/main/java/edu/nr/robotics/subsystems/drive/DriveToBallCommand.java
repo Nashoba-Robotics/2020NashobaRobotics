@@ -41,8 +41,8 @@ public class DriveToBallCommand extends NRCommand {
     double time = 0;
     double spiketime = 0;
 
-	public DriveToBallCommand(boolean b) {
-		super(Drive.getInstance(), b);
+	public DriveToBallCommand() {
+		super(Drive.getInstance());
     }
 	
 	@Override

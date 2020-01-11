@@ -22,8 +22,8 @@ public class EnableTwoDMotionProfileSmartDashboardCommand extends NRCommand {
 	private double profileStartTimeMs = 0;
 	private int index = 0;
 
-	public EnableTwoDMotionProfileSmartDashboardCommand(boolean b) {
-		super(Drive.getInstance(), b);
+	public EnableTwoDMotionProfileSmartDashboardCommand() {
+		super(Drive.getInstance());
 	}
 
 	@Override

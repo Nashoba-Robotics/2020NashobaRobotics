@@ -536,7 +536,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
         //SmartDashboard.putNumber("MOTOR RUNNING", 0);////test
  
         if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_BASIC_ENABLED) {
-            SmartDashboard.putData(new ResetGyroCommand(false));
+            SmartDashboard.putData(new ResetGyroCommand());
         }
         if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putNumber("Wheel Base Multiplier: ", wheelBaseMultiplier);

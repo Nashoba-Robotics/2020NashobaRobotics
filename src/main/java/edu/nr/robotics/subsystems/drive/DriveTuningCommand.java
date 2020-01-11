@@ -35,9 +35,9 @@ public class DriveTuningCommand extends NRCommand {
         counter ++;
         
 		if (counter * percentInterval + minPercent < DIST_CHANGE_THRESHOLD) { // this may be very broken
-			new DriveForwardBasicCommand(SLOW_DIST, counter * percentInterval + minPercent, false);
+			new DriveForwardBasicCommand(SLOW_DIST, counter * percentInterval + minPercent);
 		} else {
-			new DriveForwardBasicCommand(FAST_DIST, counter * percentInterval + minPercent, false);
+			new DriveForwardBasicCommand(FAST_DIST, counter * percentInterval + minPercent);
 		}
 	}
 

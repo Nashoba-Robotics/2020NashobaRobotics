@@ -16,8 +16,8 @@ public class TurnSmartDashboardCommand extends NRCommand {
     double outputLeft, outputRight;
     double headingAdjustment;
 
-    public TurnSmartDashboardCommand(boolean b) {
-        super(Drive.getInstance(), b);
+    public TurnSmartDashboardCommand() {
+        super(Drive.getInstance());
         this.out = Drive.getInstance();
 
     }

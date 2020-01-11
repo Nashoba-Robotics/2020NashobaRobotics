@@ -11,7 +11,7 @@ public class DoNothingCommand extends NRCommand {
 	 * Run unconnected to any subsystem
 	 */
 	public DoNothingCommand() {
-		super(false);
+		super();
 	}
 	
 	/**
@@ -19,7 +19,7 @@ public class DoNothingCommand extends NRCommand {
 	 * @param subsystem The subsystem to use
 	 */
 	public DoNothingCommand(NRSubsystem s) {
-		super(s, false);
+		super(s);
 	}
 	
 }

@@ -11,8 +11,8 @@ public class DriveForwardBasicSmartDashboardCommand extends NRCommand {
     Distance initialPosition;
     GyroCorrection gyro;
 
-    public DriveForwardBasicSmartDashboardCommand(boolean b) {
-        super(Drive.getInstance(), b);
+    public DriveForwardBasicSmartDashboardCommand() {
+        super(Drive.getInstance());
         gyro = new GyroCorrection();
     }
 

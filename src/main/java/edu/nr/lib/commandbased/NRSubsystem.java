@@ -64,7 +64,7 @@ public abstract class NRSubsystem extends SubsystemBase implements SmartDashboar
                 Command currentCommand = getCurrentCommand();
                 if(currentCommand != joystickCommand) {
                     System.err.println(joystickCommand + " is overriding.");
-                    NRCommand.cancelCommand(getCurrentCommand(), null);
+                    NRCommand.cancelCommand(getCurrentCommand());
                 }
             }
         }

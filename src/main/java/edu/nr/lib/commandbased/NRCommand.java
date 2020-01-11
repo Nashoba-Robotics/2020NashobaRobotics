@@ -18,29 +18,20 @@ import edu.wpi.first.wpilibj.Timer;
 public class NRCommand extends CommandBase {
  
     boolean forceCancel = false;
-    boolean inGroup = false;
-    private NRCommandGroup parent;
- 
-    //Just FYI this doesn't work you need to copy paste more stuff from WPIOldCommands/.../Commands.java
-    private double m_timeout = -1;
-    //Just FYI this doesn't work you need to copy paste more stuff from WPIOldCommands/.../Commands.java
-    private double m_startTime = -1;
- 
-    public NRCommand(ArrayList<NRSubsystem> subsystems, boolean b) {
+
+    public NRCommand(ArrayList<NRSubsystem> subsystems) {
         super();
         requires(subsystems);
-        this.inGroup = b;
     }
     
     public NRCommand(){
         super();
-        this.inGroup = false;
     }
     
-    public NRCommand(NRSubsystem[] subsystems, boolean b) {
+    public NRCommand(NRSubsystem[] subsystems) {
         super();
         ArrayList<NRSubsystem> subsystemsArrList = new ArrayList<>();
-        this.inGroup = b;
+        
  
         for (int i = 0; i < subsystems.length; i++) {
             subsystemsArrList.add(subsystems[i]);
@@ -53,35 +44,35 @@ public class NRCommand extends CommandBase {
     *
     * @param name
     */
-    public NRCommand(ArrayList<NRSubsystem> subsystems, String name, boolean b) {
+    public NRCommand(ArrayList<NRSubsystem> subsystems, String name) {
         super();
         setName(name);
         requires(subsystems);
-        this.inGroup = b;
+        
     }
  
-    public NRCommand(ArrayList<NRSubsystem> subsystems, String name, double timeout, boolean b) {
+    public NRCommand(ArrayList<NRSubsystem> subsystems, String name, double timeout) {
         //super(timeout);
         super();
-        setTimeout(timeout);
+        
         setName(name);
         requires(subsystems);
-        this.inGroup = b;
+        
  
     }
  
-    public NRCommand(ArrayList<NRSubsystem> subsystems, double timeout, boolean b) {
+    public NRCommand(ArrayList<NRSubsystem> subsystems, double timeout) {
         //super(timeout);
         super();
-        setTimeout(timeout);
+        
         requires(subsystems);
-        this.inGroup = b;
+        
     }
     
-    public NRCommand(NRSubsystem subsystem, boolean b) {
+    public NRCommand(NRSubsystem subsystem) {
         super();
         addRequirements(subsystem);
-        this.inGroup = b;
+        
     }
  
     /**
@@ -89,35 +80,28 @@ public class NRCommand extends CommandBase {
     *
     * @param name
     */
-    public NRCommand(NRSubsystem subsystem, String name, boolean b) {
+    public NRCommand(NRSubsystem subsystem, String name) {
         super();
         setName(name);
         addRequirements(subsystem);
-        this.inGroup = b;
+        
     }
  
-    public NRCommand(NRSubsystem subsystem, String name, double timeout, boolean b) {
+    public NRCommand(NRSubsystem subsystem, String name, double timeout) {
         //super(timeout);
         super();
-        setTimeout(timeout);
+        
         setName(name);
         addRequirements(subsystem);
-        this.inGroup = b;
+        
     }
  
-    public NRCommand(NRSubsystem subsystem, double timeout, boolean b) {
+    public NRCommand(NRSubsystem subsystem, double timeout) {
         //super(timeout);
         super();
-        setTimeout(timeout);
+        
         addRequirements(subsystem);
-        this.inGroup = b;
-    }
-    
- 
-    
-    public NRCommand(boolean b) {
-        super();
-        this.inGroup = b;
+        
     }
  
     /**
@@ -125,47 +109,31 @@ public class NRCommand extends CommandBase {
     *
     * @param name
     */
-    public NRCommand(String name, boolean b) {
+    public NRCommand(String name) {
         super();
         setName(name);
-        this.inGroup = b;
+        
     }
  
-    public NRCommand(String name, double timeout, boolean b) {
+    public NRCommand(String name, double timeout) {
         //super(timeout);
         super();
-        setTimeout(timeout);
+        
         setName(name);
-        this.inGroup = b;
+        
     }
  
     //Ethan has small arms
-    public NRCommand(double timeout, boolean b) {
+    public NRCommand(double timeout) {
         //super(timeout);
-        setTimeout(timeout);
-        this.inGroup = b;
+        
+        
     }
     
     private void requires(ArrayList<NRSubsystem> subsystems) {
         for(NRSubsystem s : subsystems) {
             addRequirements(s);
         }
-    }
-    
-    public boolean getGroup()
-    {
-        return inGroup;
-    }
- 
-    public NRCommandGroup getParent()
-    {
-        return parent;
-    }
- 
-    public void addParent(NRCommandGroup parent)
-    {
-        this.parent = parent;
-        this.inGroup = true;
     }
  
     private boolean reset;
@@ -195,24 +163,6 @@ public class NRCommand extends CommandBase {
         onStart();
         reset = false;
     }
- 
-    //Just FYI this doesn't work you need to copy paste more stuff from WPIOldCommands/.../Commands.java
-    protected final synchronized void setTimeout(double seconds) {
-        if (seconds < 0) {
-         throw new IllegalArgumentException("Seconds must be positive.  Given:" + seconds);
-        }
-        m_timeout = seconds;
-     }
-    
-    //Just FYI this doesn't work you need to copy paste more stuff from WPIOldCommands/.../Commands.java
-    private void startTiming() {
-        m_startTime = Timer.getFPGATimestamp();
-     }
- 
-    //Just FYI this doesn't work you need to copy paste more stuff from WPIOldCommands/.../Commands.java
-    public final synchronized double timeSinceInitialized() {
-        return m_startTime < 0 ? 0 : Timer.getFPGATimestamp() - m_startTime;
-     }
  
  
     @Override
@@ -248,18 +198,17 @@ public class NRCommand extends CommandBase {
     
     protected final void makeFinish() {
         System.err.println(getName() + " was made to finish");
-        if(getGroup() == false)
-            cancel();
+        //Needs editing
         forceCancel = true;
     }
     
-    public static void cancelCommand(Command command, NRCommandGroup parent) {
+    public static void cancelCommand(Command command) {
         
         if(command == null)
             return;
         
         System.err.println("Cancelling " + command.getName());
- 
+        /*
         
         if(command instanceof NRCommand)
             ((NRCommand) command).makeFinish();
@@ -267,12 +216,12 @@ public class NRCommand extends CommandBase {
             if(((NRCommand)command).getGroup() != false)
             {
                 //Cancel all other commands in the group
-                parent.cancelCommandGroup();
             }
                 
             else {
                 command.cancel();
             }
+            */
         }
  
     }

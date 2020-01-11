@@ -16,8 +16,8 @@ public class EnableMotionProfileSmartDashboardCommand extends NRCommand {
 	Distance tempRightPosition = Distance.ZERO;
 	Distance tempHPosition = Distance.ZERO;
 
-	public EnableMotionProfileSmartDashboardCommand(boolean b) {
-		super(Drive.getInstance(), b);
+	public EnableMotionProfileSmartDashboardCommand() {
+		super(Drive.getInstance());
 	}
 
 	public void onStart() {

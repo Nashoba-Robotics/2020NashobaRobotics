@@ -14,11 +14,11 @@ package edu.nr.lib.commandbased;
 public abstract class JoystickCommand extends NRCommand {
 
 	public JoystickCommand(NRSubsystem s) {
-		super(s, false);
+		super(s);
 	}
 	
 	public JoystickCommand(NRSubsystem[] s) {
-		super(s, false);
+		super(s);
 	}
 	
 	/**
