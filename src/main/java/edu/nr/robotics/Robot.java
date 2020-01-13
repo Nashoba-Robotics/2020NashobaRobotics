@@ -161,7 +161,11 @@ public class Robot extends TimedRobot {
             SmartDashboardSource.runAll();
 
 
-            System.out.println(colorSensor.getColor());
+            //System.out.println("red: " + colorSensor.getRawColor().red);
+            //System.out.println("green: " + colorSensor.getRawColor().green);
+            //System.out.println("blue: " + colorSensor.getRawColor().blue);
+            System.out.println(colorSensor.getColor().name());
+            //System.out.println(colorSensor.getProximity() + " distancey units");
         }
 
         public void enabledInit() {

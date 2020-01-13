@@ -119,21 +119,12 @@ public class OI implements SmartDashboardSource {
         return -snapDriveJoysticks(driveRight.getX(), DRIVE_JOYSTICK_DEAD_ZONE) * Drive.TURN_JOYSTICK_MULTIPLIER * SPEED_MULTIPLIER;
     }
 
-
-    public double getArcadeHValue() {
-        return snapDriveJoysticks(driveLeft.getX(), DRIVE_JOYSTICK_DEAD_ZONE) * Drive.MOVE_JOYSTICK_MULTIPLIER * SPEED_MULTIPLIER;
-    }
-
     public double getTankLeftValue() {
         return snapDriveJoysticks(driveLeft.getY(), DRIVE_JOYSTICK_DEAD_ZONE);
     }
 
     public double getTankRightValue() {
         return snapDriveJoysticks(driveRight.getY(), DRIVE_JOYSTICK_DEAD_ZONE);
-    }
-
-    public double getTankHValue() {
-        return snapDriveJoysticks(driveLeft.getX(), DRIVE_JOYSTICK_DEAD_ZONE);
     }
 
     public double getDriveLeftXValue() {
@@ -190,11 +181,11 @@ public class OI implements SmartDashboardSource {
     }
 
     public boolean isTankNonZero() {
-        return getTankLeftValue() != 0 || getTankRightValue() != 0 || getTankHValue() != 0;
+        return getTankLeftValue() != 0 || getTankRightValue() != 0;
     } 
 
     public boolean isArcadeNonZero() {
-        return getArcadeMoveValue() != 0 || getArcadeTurnValue() != 0 || getArcadeHValue() != 0;
+        return getArcadeMoveValue() != 0 || getArcadeTurnValue() != 0;
     }
 
     public boolean isDriveNonZero() {
@@ -202,10 +193,6 @@ public class OI implements SmartDashboardSource {
         || getDriveRightYValue() != 0;
     }
     
-    public boolean isHDriveZero() {
-        return snapDriveJoysticks(driveLeft.getX(), DRIVE_JOYSTICK_DEAD_ZONE) == 0;
-    }
-
     public boolean isKidModeOn(){
         //do later if needed
         return false; //kidModeSwitch.get();
