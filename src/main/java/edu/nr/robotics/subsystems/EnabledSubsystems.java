@@ -7,5 +7,7 @@ public class EnabledSubsystems {
     public static final boolean DRIVE_SMARTDASHBOARD_BASIC_ENABLED               = true;
     public static final boolean DRIVE_SMARTDASHBOARD_DEBUG_ENABLED               = true; 
 
+    public static final boolean TURRET_ENABLED                                   = true;
+    public static final boolean TURRET_SMARTDASHBOARD_DEBUG_ENABLED              = true;
     public static boolean LIMELIGHT_ENABLED                                      = false;
 }

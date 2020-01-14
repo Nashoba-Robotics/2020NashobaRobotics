@@ -1,6 +1,7 @@
 package edu.nr.lib.units;
 
 import edu.nr.lib.Units;
+import edu.nr.robotics.subsystems.turret.Turret;
 
 public class Angle {
 	
@@ -10,7 +11,7 @@ public class Angle {
 	
 	public enum Unit implements GenericUnit {
 		DEGREE, ROTATION, RADIAN, MAGNETIC_ENCODER_NATIVE_UNITS, 
-		MAGNETIC_ENCODER_TICK;
+		MAGNETIC_ENCODER_TICK, TURRET_ENCODER_TICK;
 		
 		public static final Unit defaultUnit = DEGREE;
 		
@@ -19,7 +20,8 @@ public class Angle {
 		private static final double MAGNETIC_ENCODER_NATIVE_UNITS_PER_DEGREE = MAGNETIC_ENCODER_NATIVE_UNITS_PER_ROTATION * ROTATIONS_PER_DEGREE; 
 		private static final double RADIANS_PER_DEGREE = 2 * Math.PI / 360.0;
 		private static final double MAGNETIC_ENCODER_TICKS_PER_DEGREE = MAGNETIC_ENCODER_NATIVE_UNITS_PER_ROTATION * ROTATIONS_PER_DEGREE / Units.NATIVE_UNITS_PER_TICK;
-				
+		private static final double TURRET_ENCODER_TICKS_PER_DEGREE = Turret.ENCODER_TICKS_PER_DEGREE;
+		
 		public double convertToDefault(double val) {
 			if(this == Unit.DEGREE) {
 				return val;
@@ -35,6 +37,9 @@ public class Angle {
 			}
 			if(this == Unit.MAGNETIC_ENCODER_TICK) {
 				return val / MAGNETIC_ENCODER_TICKS_PER_DEGREE;
+			}
+			if(this == Unit.TURRET_ENCODER_TICK){
+				return val / TURRET_ENCODER_TICKS_PER_DEGREE;
 			}
 			return 0;
 		}
@@ -54,6 +59,9 @@ public class Angle {
 			}
 			if(this == MAGNETIC_ENCODER_TICK) {
 				return val * MAGNETIC_ENCODER_TICKS_PER_DEGREE;
+			}
+			if(this == TURRET_ENCODER_TICK){
+				return val * TURRET_ENCODER_TICKS_PER_DEGREE;
 			}
 			return 0;
 		}

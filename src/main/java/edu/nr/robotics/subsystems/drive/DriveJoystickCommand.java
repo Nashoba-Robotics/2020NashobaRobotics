@@ -34,13 +34,11 @@ public class DriveJoystickCommand extends JoystickCommand {
                 case arcadeDrive:
                     double moveValue = OI.getInstance().getArcadeMoveValue();
                     double rotateValue = OI.getInstance().getArcadeTurnValue();
-                    double hValue = OI.getInstance().getArcadeHValue();
 
                     moveValue = NRMath.powWithSign(moveValue, 3);
                     rotateValue = NRMath.powWithSign(rotateValue, 3);
-                    hValue = NRMath.powWithSign(hValue, 3);
 
-                    if(Math.abs(rotateValue) < 0.05 && (Math.abs(moveValue)) > 0.05 || Math.abs(hValue) > 0.05){
+                    if(Math.abs(rotateValue) < 0.05 && (Math.abs(moveValue)) > 0.05){
                         rotateValue -= gyroCorrection.getTurnValue(Drive.kP_thetaOneD, false);
                     } else{
                         gyroCorrection.clearInitialValue();

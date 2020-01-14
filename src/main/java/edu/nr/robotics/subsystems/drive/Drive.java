@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
  
 import edu.nr.lib.NRMath;
 import edu.nr.lib.commandbased.NRSubsystem;
@@ -22,7 +23,6 @@ import edu.nr.lib.motionprofiling.TwoDimensionalMotionProfilerPathfinder;
 import edu.nr.lib.motionprofiling.PIDSourceType;
  
 import edu.nr.lib.motorcontrollers.CTRECreator;
- 
 import edu.nr.lib.network.LimelightNetworkTable;
 import edu.nr.lib.units.Acceleration;
 import edu.nr.lib.units.Angle;
@@ -46,7 +46,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     private static Drive singleton;
  
-    private TalonSRX leftDrive, rightDrive;
+    private TalonSRX leftDrive, rightDrive; 
+    private TalonSRX testing;
     private VictorSPX leftDriveFollow1, leftDriveFollow2, rightDriveFollow1, rightDriveFollow2;
     private PowerDistributionPanel pdp;
     // these may change because of new talons
@@ -183,6 +184,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
         if (EnabledSubsystems.DRIVE_ENABLED) {
             leftDrive = CTRECreator.createMasterTalon(RobotMap.LEFT_DRIVE);
             rightDrive = CTRECreator.createMasterTalon(RobotMap.RIGHT_DRIVE);
+            testing = CTRECreator.createMasterTalon(0); // so garbage
+
             pdp = new PowerDistributionPanel(RobotMap.PDP_ID);
  
             leftDriveFollow1 = CTRECreator.createFollowerVictor(RobotMap.LEFT_DRIVE_FOLLOW_1, leftDrive);
@@ -197,6 +200,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
             if (EnabledSubsystems.DRIVE_DUMB_ENABLED) {
                 leftDrive.set(ControlMode.PercentOutput, 0);
                 rightDrive.set(ControlMode.PercentOutput, 0); // .set sets sparkmax motor as a percent auomatically
+                testing.set(ControlMode.PercentOutput, 0);
             } else {
                 leftDrive.set(ControlMode.Velocity, 0);
                 rightDrive.set(ControlMode.Velocity, 0);
@@ -539,6 +543,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
             SmartDashboard.putData(new ResetGyroCommand());
         }
         if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
+            SmartDashboard.putNumber("TESTING PERCENT", 0);
+            SmartDashboard.putNumber("TESTING CURRENT", testing.getStatorCurrent());
+
             SmartDashboard.putNumber("Wheel Base Multiplier: ", wheelBaseMultiplier);
  
             SmartDashboard.putNumber("Left P Value: ", P_LEFT);
@@ -587,7 +594,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
             if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_BASIC_ENABLED) {
  
-                //leftDriveFollow2.set(ControlMode.PercentOutput, SmartDashboard.getNumber("MOTOR RUNNING", 0));
+                testing.set(ControlMode.PercentOutput, SmartDashboard.getNumber("TESTING PERCENT", 0));
+                SmartDashboard.putNumber("TESTING CURRENT", testing.getStatorCurrent());
+
                 
  
                 SmartDashboard.putNumberArray("Drive Left Current",
