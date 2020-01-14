@@ -192,7 +192,6 @@ public class OI implements SmartDashboardSource {
         return getDriveLeftXValue() != 0 || getDriveRightXValue() != 0 || getDriveLeftYValue() != 0
         || getDriveRightYValue() != 0;
     }
-
     public boolean isKidModeOn(){
         //do later if needed
         return false; //kidModeSwitch.get();
