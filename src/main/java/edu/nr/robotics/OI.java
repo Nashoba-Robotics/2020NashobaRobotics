@@ -55,6 +55,8 @@ public class OI implements SmartDashboardSource {
     private final Joystick operatorLeft;
     private final Joystick operatorRight;
 
+    private final Joystick turretStick;
+
     private JoystickButton kidModeSwitch;
     private JoystickButton elevGearSwitcherSwitch;
 
@@ -71,6 +73,7 @@ public class OI implements SmartDashboardSource {
 
         operatorLeft = new Joystick(STICK_OPERATOR_LEFT);
         operatorRight = new Joystick(STICK_OPERATOR_RIGHT);
+        turretStick = operatorRight;
 
        initDriveLeft();
        initDriveRight();
@@ -171,6 +174,10 @@ public class OI implements SmartDashboardSource {
         return driveRight.getX();
     }
 
+    public double getTurretTurn(){
+        return snapDriveJoysticks(turretStick.getX(), JOYSTICK_DEAD_ZONE);
+    }
+
     private double getTurnAdjust() {
         //do with buttons
         return 0;
@@ -178,6 +185,10 @@ public class OI implements SmartDashboardSource {
 
     public void smartDashboardInfo() {
         //add in sensor values for whatever we need
+    }
+
+    public boolean isTurretNonZero(){
+        return getTurretTurn() != 0;
     }
 
     public boolean isTankNonZero() {

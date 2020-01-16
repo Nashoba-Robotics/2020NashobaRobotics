@@ -41,8 +41,8 @@ public class Turret extends NRSubsystem
     public static final double PROFILE_VEL_PERCENT_TURRET = 0.0; //change
     public static final double PROFILE_ACCEL_PERCENT_TURRET = 0.0;
 
-    public DigitalSensor limSwitchLeft = new DigitalSensor(0); // change IDs
-    public DigitalSensor limSwitchRight = new DigitalSensor(1);
+    public DigitalSensor limSwitchLeft = new DigitalSensor(RobotMap.LIM_TURRET_LEFT); // change IDs
+    public DigitalSensor limSwitchRight = new DigitalSensor(RobotMap.LIM_TURRET_RIGHT);
 
     public final Angle leftmost = new Angle(-118, Angle.Unit.DEGREE);
     public final Angle rightmost = new Angle(118, Angle.Unit.DEGREE);
@@ -74,8 +74,9 @@ public class Turret extends NRSubsystem
 
     public static Angle setAngle = Angle.ZERO;
     public static Angle deltaAngle = Angle.ZERO;
+    public static Angle goalAngle = Angle.ZERO;
 
-    public static final int MOTION_MAGIC_ELEV_UP_SLOT = 2;
+    public static final int MOTION_MAGIC_SLOT = 2;
 
     private Turret()
     {
@@ -88,10 +89,10 @@ public class Turret extends NRSubsystem
             turretTalon.config_kP(VEL_SLOT, P_VEL_TURRET, DEFAULT_TIMEOUT);
             turretTalon.config_kI(VEL_SLOT, I_VEL_TURRET, DEFAULT_TIMEOUT);
             turretTalon.config_kD(VEL_SLOT, D_VEL_TURRET, DEFAULT_TIMEOUT);
-            turretTalon.config_kF(MOTION_MAGIC_ELEV_UP_SLOT, F_POS_TURRET, DEFAULT_TIMEOUT);
-            turretTalon.config_kP(MOTION_MAGIC_ELEV_UP_SLOT, P_POS_TURRET, DEFAULT_TIMEOUT);
-            turretTalon.config_kI(MOTION_MAGIC_ELEV_UP_SLOT, I_POS_TURRET, DEFAULT_TIMEOUT);
-            turretTalon.config_kD(MOTION_MAGIC_ELEV_UP_SLOT, D_POS_TURRET, DEFAULT_TIMEOUT);
+            turretTalon.config_kF(MOTION_MAGIC_SLOT, F_POS_TURRET, DEFAULT_TIMEOUT);
+            turretTalon.config_kP(MOTION_MAGIC_SLOT, P_POS_TURRET, DEFAULT_TIMEOUT);
+            turretTalon.config_kI(MOTION_MAGIC_SLOT, I_POS_TURRET, DEFAULT_TIMEOUT);
+            turretTalon.config_kD(MOTION_MAGIC_SLOT, D_POS_TURRET, DEFAULT_TIMEOUT);
 
             turretTalon.config_kF(POS_SLOT, F_POS_TURRET, DEFAULT_TIMEOUT);
             turretTalon.config_kP(POS_SLOT, P_POS_TURRET, DEFAULT_TIMEOUT);
@@ -122,7 +123,7 @@ public class Turret extends NRSubsystem
 
             turretTalon.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
 
-            if(EnabledSubsystems.TURRET_ENABLED) {
+            if(EnabledSubsystems.TURRET_DUMB_ENABLED) {
                 turretTalon.set(ControlMode.PercentOutput, 0);
             }
             else{
@@ -169,6 +170,10 @@ public class Turret extends NRSubsystem
 
             SmartDashboard.putNumber("Profile Vel Percent Turret: ", PROFILE_VEL_PERCENT_TURRET);
             SmartDashboard.putNumber("Profile Accel Percent Turret: ", PROFILE_ACCEL_PERCENT_TURRET);
+
+            SmartDashboard.putNumber("Target Angle: ", goalAngle.get(Angle.Unit.DEGREE));
+            SmartDashboard.putNumber("Delta Angle: ", deltaAngle.get(Angle.Unit.DEGREE));
+
         }
     }
 
@@ -176,7 +181,7 @@ public class Turret extends NRSubsystem
     {
         if(turretTalon != null)
         {
-            if(EnabledSubsystems.TURRET_SMARTDASHBOARD_DEBUG_ENABLED)
+            if(EnabledSubsystems.TURRET_SMARTDASHBOARD_BASIC_ENABLED)
             {
                 SmartDashboard.putNumber("Turret Position: ", getAngle().get(Angle.Unit.DEGREE));
                 SmartDashboard.putNumber("Turret Current", turretTalon.getOutputCurrent());
@@ -186,7 +191,10 @@ public class Turret extends NRSubsystem
 			if(EnabledSubsystems.TURRET_SMARTDASHBOARD_DEBUG_ENABLED){
 				SmartDashboard.putString("Turret Control Mode", turretTalon.getControlMode().toString());
 				SmartDashboard.putNumber("Turret Voltage", turretTalon.getMotorOutputVoltage());
-				SmartDashboard.putNumber("Turret Raw Position Ticks", turretTalon.getSelectedSensorPosition());
+                SmartDashboard.putNumber("Turret Raw Position Ticks", turretTalon.getSelectedSensorPosition());
+                
+                goalAngle = new Angle(SmartDashboard.getNumber("Target Angle: ", goalAngle.get(Angle.Unit.DEGREE)), Angle.Unit.DEGREE);
+                deltaAngle = new Angle(SmartDashboard.getNumber("Delta Angle: ", deltaAngle.get(Angle.Unit.DEGREE)), Angle.Unit.DEGREE);
 			}
         }
 

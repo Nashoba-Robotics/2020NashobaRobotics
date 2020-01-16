@@ -15,6 +15,8 @@ import edu.nr.robotics.subsystems.drive.EnableReverseTwoDMotionProfileSmartDashb
 import edu.nr.robotics.subsystems.drive.EnableTwoDMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.TurnSmartDashboardCommand;
 import edu.nr.robotics.subsystems.sensors.ISquaredCSensor;
+import edu.nr.robotics.subsystems.turret.DeltaTurretAngleSmartDashboardCommand;
+import edu.nr.robotics.subsystems.turret.SetTurretAngleSmartDashboardCommand;
 /*import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;*/
 import edu.wpi.first.wpilibj.Compressor;
@@ -85,6 +87,11 @@ public class Robot extends TimedRobot {
 			SmartDashboard.putData(new TurnSmartDashboardCommand());
             SmartDashboard.putData(new EnableTwoDMotionProfileSmartDashboardCommand());
             SmartDashboard.putData(new EnableReverseTwoDMotionProfileSmartDashboardCommand());
+        }
+
+        if(EnabledSubsystems.TURRET_SMARTDASHBOARD_DEBUG_ENABLED) {
+            SmartDashboard.putData(new SetTurretAngleSmartDashboardCommand());
+            SmartDashboard.putData(new DeltaTurretAngleSmartDashboardCommand());
         }
 
         

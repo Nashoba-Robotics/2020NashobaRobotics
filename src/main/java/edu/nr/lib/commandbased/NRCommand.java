@@ -221,13 +221,8 @@ public class NRCommand extends CommandBase {
             else {
                 command.cancel();
             }
-<<<<<<< HEAD
         }
         */
-=======
-            
-        }*/
->>>>>>> 5bb3b6bbb6181d2cd7f91d5e3be669e9127aa109
  
     }
     
