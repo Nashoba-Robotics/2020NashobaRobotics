@@ -1,6 +1,7 @@
 package edu.nr.lib.units;
 
 import edu.nr.lib.Units;
+import edu.nr.robotics.subsystems.hood.Hood;
 import edu.nr.robotics.subsystems.shooter.Shooter;
 import edu.nr.robotics.subsystems.turret.Turret;
 
@@ -23,7 +24,7 @@ public class Angle {
 		private static final double MAGNETIC_ENCODER_TICKS_PER_DEGREE = MAGNETIC_ENCODER_NATIVE_UNITS_PER_ROTATION * ROTATIONS_PER_DEGREE / Units.NATIVE_UNITS_PER_TICK;
 		private static final double TURRET_ENCODER_TICKS_PER_DEGREE = Turret.ENCODER_TICKS_PER_DEGREE;
 		private static final double SHOOTER_ENCODER_TICKS_PER_DEGREE = Shooter.ENCODER_TICKS_PER_DEGREE_SHOOTER;
-		private static final double HOOD_ENCODER_TICKS_PER_DEGREE = Shooter.ENCODER_TICKS_PER_DEGREE_HOOD;
+		private static final double HOOD_ENCODER_TICKS_PER_DEGREE = Hood.ENCODER_TICKS_PER_DEGREE_HOOD;
 
 		
 		public double convertToDefault(double val) {

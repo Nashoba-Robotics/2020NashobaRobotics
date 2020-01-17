@@ -374,7 +374,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
     }
  
     public void setMotorSpeed(Speed left, Speed right) {
-        if (leftDrive != null && rightDrive != null/* && hDrive != null*/) {
+        if (leftDrive != null && rightDrive != null) {
  
             leftMotorSetpoint = left;
             rightMotorSetpoint = right;

@@ -1,20 +1,31 @@
 package edu.nr.robotics.subsystems.hood;
 
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.motorcontrollers.CTRECreator;
+import edu.nr.lib.units.Distance;
+import edu.nr.lib.units.Speed;
+import edu.nr.lib.units.Acceleration;
 import edu.nr.lib.units.Angle;
 import edu.nr.lib.units.AngularAcceleration;
 import edu.nr.lib.units.AngularSpeed;
 import edu.nr.lib.units.Time;
+import edu.nr.lib.units.Angle.Unit;
 import edu.nr.robotics.RobotMap;
+import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.DigitalSensor;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Hood {
+public class Hood extends NRSubsystem{
 
-    private TalonSRX hoodTalon;
+    private static Hood Singleton;
+
+    private static TalonSRX hoodTalon;
 
     public static final double ENCODER_TICKS_PER_DEGREE_HOOD = 0.0;
 
@@ -25,8 +36,14 @@ public class Hood {
     public static final double PROFILE_VEL_PERCENT_HOOD = 0.0; //change
     public static final double PROFILE_ACCEL_PERCENT_HOOD = 0.0;
 
+    public static final double MOTION_MAGIC_PERCENT = 0.5;
+
+    public static final AngularSpeed MAX_SPEED_HOOD = new AngularSpeed(0, Angle.Unit.DEGREE, Time.Unit.SECOND);
+    public static final AngularAcceleration MAX_ACCELERATION_HOOD = new AngularAcceleration(0, Angle.Unit.DEGREE, Time.Unit.SECOND, Time.Unit.SECOND);
     public DigitalSensor limSwitchTop = new DigitalSensor(2); // change IDs
     public DigitalSensor limSwitchBottom = new DigitalSensor(3);
+
+    //Change this
 
     public final Angle uppermost = new Angle(45, Angle.Unit.DEGREE);
     public final Angle lowermost = new Angle(0, Angle.Unit.DEGREE);
@@ -52,6 +69,7 @@ public class Hood {
     public static Angle goalAngleHood = Angle.ZERO;
 
     public static final int MOTION_MAGIC_SLOT = 2;
+    public static final int MOTION_MAGIC_MULTIPLIER = 3; // Garrison Calculation Constant # 4
 
     public static final AngularAcceleration MAX_ACCEL = new AngularAcceleration(580, Angle.Unit.DEGREE, Time.Unit.SECOND, Time.Unit.SECOND);
 	public static final AngularSpeed MAX_SPEED = new AngularSpeed(80, Angle.Unit.DEGREE, Time.Unit.SECOND);
@@ -107,6 +125,56 @@ public class Hood {
         hoodTalon.configMotionAcceleration((int) MAX_ACCEL.mul(PROFILE_ACCEL_PERCENT_HOOD).get(Angle.Unit.HOOD_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
 
         hoodTalon.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
+
+
+    }
+
+    public synchronized static void init()
+    {
+        if(Singleton == null)
+            Singleton = new Hood();
+    }
+
+    public static Hood getInstance()
+    {
+        if(Singleton == null)
+        {
+            init();
+        }
+        return Singleton;
+    }
+
+    public static Angle getAngle()
+    {
+        if(hoodTalon != null)
+        {
+            return new Angle(hoodTalon.getSelectedSensorPosition() / ENCODER_TICKS_PER_DEGREE_HOOD, Angle.Unit.DEGREE);
+        } 
+        return Angle.ZERO;
+    }
+
+    public static void setAngle(Angle target)
+    {
+        setAngleHood = target;
+        //Motion Magic
+        hoodTalon.selectProfileSlot(MOTION_MAGIC_SLOT, DEFAULT_TIMEOUT);
+
+        hoodTalon.configMotionCruiseVelocity(MOTION_MAGIC_MULTIPLIER * (int) MAX_SPEED_HOOD.mul(MOTION_MAGIC_PERCENT).get(Angle.Unit.DEGREE, Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
+        hoodTalon.configMotionAcceleration(MOTION_MAGIC_MULTIPLIER * (int) MAX_ACCELERATION_HOOD.mul(MOTION_MAGIC_PERCENT).get(Angle.Unit.DEGREE, Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
+
+        hoodTalon.set(ControlMode.MotionMagic, setAngleHood.get(Angle.Unit.HOOD_ENCODER_TICK));
+    }
+
+    @Override
+    public void disable()
+    {
+
+    }
+
+    @Override
+    public void smartDashboardInfo()
+    {
+
     }
 
 }

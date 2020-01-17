@@ -51,7 +51,7 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         singleton = this;
 
-        m_period = period; // period that code runs at
+        m_period = period; // period that the code runs at
 
         smartDashboardInit();
         autoChooserInit();
