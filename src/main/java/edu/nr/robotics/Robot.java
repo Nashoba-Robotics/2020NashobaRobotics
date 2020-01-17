@@ -15,8 +15,10 @@ import edu.nr.robotics.subsystems.drive.EnableReverseTwoDMotionProfileSmartDashb
 import edu.nr.robotics.subsystems.drive.EnableTwoDMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.TurnSmartDashboardCommand;
 import edu.nr.robotics.subsystems.sensors.ISquaredCSensor;
+import edu.nr.robotics.subsystems.shooter.Shooter;
 import edu.nr.robotics.subsystems.turret.DeltaTurretAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.turret.SetTurretAngleSmartDashboardCommand;
+import edu.nr.robotics.subsystems.turret.Turret;
 /*import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;*/
 import edu.wpi.first.wpilibj.Compressor;
@@ -57,6 +59,8 @@ public class Robot extends TimedRobot {
         autoChooserInit();
         OI.init();
         Drive.getInstance();
+        Turret.getInstance();
+        Shooter.getInstance();
        
         robotCompressor = new Compressor(RobotMap.PCM_ID);
         robotCompressor.start();

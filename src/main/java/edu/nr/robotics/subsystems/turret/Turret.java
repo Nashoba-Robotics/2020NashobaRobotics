@@ -184,7 +184,7 @@ public class Turret extends NRSubsystem
             if(EnabledSubsystems.TURRET_SMARTDASHBOARD_BASIC_ENABLED)
             {
                 SmartDashboard.putNumber("Turret Position: ", getAngle().get(Angle.Unit.DEGREE));
-                SmartDashboard.putNumber("Turret Current", turretTalon.getOutputCurrent());
+                SmartDashboard.putNumber("Turret Current", turretTalon.getStatorCurrent());
 				SmartDashboard.putString("Turret Speed", getSpeed().get(Angle.Unit.DEGREE, Time.Unit.SECOND) + " : " + speedSetPoint.get(Angle.Unit.DEGREE, Time.Unit.SECOND));
 				SmartDashboard.putString("Turret Angle", getAngle().get(Angle.Unit.DEGREE) + " : " + setAngle.get(Angle.Unit.DEGREE));	
 			}

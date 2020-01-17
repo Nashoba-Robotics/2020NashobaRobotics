@@ -9,10 +9,12 @@ import edu.nr.lib.motorcontrollers.CTRECreator;
 import edu.nr.lib.units.AngularAcceleration;
 import edu.nr.lib.units.Angle;
 import edu.nr.lib.units.Time;
+import edu.nr.lib.units.Angle.Unit;
 import edu.nr.lib.units.AngularSpeed;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.DigitalSensor;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Shooter extends NRSubsystem
 {
@@ -39,7 +41,8 @@ public class Shooter extends NRSubsystem
 
     public static final NeutralMode NEUTRAL_MODE_SHOOTER = NeutralMode.Coast;
 
-    private AngularSpeed speedSetPointShooter = AngularSpeed.ZERO;
+    public static AngularSpeed speedSetPointShooter = AngularSpeed.ZERO;
+    public static AngularSpeed goalSpeed = AngularSpeed.ZERO;
 
     public static final int MOTION_MAGIC_SLOT = 2;
 
@@ -91,6 +94,7 @@ public class Shooter extends NRSubsystem
             }
 
         }
+        smartDashboardInit();
 
     }
 
@@ -109,10 +113,68 @@ public class Shooter extends NRSubsystem
 
     public void disable()
     {
+        shooterTalon.set(ControlMode.PercentOutput, 0.0);
 
     }
+
+    public void smartDashboardInit(){
+
+        if(EnabledSubsystems.SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED){
+        SmartDashboard.putNumber("F_VEL_SHOOTER", F_VEL_SHOOTER);
+        SmartDashboard.putNumber("P_VEL_SHOOTER", P_VEL_SHOOTER);
+        SmartDashboard.putNumber("I_VEL_SHOOTER", I_VEL_SHOOTER);
+        SmartDashboard.putNumber("D_VEL_SHOOTER", D_VEL_SHOOTER);
+
+        SmartDashboard.putNumber("Goal Speed", goalSpeed.get(Angle.Unit.DEGREE, Time.Unit.SECOND));
+
+        }
+    }
+
     public void smartDashboardInfo()
     {
+        if(shooterTalon != null){
+
+            if(EnabledSubsystems.SHOOTER_SMARTDASHBOARD_BASIC_ENABLED){
+                SmartDashboard.putNumber("Shooter Speed", getSpeed().get(Angle.Unit.DEGREE, Time.Unit.SECOND));
+                SmartDashboard.putNumber("Turret Current", shooterTalon.getStatorCurrent());
+                SmartDashboard.putNumber("Goal Speed", goalSpeed.get(Angle.Unit.DEGREE, Time.Unit.SECOND));
+
+
+
+            }
+            if(EnabledSubsystems.SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED){
+                SmartDashboard.putString("Shooter Control Mode", shooterTalon.getControlMode().toString());
+				SmartDashboard.putNumber("Shooter Voltage", shooterTalon.getMotorOutputVoltage());
+                SmartDashboard.putNumber("Shooter Raw Position Ticks", shooterTalon.getSelectedSensorPosition());
+            }
+            goalSpeed = new AngularSpeed( SmartDashboard.getNumber("Goal Speed", goalSpeed.get(Angle.Unit.DEGREE, Time.Unit.SECOND)), Angle.Unit.DEGREE, Time.Unit.SECOND);
+        }
+    }
+
+    public AngularSpeed getSpeed(){
+        if(shooterTalon != null){
+            return speedSetPointShooter;
+        }
+        return AngularSpeed.ZERO;
+    }
+
+    public void setMotorSpeedInDegreesPerSecond(AngularSpeed speed){
+        speedSetPointShooter = speed;
+        double ratio = speed.get(Unit.DEGREE, Time.Unit.SECOND) / MAX_SPEED.get(Unit.DEGREE, Time.Unit.SECOND);
+
+        if(shooterTalon != null){
+            shooterTalon.set(ControlMode.PercentOutput, ratio);
+        }
 
     }
+
+    public void setMotorSpeed(AngularSpeed speed)
+    {
+        if(shooterTalon != null){
+            shooterTalon.selectProfileSlot(VEL_SLOT, DEFAULT_TIMEOUT);
+            shooterTalon.set(ControlMode.Velocity, speedSetPointShooter.get(Angle.Unit.DEGREE, Time.Unit.SECOND));
+            speedSetPointShooter = speed;
+        }
+    }
+
 }
