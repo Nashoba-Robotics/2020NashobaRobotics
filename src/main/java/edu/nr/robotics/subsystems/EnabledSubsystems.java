@@ -15,5 +15,7 @@ public class EnabledSubsystems {
 
     public static final boolean SHOOTER_ENABLED                                  = false;
     public static final boolean SHOOTER_DUMB_ENABLED                             = false;
+    public static final boolean SHOOTER_SMARTDASHBOARD_BASIC_ENABLED             = false;
+    public static final boolean SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED             = false;
 
 }
