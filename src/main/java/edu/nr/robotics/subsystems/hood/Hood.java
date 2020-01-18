@@ -239,4 +239,11 @@ public class Hood extends NRSubsystem{
         }
 
     }
+    
+    public double getCurrent()
+    {
+        if(hoodTalon != null)  
+        return hoodTalon.getStatorCurrent();
+        return 0;
+    }
 }
