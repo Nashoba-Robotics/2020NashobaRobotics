@@ -25,6 +25,9 @@ public class RobotMap {
     public static final int LIM_TURRET_LEFT = 2;
     public static final int LIM_TURRET_RIGHT = 3;
 
+    //Change to thing
+    public static final int INTAKE_SPARKMAX = 0;
+
 
 
 

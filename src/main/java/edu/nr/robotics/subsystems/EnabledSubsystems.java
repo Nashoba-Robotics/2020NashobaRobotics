@@ -23,4 +23,7 @@ public class EnabledSubsystems {
     public static final boolean HOOD_SMARTDASHBOARD_BASIC_ENABLED                = false;
     public static final boolean HOOD_SMARTDASHBOARD_DEBUG_ENABLED                = false;
 
+    public static final boolean INTAKE_ENABLED                                   = false;
+	public static final boolean INTAKE_SMARTDASHBOARD_DEBUG_ENABLED              = false;
+
 }

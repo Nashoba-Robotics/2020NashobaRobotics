@@ -189,7 +189,7 @@ public class Hood extends NRSubsystem{
     public void disable()
     {
         if(hoodTalon != null){
-        hoodTalon.set(ControlMode.PercentOutput, 0);
+            hoodTalon.set(ControlMode.PercentOutput, 0);
         }
     }
 
@@ -206,6 +206,8 @@ public class Hood extends NRSubsystem{
         }
     }
 
+    
+
     public void smartDashboardInfo()
     {
         if(hoodTalon != null){
@@ -219,6 +221,11 @@ public class Hood extends NRSubsystem{
                 I_POS_HOOD = SmartDashboard.getNumber("I_POS_HOOD", 0);
                 D_POS_HOOD = SmartDashboard.getNumber("D_POS_HOOD", 0);
 
+                F_VEL_HOOD = SmartDashboard.getNumber("F_VEL_HOOD", 0);
+                P_VEL_HOOD = SmartDashboard.getNumber("P_VEL_HOOD", 0);
+                I_VEL_HOOD = SmartDashboard.getNumber("I_VEL_HOOD", 0);
+                D_VEL_HOOD = SmartDashboard.getNumber("D_VEL_HOOD", 0);
+
                 hoodTalon.config_kF(POS_SLOT, 0, DEFAULT_TIMEOUT);
                 hoodTalon.config_kP(POS_SLOT, P_POS_HOOD, DEFAULT_TIMEOUT);
                 hoodTalon.config_kI(POS_SLOT, I_POS_HOOD, DEFAULT_TIMEOUT);
@@ -229,8 +236,6 @@ public class Hood extends NRSubsystem{
                 SmartDashboard.putString("Hood Control Mode", hoodTalon.getControlMode().toString());
                 SmartDashboard.putNumber("Hood Voltage", hoodTalon.getMotorOutputVoltage());
                 SmartDashboard.putNumber("Shooter Raw Position Ticks", hoodTalon.getSelectedSensorPosition());
-            
-
             }
             goalAngleHood = new Angle(SmartDashboard.getNumber("Goal Angle Hood", goalAngleHood.get(Angle.Unit.DEGREE)), Angle.Unit.DEGREE);
         }
