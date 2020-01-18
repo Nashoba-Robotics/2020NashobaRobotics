@@ -18,4 +18,9 @@ public class EnabledSubsystems {
     public static final boolean SHOOTER_SMARTDASHBOARD_BASIC_ENABLED             = false;
     public static final boolean SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED             = false;
 
+    public static final boolean HOOD_ENABLED                                     = true;
+    public static final boolean HOOD_DUMB_ENABLED                                = false;
+    public static final boolean HOOD_SMARTDASHBOARD_BASIC_ENABLED                = false;
+    public static final boolean HOOD_SMARTDASHBOARD_DEBUG_ENABLED                = false;
+
 }
