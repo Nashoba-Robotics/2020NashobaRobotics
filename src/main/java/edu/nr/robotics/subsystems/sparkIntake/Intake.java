@@ -1,8 +1,10 @@
-package edu.nr.robotics.subsystems.intake;
+package edu.nr.robotics.subsystems.sparkIntake;
 
 import edu.nr.lib.commandbased.NRSubsystem;
 
 import edu.nr.lib.units.AngularSpeed;
+import edu.nr.lib.units.Distance;
+import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
 import edu.nr.lib.units.Time.Unit;
 import edu.nr.lib.units.Angle;
@@ -28,10 +30,10 @@ public class Intake extends NRSubsystem
 
     public static final Time ACTUATION_TIME = new Time(0.5, Time.Unit.SECOND);
 
-    public static final AngularSpeed MAX_ANGULAR_SPEED = new AngularSpeed(1, Angle.Unit.DEGREE, Time.Unit.SECOND);
-    public static final AngularAcceleration MAX_ANGULAR_ACCELERATION = new AngularAcceleration(1, Angle.Unit.DEGREE, Time.Unit.SECOND, Time.Unit.SECOND);
+    public static final AngularSpeed MAX_SPEED_INTAKE = new AngularSpeed(1, Angle.Unit.DEGREE, Time.Unit.SECOND);
+    public static final AngularAcceleration MAX_ACCELERATION_INTAKE = new AngularAcceleration(1, Angle.Unit.DEGREE, Time.Unit.SECOND, Time.Unit.SECOND);
 
-
+    public static AngularSpeed currentAngularSpeed = AngularSpeed.ZERO;
 
     private Intake()
     {
@@ -41,7 +43,7 @@ public class Intake extends NRSubsystem
         }
     }
 
-    private static void init()
+    public static void init()
     {
         if(Singleton == null)
         {
@@ -49,7 +51,7 @@ public class Intake extends NRSubsystem
         }
     }
 
-    private static Intake getInstance()
+    public static Intake getInstance()
     {
         if(Singleton == null)
         {
@@ -60,7 +62,7 @@ public class Intake extends NRSubsystem
 
     public void disable() 
     {
-
+        setMotorSpeedRaw(0);
     }
 
     public enum State {
@@ -103,7 +105,34 @@ public class Intake extends NRSubsystem
 		}
     }
 
+    public double getCurrent()
+    {
+        if(IntakeSparkMax != null)
+            return IntakeSparkMax.getOutputCurrent();
+        return 0;
+    }
 
+    public void setMotorSpeedRaw(double percent) {
+        if (IntakeSparkMax != null)
+            IntakeSparkMax.set(percent);
+    }
+    
+    /*
+    public void setMotorSpeedPercent(double percent) {
+        if (IntakeSparkMax != null)
+            if (EnabledSubsystems.INTAKE_ENABLED)
+                setMotorSpeedRaw(percent);
+            else
+                setMotorSpeed(MAX_SPEED_INTAKE.mul(percent));
+    }
+    */
+
+
+
+    public AngularSpeed getMotorSpeed()
+    {
+        return currentAngularSpeed;
+    }
 
     public void SmartDashboardInit() {
 		if (EnabledSubsystems.INTAKE_SMARTDASHBOARD_DEBUG_ENABLED) {
