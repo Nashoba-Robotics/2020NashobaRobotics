@@ -22,7 +22,7 @@ public class Shooter extends NRSubsystem
 
     private TalonSRX shooterTalon;
 
-    public static final double ENCODER_TICKS_PER_DEGREE_SHOOTER = 0.0;
+    public static final double ENCODER_TICKS_PER_DEGREE_SHOOTER = 2048 / 360;
 
 
     public static Time VOLTAGE_RAMP_RATE_SHOOTER = new Time(0.05, Time.Unit.SECOND);
@@ -158,15 +158,7 @@ public class Shooter extends NRSubsystem
         return AngularSpeed.ZERO;
     }
 
-    public void setMotorSpeedInDegreesPerSecond(AngularSpeed speed){
-        speedSetPointShooter = speed;
-        double ratio = speed.get(Unit.DEGREE, Time.Unit.SECOND) / MAX_SPEED.get(Unit.DEGREE, Time.Unit.SECOND);
 
-        if(shooterTalon != null){
-            shooterTalon.set(ControlMode.PercentOutput, ratio);
-        }
-
-    }
 
     public void setMotorSpeed(AngularSpeed speed)
     {
