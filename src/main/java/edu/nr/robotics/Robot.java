@@ -5,6 +5,8 @@ import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.interfaces.Periodic;
 import edu.nr.lib.interfaces.SmartDashboardSource;
 import edu.nr.lib.network.LimelightNetworkTable;
+import edu.nr.lib.network.LimelightNetworkTable.Pipeline;
+import edu.nr.lib.units.Distance;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.drive.CSVSaverDisable;
 import edu.nr.robotics.subsystems.drive.CSVSaverEnable;
@@ -68,7 +70,8 @@ public class Robot extends TimedRobot {
 
         // CameraInit();
 
-        LimelightNetworkTable.getInstance().lightLED(false);
+        LimelightNetworkTable.getInstance().lightLED(true);
+        LimelightNetworkTable.getInstance().setPipeline(Pipeline.Target);
         //System.out.println("end of robot init");
 
     }
@@ -153,6 +156,8 @@ public class Robot extends TimedRobot {
                 dtTot = 0;
                 count = 0;
             }
+
+            System.out.println(LimelightNetworkTable.getInstance().getDistance().get(Distance.Unit.INCH));
         
         }
 
