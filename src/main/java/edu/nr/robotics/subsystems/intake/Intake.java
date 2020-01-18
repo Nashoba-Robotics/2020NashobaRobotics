@@ -1,7 +1,12 @@
 package edu.nr.robotics.subsystems.intake;
 
 import edu.nr.lib.commandbased.NRSubsystem;
+
+import edu.nr.lib.units.AngularSpeed;
 import edu.nr.lib.units.Time;
+import edu.nr.lib.units.Time.Unit;
+import edu.nr.lib.units.Angle;
+import edu.nr.lib.units.AngularAcceleration;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
@@ -22,6 +27,9 @@ public class Intake extends NRSubsystem
     private Solenoid IntakeSolenoid;
 
     public static final Time ACTUATION_TIME = new Time(0.5, Time.Unit.SECOND);
+
+    public static final AngularSpeed MAX_ANGULAR_SPEED = new AngularSpeed(1, Angle.Unit.DEGREE, Time.Unit.SECOND);
+    public static final AngularAcceleration MAX_ANGULAR_ACCELERATION = new AngularAcceleration(1, Angle.Unit.DEGREE, Time.Unit.SECOND, Time.Unit.SECOND);
 
 
 

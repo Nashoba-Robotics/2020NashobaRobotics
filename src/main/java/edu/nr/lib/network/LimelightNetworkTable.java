@@ -5,6 +5,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import edu.nr.lib.units.Angle;
+import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Time;
 import edu.nr.lib.units.Angle.Unit;
 import edu.wpi.first.networktables.*;
@@ -24,6 +25,13 @@ public class LimelightNetworkTable extends TimerTask {
 	private static final Pipeline DEFAULT_PIPELINE = Pipeline.DriverCam;
 	
 	private static final Time IMAGE_CAPTURE_LATENCY = new Time(11, Time.Unit.MILLISECOND);
+
+	private static final Distance TARGET_HEIGHT = new Distance(81, Distance.Unit.INCH);
+	private static final Distance LIMELIGHT_HEIGHT = new Distance(22, Distance.Unit.INCH); // may change
+
+	private static final Angle LIMELIGHT_MOUNT_ANGLE = Angle.ZERO;
+	//ethan has small arms
+
 	
 	private static double [] camtranHolder;
 	private static int count = 0;
@@ -120,6 +128,13 @@ public class LimelightNetworkTable extends TimerTask {
 	 */
 	public double getBoxHeight() {
 		return boxHeight;
+	}
+
+	public Distance getDistance(){
+		double distance = (TARGET_HEIGHT.sub(LIMELIGHT_HEIGHT)).get(Distance.Unit.INCH) / ( Math.tan(LIMELIGHT_MOUNT_ANGLE.add(vertOffsetAngle).get(Angle.Unit.RADIAN)));
+
+		return new Distance(distance, Distance.Unit.INCH);
+
 	}
 	
 	/**

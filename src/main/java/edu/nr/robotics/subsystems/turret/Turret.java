@@ -148,8 +148,10 @@ public class Turret extends NRSubsystem
 
     public void disable()
     {
+        if(turretTalon != null){
         turretTalon.set(ControlMode.PercentOutput, 0);
         setAngle(getAngle());
+    }
     }
 
     public void smartDashboardInit()

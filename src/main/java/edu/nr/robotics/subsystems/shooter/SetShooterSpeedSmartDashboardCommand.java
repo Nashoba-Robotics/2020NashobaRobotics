@@ -1,6 +1,8 @@
 package edu.nr.robotics.subsystems.shooter;
 
 import edu.nr.lib.commandbased.NRCommand;
+import edu.nr.lib.units.Angle;
+import edu.nr.lib.units.Time;
 
 
 public class SetShooterSpeedSmartDashboardCommand extends NRCommand {

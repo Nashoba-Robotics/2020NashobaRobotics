@@ -14,7 +14,9 @@ import edu.nr.robotics.subsystems.drive.EnableMotionProfileSmartDashboardCommand
 import edu.nr.robotics.subsystems.drive.EnableReverseTwoDMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.EnableTwoDMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.TurnSmartDashboardCommand;
+import edu.nr.robotics.subsystems.hood.Hood;
 import edu.nr.robotics.subsystems.sensors.ISquaredCSensor;
+import edu.nr.robotics.subsystems.shooter.SetShooterSpeedSmartDashboardCommand;
 import edu.nr.robotics.subsystems.shooter.Shooter;
 import edu.nr.robotics.subsystems.turret.DeltaTurretAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.turret.SetTurretAngleSmartDashboardCommand;
@@ -32,8 +34,6 @@ public class Robot extends TimedRobot {
     private static Robot singleton;
 
     private static double period = 0.02;
-
-    ISquaredCSensor colorSensor = new ISquaredCSensor();
 
     double dt;
     double dtTot = 0;
@@ -61,6 +61,7 @@ public class Robot extends TimedRobot {
         Drive.getInstance();
         Turret.getInstance();
         Shooter.getInstance();
+        Hood.getInstance();
        
         robotCompressor = new Compressor(RobotMap.PCM_ID);
         robotCompressor.start();
@@ -96,6 +97,10 @@ public class Robot extends TimedRobot {
         if(EnabledSubsystems.TURRET_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putData(new SetTurretAngleSmartDashboardCommand());
             SmartDashboard.putData(new DeltaTurretAngleSmartDashboardCommand());
+        }
+
+        if(EnabledSubsystems.SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED){
+            SmartDashboard.putData(new SetShooterSpeedSmartDashboardCommand());
         }
 
         
