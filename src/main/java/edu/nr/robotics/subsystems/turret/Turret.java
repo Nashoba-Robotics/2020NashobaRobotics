@@ -161,12 +161,12 @@ public class Turret extends NRSubsystem
             SmartDashboard.putNumber("Voltage Ramp Rate Turret Seconds", VOLTAGE_RAMP_RATE_TURRET.get(Time.Unit.SECOND));
 
             SmartDashboard.putNumber("F_POS_TURRET: ", F_POS_TURRET);
-            SmartDashboard.putNumber("K_POS_TURRET: ", P_POS_TURRET);
+            SmartDashboard.putNumber("P_POS_TURRET: ", P_POS_TURRET);
             SmartDashboard.putNumber("I_POS_TURRET: ", I_POS_TURRET);
             SmartDashboard.putNumber("D_POS_TURRET: ", D_POS_TURRET);
 
             SmartDashboard.putNumber("F_VEL_TURRET: ", F_VEL_TURRET);
-            SmartDashboard.putNumber("K_VEL_TURRET: ", P_VEL_TURRET);
+            SmartDashboard.putNumber("P_VEL_TURRET: ", P_VEL_TURRET);
             SmartDashboard.putNumber("I_VEL_TURRET: ", I_VEL_TURRET);
             SmartDashboard.putNumber("D_VEL_TURRET: ", D_VEL_TURRET);
 
@@ -199,6 +199,8 @@ public class Turret extends NRSubsystem
                 deltaAngle = new Angle(SmartDashboard.getNumber("Delta Angle: ", deltaAngle.get(Angle.Unit.DEGREE)), Angle.Unit.DEGREE);
 			}
         }
+        System.out.println(goalAngle.get(Angle.Unit.DEGREE));
+
 
     }
 
@@ -233,10 +235,10 @@ public class Turret extends NRSubsystem
     }
 
     public void setAngle(Angle targetAngle){
-        setAngle = targetAngle;
+        goalAngle = targetAngle;
         turretTalon.selectProfileSlot(POS_SLOT, DEFAULT_TIMEOUT);
 
-        turretTalon.set(ControlMode.Position, setAngle.get(Unit.TURRET_ENCODER_TICK));
+        turretTalon.set(ControlMode.Position, goalAngle.get(Unit.TURRET_ENCODER_TICK));
     }
 
     public void periodic()
@@ -250,6 +252,7 @@ public class Turret extends NRSubsystem
                 setAngle(rightmost);
             }
         }
+    //    System.out.println(goalAngle.get(Angle.Unit.DEGREE));
     }
 
 
