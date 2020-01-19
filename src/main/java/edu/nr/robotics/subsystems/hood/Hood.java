@@ -206,8 +206,6 @@ public class Hood extends NRSubsystem{
         }
     }
 
-    
-
     public void smartDashboardInfo()
     {
         if(hoodTalon != null){

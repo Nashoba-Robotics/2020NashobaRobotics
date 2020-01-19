@@ -2,18 +2,19 @@ package edu.nr.robotics.subsystems.sparkIntake;
 
 import edu.nr.lib.commandbased.NRCommand;
 
-
-public class IntakeExtendCommand extends NRCommand
+public class SetIntakeSpeedCommand extends NRCommand
 {
-    public IntakeExtendCommand()
+    private double targetSpeed;
+
+    public SetIntakeSpeedCommand(double targetSpeed)
     {
         super(Intake.getInstance());
+        this.targetSpeed = targetSpeed;
     }
 
     public void onStart()
     {
-        if(Intake.getInstance().isIntakeDeployed() == false)
-            Intake.getInstance().deployIntake();
+        Intake.getInstance().setMotorSpeedRaw(targetSpeed);
     }
 
     public boolean isFinishedNR()
