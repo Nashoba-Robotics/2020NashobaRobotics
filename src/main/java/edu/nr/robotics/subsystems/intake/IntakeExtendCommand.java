@@ -1,18 +1,18 @@
-package edu.nr.robotics.subsystems.sparkIntake;
+package edu.nr.robotics.subsystems.intake;
 
 import edu.nr.lib.commandbased.NRCommand;
 
 
-public class IntakeRetractCommand extends NRCommand
+public class IntakeExtendCommand extends NRCommand
 {
-    public IntakeRetractCommand()
+    public IntakeExtendCommand()
     {
         super(Intake.getInstance());
     }
 
     public void onStart()
     {
-        if(Intake.getInstance().isIntakeDeployed() == true)
+        if(Intake.getInstance().isIntakeDeployed() == false)
             Intake.getInstance().deployIntake();
     }
 

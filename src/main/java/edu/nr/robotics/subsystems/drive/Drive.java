@@ -48,10 +48,13 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     private TalonSRX leftDrive, rightDrive; 
     private TalonSRX testing;
-    private VictorSPX leftDriveFollow1, leftDriveFollow2, rightDriveFollow1, rightDriveFollow2;
+    private TalonSRX leftDriveFollow1, leftDriveFollow2, rightDriveFollow1, rightDriveFollow2;
     private PowerDistributionPanel pdp;
     // these may change because of new talons
  
+    private double leftDrivePosition;
+    private double rightDrivePosition;
+
     // TODO: fix all of these
     public static final double REAL_ENC_TICK_PER_INCH_DRIVE = 8192 / (6 * Math.PI);
  
@@ -144,6 +147,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
     // Type of PID. 0 = primary. 1 = cascade
     public static final int PID_TYPE = 0;
  
+    public static final int POS_SLOT = 0;
+
     public static final int VEL_SLOT = 0;
  
     // No timeout for talon configuration functions
@@ -188,14 +193,14 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
             pdp = new PowerDistributionPanel(RobotMap.PDP_ID);
  
-            leftDriveFollow1 = CTRECreator.createFollowerVictor(RobotMap.LEFT_DRIVE_FOLLOW_1, leftDrive);
-            leftDriveFollow2 = CTRECreator.createFollowerVictor(RobotMap.LEFT_DRIVE_FOLLOW_2, leftDrive);
+            leftDriveFollow1 = CTRECreator.createFollowerTalon(RobotMap.LEFT_DRIVE_FOLLOW_1, leftDrive);
+            leftDriveFollow2 = CTRECreator.createFollowerTalon(RobotMap.LEFT_DRIVE_FOLLOW_2, leftDrive);
             //leftDriveFollow1 = CTRECreator.createMasterVictor(RobotMap.LEFT_DRIVE_FOLLOW_1, RobotMap.LEFT_DRIVE);
             //leftDriveFollow2 = CTRECreator.createMasterVictor(RobotMap.LEFT_DRIVE_FOLLOW_2);
             //leftDriveFollow1 = CTRECreator.createMasterVictor(RobotMap.LEFT_DRIVE_FOLLOW_1);
  
-            rightDriveFollow1 = CTRECreator.createMasterVictor(RobotMap.RIGHT_DRIVE_FOLLOW_1);
-            rightDriveFollow2 = CTRECreator.createMasterVictor(RobotMap.RIGHT_DRIVE_FOLLOW_2);
+            rightDriveFollow1 = CTRECreator.createMasterTalon(RobotMap.RIGHT_DRIVE_FOLLOW_1);
+            rightDriveFollow2 = CTRECreator.createMasterTalon(RobotMap.RIGHT_DRIVE_FOLLOW_2);
  
             if (EnabledSubsystems.DRIVE_DUMB_ENABLED) {
                 leftDrive.set(ControlMode.PercentOutput, 0);
@@ -362,7 +367,20 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
         return 0;
     }
  
-    
+    public void stayInPlaceOnStart()
+    {
+        leftDrivePosition = leftDrive.getSelectedSensorPosition();
+        rightDrivePosition = rightDrive.getSelectedSensorPosition();
+    }
+
+    public void stayInPlace()
+    {
+        leftDrive.selectProfileSlot(POS_SLOT, DEFAULT_TIMEOUT);
+        leftDrive.set(ControlMode.Position, leftDrivePosition);
+
+        rightDrive.selectProfileSlot(POS_SLOT, DEFAULT_TIMEOUT);
+        rightDrive.set(ControlMode.Position, rightDrivePosition);
+    }
  
     public void setMotorSpeedInPercent(double left, double right) {
         if (EnabledSubsystems.DRIVE_DUMB_ENABLED) {

@@ -1,4 +1,4 @@
-package edu.nr.robotics.subsystems.sparkIntake;
+package edu.nr.robotics.subsystems.intake;
 
 import edu.nr.lib.commandbased.NRSubsystem;
 
@@ -15,9 +15,13 @@ import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
+
+import edu.nr.lib.motorcontrollers.CTRECreator;
 import edu.nr.lib.motorcontrollers.SparkMax;
 
 public class Intake extends NRSubsystem
@@ -25,6 +29,7 @@ public class Intake extends NRSubsystem
     private static Intake Singleton;
 
     private CANSparkMax IntakeSparkMax;
+    private TalonSRX IntakeTalon;
 
     private Solenoid IntakeSolenoid;
 
@@ -37,9 +42,11 @@ public class Intake extends NRSubsystem
 
     private Intake()
     {
+        super();
         if(EnabledSubsystems.INTAKE_ENABLED)
         {
             IntakeSparkMax = SparkMax.createSpark(RobotMap.INTAKE_SPARKMAX, true);
+            IntakeTalon = CTRECreator.createMasterTalon(0);
         }
     }
 
@@ -115,6 +122,8 @@ public class Intake extends NRSubsystem
     public void setMotorSpeedRaw(double percent) {
         if (IntakeSparkMax != null)
             IntakeSparkMax.set(percent);
+        if (IntakeTalon != null)
+            IntakeTalon.set(ControlMode.PercentOutput, percent);
     }
     
     /*
@@ -129,29 +138,31 @@ public class Intake extends NRSubsystem
 
 
 
-    public AngularSpeed getMotorSpeed()
+    public AngularSpeed getIdealMotorSpeed()
     {
         return currentAngularSpeed;
     }
 
+    //Hopefully returns actual motor speed
+    public double getActualMotorSpeed()
+    {
+        return IntakeSparkMax.get();
+    }
+
     public void SmartDashboardInit() {
 		if (EnabledSubsystems.INTAKE_SMARTDASHBOARD_DEBUG_ENABLED) {
-            SmartDashboard.putBoolean("INTAKE DEPLOYED: ", isIntakeDeployed());
+            SmartDashboard.putBoolean("Intake deployed: ", isIntakeDeployed());
+            SmartDashboard.putNumber("Intake Motor Speed: ", 0);
 		}
 	}
 
 	@Override
 	public void smartDashboardInfo() {
-		//SmartDashboard.putBoolean("Has Hatch", hasHatch());
-        /*
-		if(EnabledSubsystems.HATCH_MECHANISM_SMARTDASHBOARD_BASIC_ENABLED) {
-            SmartDashboard.putString("Hatch Deploy Mechanism Position: ", currentDeployState().toString());
-            SmartDashboard.putString("Hatch Mechanism State: ", currentHatchState().toString());
-		}
-		if(EnabledSubsystems.INTAKE_SMARTDASHBOARD_DEBUG_ENABLED) {
-			hatchSensorThreshold = (int) SmartDashboard.getNumber("Hatch Sensor Threshold: ", hatchSensorThreshold);
+        if(EnabledSubsystems.INTAKE_SMARTDASHBOARD_DEBUG_ENABLED)
+        {
+            //SmartDashboard.putNumber("Intake Motor Speed: ", getMotorSpeed().getDefault());
+            SmartDashboard.putBoolean("Intake Deployed: ", isIntakeDeployed());
         }
-        */
 	}
 
 	@Override
