@@ -203,6 +203,8 @@ public class Turret extends NRSubsystem
                 deltaAngle = new Angle(SmartDashboard.getNumber("Delta Angle: ", deltaAngle.get(Angle.Unit.DEGREE)), Angle.Unit.DEGREE);
 			}
         }
+        System.out.println(goalAngle.get(Angle.Unit.DEGREE));
+
 
     }
 
@@ -237,10 +239,10 @@ public class Turret extends NRSubsystem
     }
 
     public void setAngle(Angle targetAngle){
-        setAngle = targetAngle;
+        goalAngle = targetAngle;
         turretTalon.selectProfileSlot(POS_SLOT, DEFAULT_TIMEOUT);
 
-        turretTalon.set(ControlMode.Position, setAngle.get(Unit.TURRET_ENCODER_TICK));
+        turretTalon.set(ControlMode.Position, goalAngle.get(Unit.TURRET_ENCODER_TICK));
     }
 
     public void periodic()
@@ -254,5 +256,6 @@ public class Turret extends NRSubsystem
                 setAngle(rightmost);
             }
         }
+    //    System.out.println(goalAngle.get(Angle.Unit.DEGREE));
     }
 }
