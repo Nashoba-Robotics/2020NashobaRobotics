@@ -1,7 +1,6 @@
 package edu.nr.robotics;
 
 import com.revrobotics.CANSparkMax;
-<<<<<<< HEAD
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import edu.nr.lib.motorcontrollers.SparkMax;
@@ -10,12 +9,6 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-
-
-=======
-import edu.nr.lib.motorcontrollers.SparkMax;
-
->>>>>>> cb05abe47ec261cb467b3edaefb2503188699e6a
 import edu.nr.lib.commandbased.DoNothingCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.interfaces.Periodic;
@@ -107,7 +100,6 @@ public class Robot extends TimedRobot {
         LimelightNetworkTable.getInstance().lightLED(true);
         LimelightNetworkTable.getInstance().setPipeline(Pipeline.Target);
         //System.out.println("end of robot init");
-<<<<<<< HEAD
 
         protoShooter1 = SparkMax.createSpark(1, true);
         protoShooter2 = SparkMax.createSpark(11, true);
@@ -144,10 +136,6 @@ public class Robot extends TimedRobot {
 
             protoShooter1.setCANTimeout(10);
             protoShooter2.setCANTimeout(10);
-=======
-        protoSparkMax1 = SparkMax.createSpark(0, true);
-        protoSparkMax2 = SparkMax.createSpark(0, true);
->>>>>>> cb05abe47ec261cb467b3edaefb2503188699e6a
     }
 
     public void autoChooserInit() {
@@ -243,7 +231,6 @@ public class Robot extends TimedRobot {
                 dtTot = 0;
                 count = 0;
             }
-<<<<<<< HEAD
             if(protoShooter2 != null)
             {
 
@@ -281,15 +268,6 @@ public class Robot extends TimedRobot {
             SmartDashboard.putNumber("Shooter1 Speed: ", protoShooter1.getEncoder().getVelocity());
             SmartDashboard.putNumber("Shooter2 Speed: ", protoShooter2.getEncoder().getVelocity());
             }
-=======
-            protoSparkMax1.set(SmartDashboard.getNumber("Prototype Speed Percent: ", 0));
-            protoSparkMax2.set(SmartDashboard.getNumber("Prototype Speed Percent: ", 0));
-
-            SmartDashboard.putNumber("A Prototype Current Reading: ", protoSparkMax1.getOutputCurrent());
-            SmartDashboard.putNumber("B Prototype Current Reading: ", protoSparkMax2.getOutputCurrent());
-
-
->>>>>>> cb05abe47ec261cb467b3edaefb2503188699e6a
         }
 
        /* public void CameraInit() {

@@ -70,6 +70,8 @@ public class OI implements SmartDashboardSource {
 
     public static final Drive.DriveMode driveMode = Drive.DriveMode.cheesyDrive; // set default type of drive here
 
+    public JoystickButton pushModeEnabled;
+
     private OI() {
         driveLeft = new Joystick(STICK_LEFT);
         driveRight = new Joystick(STICK_RIGHT);
@@ -91,8 +93,9 @@ public class OI implements SmartDashboardSource {
 
     public void initDriveLeft() {
         //buttons go here
-        new JoystickButton(driveLeft, 1).whileHeld(new StayInPlaceDriveCommand());
-        new JoystickButton(driveLeft, 1).whenReleased(new DoNothingCommand());
+        //pushModeEnabled = new JoystickButton(driveLeft, 1);
+        //pushModeEnabled.whileHeld(new StayInPlaceDriveCommand());
+
     }
 
     public void initDriveRight() {
@@ -220,5 +223,10 @@ public class OI implements SmartDashboardSource {
     public boolean isKidModeOn(){
         //do later if needed
         return false; //kidModeSwitch.get();
+    }
+
+    public boolean getStayMode()
+    {
+        return pushModeEnabled.get();
     }
 }
