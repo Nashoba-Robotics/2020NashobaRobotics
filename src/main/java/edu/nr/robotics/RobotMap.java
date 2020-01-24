@@ -15,6 +15,7 @@ public class RobotMap {
     public static final int HOOD_TALON = 5;
     public static final int SHOOTER_TALON1 = 6; // motor on 2019 bot at pdp six is slot 0
     public static final int SHOOTER_TALON2 = 5;
+    public static final int ARM_TALON = 15;
     public static final int PIGEON_ID = 10;
 
     public static final int PCM_ID = 1;
