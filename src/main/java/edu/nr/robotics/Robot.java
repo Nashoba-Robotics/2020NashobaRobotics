@@ -30,6 +30,7 @@ import edu.nr.robotics.subsystems.drive.EnableReverseTwoDMotionProfileSmartDashb
 import edu.nr.robotics.subsystems.drive.EnableTwoDMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.TurnSmartDashboardCommand;
 import edu.nr.robotics.subsystems.hood.Hood;
+import edu.nr.robotics.subsystems.indexer.IndexerDeltaPositionSmartDashboardCommand;
 import edu.nr.robotics.subsystems.sensors.ISquaredCSensor;
 import edu.nr.robotics.subsystems.shooter.SetShooterSpeedSmartDashboardCommand;
 import edu.nr.robotics.subsystems.shooter.Shooter;
@@ -101,8 +102,8 @@ public class Robot extends TimedRobot {
         LimelightNetworkTable.getInstance().setPipeline(Pipeline.Target);
         //System.out.println("end of robot init");
 
-        protoShooter1 = SparkMax.createSpark(1, true);
-        protoShooter2 = SparkMax.createSpark(11, true);
+        protoShooter1 = SparkMax.createSpark(0, true);
+        protoShooter2 = SparkMax.createSpark(0, true);
 
         protoShooter1.getPIDController().setFF(F_VEL_SHOOTER, 0);
         protoShooter1.getPIDController().setP(P_VEL_SHOOTER, 0);
@@ -164,11 +165,15 @@ public class Robot extends TimedRobot {
             SmartDashboard.putData(new DeltaTurretAngleSmartDashboardCommand());
         }
 
+        if(EnabledSubsystems.INDEXER_SMARTDASHBOARD_DEBUG_ENABLED){
+            SmartDashboard.putData(new IndexerDeltaPositionSmartDashboardCommand());
+        }
+
         if(EnabledSubsystems.SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED){
             //SmartDashboard.putData(new SetShooterSpeedSmartDashboardCommand());
             SmartDashboard.putNumber("Prototype Speed Percent: ", 0);
-            SmartDashboard.putNumber("A Prototype Current Reading: ", 0);
-            SmartDashboard.putNumber("B Prototype Current Reading: ", 0);
+            SmartDashboard.putNumber("1 Prototype Current Reading: ", 0);
+            SmartDashboard.putNumber("2 Prototype Current Reading: ", 0);
         }
 
         SmartDashboard.putNumber("TEST SHOOTER SPEED", 0);
@@ -307,3 +312,4 @@ public class Robot extends TimedRobot {
 
     }
 
+    

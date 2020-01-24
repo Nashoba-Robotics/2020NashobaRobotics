@@ -27,8 +27,15 @@ public class RobotMap {
     public static final int LIM_TURRET_LEFT = 2;
     public static final int LIM_TURRET_RIGHT = 3;
 
+    public static final int INDEXER_INPUT = 0;
+    public static final int INDEXER_SPACING_CLOSE = 0;
+    public static final int INDEXER_SPACING_FAR = 0;
+    public static final int INDEXER_READY_SHOT = 0;
+
     //Change to thing
-    public static final int INTAKE_SPARKMAX = 5;
+    public static final int INTAKE_SPARKMAX = 0;
+    public static final int INTAKE_SOLENOID_PCM_PORT = 0;
+	public static final int INDEXER_TALON = 0;
 
 
 
