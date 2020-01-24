@@ -20,6 +20,7 @@ import edu.nr.robotics.subsystems.drive.EnableReverseTwoDMotionProfileSmartDashb
 import edu.nr.robotics.subsystems.drive.EnableTwoDMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.TurnSmartDashboardCommand;
 import edu.nr.robotics.subsystems.hood.Hood;
+import edu.nr.robotics.subsystems.indexer.IndexerDeltaPositionSmartDashboardCommand;
 import edu.nr.robotics.subsystems.sensors.ISquaredCSensor;
 import edu.nr.robotics.subsystems.shooter.SetShooterSpeedSmartDashboardCommand;
 import edu.nr.robotics.subsystems.shooter.Shooter;
@@ -81,7 +82,7 @@ public class Robot extends TimedRobot {
         LimelightNetworkTable.getInstance().setPipeline(Pipeline.Target);
         //System.out.println("end of robot init");
         protoSparkMax1 = SparkMax.createSpark(0, true);
-        protoSparkMax2 = SparkMax.createSpark(0, true);
+        protoSparkMax2 = SparkMax.createSpark(15, true);
     }
 
     public void autoChooserInit() {
@@ -110,11 +111,15 @@ public class Robot extends TimedRobot {
             SmartDashboard.putData(new DeltaTurretAngleSmartDashboardCommand());
         }
 
+        if(EnabledSubsystems.INDEXER_SMARTDASHBOARD_DEBUG_ENABLED){
+            SmartDashboard.putData(new IndexerDeltaPositionSmartDashboardCommand());
+        }
+
         if(EnabledSubsystems.SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED){
             //SmartDashboard.putData(new SetShooterSpeedSmartDashboardCommand());
             SmartDashboard.putNumber("Prototype Speed Percent: ", 0);
-            SmartDashboard.putNumber("A Prototype Current Reading: ", 0);
-            SmartDashboard.putNumber("B Prototype Current Reading: ", 0);
+            SmartDashboard.putNumber("1 Prototype Current Reading: ", 0);
+            SmartDashboard.putNumber("2 Prototype Current Reading: ", 0);
         }
 
         
@@ -170,8 +175,8 @@ public class Robot extends TimedRobot {
             protoSparkMax1.set(SmartDashboard.getNumber("Prototype Speed Percent: ", 0));
             protoSparkMax2.set(SmartDashboard.getNumber("Prototype Speed Percent: ", 0));
 
-            SmartDashboard.putNumber("A Prototype Current Reading: ", protoSparkMax1.getOutputCurrent());
-            SmartDashboard.putNumber("B Prototype Current Reading: ", protoSparkMax2.getOutputCurrent());
+            SmartDashboard.putNumber("1 Prototype Current Reading: ", protoSparkMax1.getOutputCurrent());
+            SmartDashboard.putNumber("2 Prototype Current Reading: ", protoSparkMax2.getOutputCurrent());
 
 
         }
@@ -213,3 +218,4 @@ public class Robot extends TimedRobot {
 
     }
 
+    

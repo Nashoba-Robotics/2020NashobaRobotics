@@ -255,6 +255,13 @@ public class Turret extends NRSubsystem
     //    System.out.println(goalAngle.get(Angle.Unit.DEGREE));
     }
 
+    public double getCurrent(){
+        if(turretTalon != null){
+            return turretTalon.getStatorCurrent();
+        }
+        return 0;
+    }
+
 
 
     

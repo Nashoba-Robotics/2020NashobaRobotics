@@ -33,13 +33,14 @@ public class Intake extends NRSubsystem
     public static final AngularSpeed MAX_SPEED_INTAKE = new AngularSpeed(1, Angle.Unit.DEGREE, Time.Unit.SECOND);
     public static final AngularAcceleration MAX_ACCELERATION_INTAKE = new AngularAcceleration(1, Angle.Unit.DEGREE, Time.Unit.SECOND, Time.Unit.SECOND);
 
-    public static AngularSpeed currentAngularSpeed = AngularSpeed.ZERO;
+    public static final double INTAKE_PERCENT = 0.5;
 
     private Intake()
     {
         if(EnabledSubsystems.INTAKE_ENABLED)
         {
             IntakeSparkMax = SparkMax.createSpark(RobotMap.INTAKE_SPARKMAX, true);
+            IntakeSolenoid = new Solenoid(RobotMap.PCM_ID, RobotMap.INTAKE_SOLENOID_PCM_PORT);
         }
     }
 
@@ -63,6 +64,9 @@ public class Intake extends NRSubsystem
     public void disable() 
     {
         setMotorSpeedRaw(0);
+        if(currentDeployState() == State.DEPLOYED){
+            retractIntake();
+        }
     }
 
     public enum State {
@@ -84,7 +88,7 @@ public class Intake extends NRSubsystem
 		if(IntakeSolenoid != null) {
 			return State.getDeployState(IntakeSolenoid.get());
 		} else {
-			return State.DEPLOYED;
+			return State.RETRACTED;
 		}
     }
 
@@ -127,11 +131,12 @@ public class Intake extends NRSubsystem
     }
     */
 
-
-
-    public AngularSpeed getMotorSpeed()
+    public double getMotorSpeed() // returns in rev / min
     {
-        return currentAngularSpeed;
+        if(IntakeSparkMax != null){
+            return IntakeSparkMax.getEncoder().getVelocity();
+        }
+        return 0;
     }
 
     public void SmartDashboardInit() {
@@ -159,5 +164,4 @@ public class Intake extends NRSubsystem
 
     }
     
-
 }

@@ -4,8 +4,11 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.motorcontrollers.CTRECreator;
+import edu.nr.lib.motorcontrollers.SparkMax;
 import edu.nr.lib.units.AngularAcceleration;
 import edu.nr.lib.units.Angle;
 import edu.nr.lib.units.Time;
@@ -21,6 +24,8 @@ public class Shooter extends NRSubsystem
     private static Shooter singleton;
 
     private TalonSRX shooterTalon;
+    private CANSparkMax shooterOne;
+    private CANSparkMax shooterTwo;
 
     public static final double ENCODER_TICKS_PER_DEGREE_SHOOTER = 2048 / 360;
 
@@ -57,6 +62,10 @@ public class Shooter extends NRSubsystem
     private Shooter()
     {
         if(EnabledSubsystems.SHOOTER_ENABLED) {
+            shooterOne = SparkMax.createSpark(0, true);
+            shooterTwo = SparkMax.createSpark(15, true);
+
+
             shooterTalon = CTRECreator.createMasterTalon(RobotMap.SHOOTER_TALON);
 
             shooterTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
@@ -115,10 +124,14 @@ public class Shooter extends NRSubsystem
     {
         if(shooterTalon != null)
             shooterTalon.set(ControlMode.PercentOutput, 0.0);
+            shooterOne.set(0);
+            shooterTwo.set(0);
 
     }
 
     public void smartDashboardInit(){
+
+        SmartDashboard.putNumber("TEST SHOOTER PERCENT", 0);
 
         if(EnabledSubsystems.SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED){
         SmartDashboard.putNumber("F_VEL_SHOOTER", F_VEL_SHOOTER);
@@ -133,6 +146,10 @@ public class Shooter extends NRSubsystem
 
     public void smartDashboardInfo()
     {
+        shooterTwo.set(SmartDashboard.getNumber("TEST SHOOTER PERCENT", 0));
+        shooterOne.set(SmartDashboard.getNumber("TEST SHOOTER PERCENT", 0));
+
+
         if(shooterTalon != null){
 
             if(EnabledSubsystems.SHOOTER_SMARTDASHBOARD_BASIC_ENABLED){
