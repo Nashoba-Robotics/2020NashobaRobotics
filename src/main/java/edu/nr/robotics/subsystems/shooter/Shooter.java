@@ -19,13 +19,18 @@ import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.DigitalSensor;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
+import edu.nr.lib.motorcontrollers.SparkMax;
+
 public class Shooter extends NRSubsystem
 {
+    //Needs to be done correctly
     private static Shooter singleton;
 
-    private TalonSRX shooterTalon;
-    private CANSparkMax shooterOne;
-    private CANSparkMax shooterTwo;
+    private TalonSRX shooterTalon1;
+    private TalonSRX shooterTalon2;
 
     public static final double ENCODER_TICKS_PER_DEGREE_SHOOTER = 2048 / 360;
 
@@ -62,44 +67,60 @@ public class Shooter extends NRSubsystem
     private Shooter()
     {
         if(EnabledSubsystems.SHOOTER_ENABLED) {
-            shooterOne = SparkMax.createSpark(0, true);
-            shooterTwo = SparkMax.createSpark(15, true);
+            shooterTalon1 = CTRECreator.createMasterTalon(RobotMap.SHOOTER_TALON1);
+            shooterTalon2 = CTRECreator.createFollowerTalon(RobotMap.SHOOTER_TALON2, shooterTalon1);
 
-
-            shooterTalon = CTRECreator.createMasterTalon(RobotMap.SHOOTER_TALON);
-
-            shooterTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
+            shooterTalon1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
+            shooterTalon2.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
             
-            shooterTalon.config_kF(VEL_SLOT, 0, DEFAULT_TIMEOUT);
-            shooterTalon.config_kP(VEL_SLOT, P_VEL_SHOOTER, DEFAULT_TIMEOUT);
-            shooterTalon.config_kI(VEL_SLOT, I_VEL_SHOOTER, DEFAULT_TIMEOUT);
-            shooterTalon.config_kD(VEL_SLOT, D_VEL_SHOOTER, DEFAULT_TIMEOUT);
+            shooterTalon1.config_kF(VEL_SLOT, 0, DEFAULT_TIMEOUT);
+            shooterTalon1.config_kP(VEL_SLOT, P_VEL_SHOOTER, DEFAULT_TIMEOUT);
+            shooterTalon1.config_kI(VEL_SLOT, I_VEL_SHOOTER, DEFAULT_TIMEOUT);
+            shooterTalon1.config_kD(VEL_SLOT, D_VEL_SHOOTER, DEFAULT_TIMEOUT);
+            shooterTalon2.config_kF(VEL_SLOT, 0, DEFAULT_TIMEOUT);
+            shooterTalon2.config_kP(VEL_SLOT, P_VEL_SHOOTER, DEFAULT_TIMEOUT);
+            shooterTalon2.config_kI(VEL_SLOT, I_VEL_SHOOTER, DEFAULT_TIMEOUT);
+            shooterTalon2.config_kD(VEL_SLOT, D_VEL_SHOOTER, DEFAULT_TIMEOUT);
 
-            shooterTalon.setNeutralMode(NEUTRAL_MODE_SHOOTER);
+            shooterTalon1.setNeutralMode(NEUTRAL_MODE_SHOOTER);
+            shooterTalon2.setNeutralMode(NEUTRAL_MODE_SHOOTER);
 
-            shooterTalon.setInverted(false);
+            shooterTalon1.setInverted(false);
+            shooterTalon2.setInverted(false);
             //Change to Talon Version
-            shooterTalon.setSensorPhase(false);
+            shooterTalon1.setSensorPhase(false);
+            shooterTalon2.setSensorPhase(false);
 
-            shooterTalon.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT_SHOOTER);
+            shooterTalon1.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT_SHOOTER);
+            shooterTalon2.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT_SHOOTER);
 
-            shooterTalon.enableVoltageCompensation(true);
-            shooterTalon.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL, DEFAULT_TIMEOUT);
+            shooterTalon1.enableVoltageCompensation(true);
+            shooterTalon1.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL, DEFAULT_TIMEOUT);
+            shooterTalon2.enableVoltageCompensation(true);
+            shooterTalon2.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL, DEFAULT_TIMEOUT);
             
-            shooterTalon.enableCurrentLimit(true);
-            shooterTalon.configPeakCurrentLimit(PEAK_CURRENT_SHOOTER, DEFAULT_TIMEOUT);
-            shooterTalon.configPeakCurrentDuration(CONTINUOUS_CURRENT_LIMIT_SHOOTER, DEFAULT_TIMEOUT);
+            shooterTalon1.enableCurrentLimit(true);
+            shooterTalon1.configPeakCurrentLimit(PEAK_CURRENT_SHOOTER, DEFAULT_TIMEOUT);
+            shooterTalon1.configPeakCurrentDuration(CONTINUOUS_CURRENT_LIMIT_SHOOTER, DEFAULT_TIMEOUT);
+            shooterTalon2.enableCurrentLimit(true);
+            shooterTalon2.configPeakCurrentLimit(PEAK_CURRENT_SHOOTER, DEFAULT_TIMEOUT);
+            shooterTalon2.configPeakCurrentDuration(CONTINUOUS_CURRENT_LIMIT_SHOOTER, DEFAULT_TIMEOUT);
 
-            shooterTalon.configClosedloopRamp(VOLTAGE_RAMP_RATE_SHOOTER.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
-            shooterTalon.configOpenloopRamp(VOLTAGE_RAMP_RATE_SHOOTER.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
+            shooterTalon1.configClosedloopRamp(VOLTAGE_RAMP_RATE_SHOOTER.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
+            shooterTalon1.configOpenloopRamp(VOLTAGE_RAMP_RATE_SHOOTER.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
+            shooterTalon2.configClosedloopRamp(VOLTAGE_RAMP_RATE_SHOOTER.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
+            shooterTalon2.configOpenloopRamp(VOLTAGE_RAMP_RATE_SHOOTER.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
 
-            shooterTalon.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
+            shooterTalon1.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
+            shooterTalon2.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
 
             if(EnabledSubsystems.SHOOTER_DUMB_ENABLED) {
-                shooterTalon.set(ControlMode.PercentOutput, 0);
+                shooterTalon1.set(ControlMode.PercentOutput, 0);
+                shooterTalon2.set(ControlMode.PercentOutput, 0);
             }
             else{
-                shooterTalon.set(ControlMode.Velocity, 0);
+                shooterTalon1.set(ControlMode.Velocity, 0);
+                shooterTalon2.set(ControlMode.Velocity, 0);
             }
 
         }
@@ -122,10 +143,10 @@ public class Shooter extends NRSubsystem
 
     public void disable()
     {
-        if(shooterTalon != null)
-            shooterTalon.set(ControlMode.PercentOutput, 0.0);
-            shooterOne.set(0);
-            shooterTwo.set(0);
+        if(shooterTalon1 != null)
+            shooterTalon1.set(ControlMode.PercentOutput, 0.0);
+        if(shooterTalon2 != null)
+            shooterTalon2.set(ControlMode.PercentOutput, 0.0);
 
     }
 
@@ -134,55 +155,77 @@ public class Shooter extends NRSubsystem
         SmartDashboard.putNumber("TEST SHOOTER PERCENT", 0);
 
         if(EnabledSubsystems.SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED){
-        SmartDashboard.putNumber("F_VEL_SHOOTER", F_VEL_SHOOTER);
-        SmartDashboard.putNumber("P_VEL_SHOOTER", P_VEL_SHOOTER);
-        SmartDashboard.putNumber("I_VEL_SHOOTER", I_VEL_SHOOTER);
-        SmartDashboard.putNumber("D_VEL_SHOOTER", D_VEL_SHOOTER);
+        SmartDashboard.putNumber("F_VEL_SHOOTER1", F_VEL_SHOOTER);
+        SmartDashboard.putNumber("P_VEL_SHOOTER1", P_VEL_SHOOTER);
+        SmartDashboard.putNumber("I_VEL_SHOOTER1", I_VEL_SHOOTER);
+        SmartDashboard.putNumber("D_VEL_SHOOTER1", D_VEL_SHOOTER);
 
         SmartDashboard.putNumber("Shooter Goal Speed", goalSpeed.get(Angle.Unit.DEGREE, Time.Unit.SECOND));
         
+        SmartDashboard.putNumber("F_VEL_SHOOTER2", F_VEL_SHOOTER);
+        SmartDashboard.putNumber("P_VEL_SHOOTER2", P_VEL_SHOOTER);
+        SmartDashboard.putNumber("I_VEL_SHOOTER2", I_VEL_SHOOTER);
+        SmartDashboard.putNumber("D_VEL_SHOOTER2", D_VEL_SHOOTER);
         }
     }
 
     public void smartDashboardInfo()
     {
-        shooterTwo.set(SmartDashboard.getNumber("TEST SHOOTER PERCENT", 0));
-        shooterOne.set(SmartDashboard.getNumber("TEST SHOOTER PERCENT", 0));
-
-
-        if(shooterTalon != null){
+        if(shooterTalon1 != null && shooterTalon2 != null){
 
             if(EnabledSubsystems.SHOOTER_SMARTDASHBOARD_BASIC_ENABLED){
-                SmartDashboard.putNumber("Shooter Speed", getSpeed().get(Angle.Unit.DEGREE, Time.Unit.SECOND));
-                SmartDashboard.putNumber("Shooter Current", shooterTalon.getStatorCurrent());
+                SmartDashboard.putNumber("Shooter1 Speed", getSpeedShooter1().get(Angle.Unit.DEGREE, Time.Unit.SECOND));
+                SmartDashboard.putNumber("Shooter1 Current", shooterTalon1.getStatorCurrent());
+
+                //SmartDashboard.putNumber("Shooter2 Speed", getSpeedShooter2().get(Angle.Unit.DEGREE, Time.Unit.SECOND));
+                SmartDashboard.putNumber("Shooter2 Current", shooterTalon2.getStatorCurrent());
                 
                 F_VEL_SHOOTER = SmartDashboard.getNumber("F_VEL_SHOOTER", 0);
                 P_VEL_SHOOTER = SmartDashboard.getNumber("P_VEL_SHOOTER", 0);
                 I_VEL_SHOOTER = SmartDashboard.getNumber("I_VEL_SHOOTER", 0);
                 D_VEL_SHOOTER = SmartDashboard.getNumber("D_VEL_SHOOTER", 0);
 
-                shooterTalon.config_kF(VEL_SLOT, 0, DEFAULT_TIMEOUT);
-                shooterTalon.config_kP(VEL_SLOT, P_VEL_SHOOTER, DEFAULT_TIMEOUT);
-                shooterTalon.config_kI(VEL_SLOT, I_VEL_SHOOTER, DEFAULT_TIMEOUT);
-                shooterTalon.config_kD(VEL_SLOT, D_VEL_SHOOTER, DEFAULT_TIMEOUT);
+                shooterTalon1.config_kF(VEL_SLOT, 0, DEFAULT_TIMEOUT);
+                shooterTalon1.config_kP(VEL_SLOT, P_VEL_SHOOTER, DEFAULT_TIMEOUT);
+                shooterTalon1.config_kI(VEL_SLOT, I_VEL_SHOOTER, DEFAULT_TIMEOUT);
+                shooterTalon1.config_kD(VEL_SLOT, D_VEL_SHOOTER, DEFAULT_TIMEOUT);
+
+                shooterTalon2.config_kF(VEL_SLOT, 0, DEFAULT_TIMEOUT);
+                shooterTalon2.config_kP(VEL_SLOT, P_VEL_SHOOTER, DEFAULT_TIMEOUT);
+                shooterTalon2.config_kI(VEL_SLOT, I_VEL_SHOOTER, DEFAULT_TIMEOUT);
+                shooterTalon2.config_kD(VEL_SLOT, D_VEL_SHOOTER, DEFAULT_TIMEOUT);
 
             }
             if(EnabledSubsystems.SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED){
-                SmartDashboard.putString("Shooter Control Mode", shooterTalon.getControlMode().toString());
-				SmartDashboard.putNumber("Shooter Voltage", shooterTalon.getMotorOutputVoltage());
-                SmartDashboard.putNumber("Shooter Raw Position Ticks", shooterTalon.getSelectedSensorPosition());
+                SmartDashboard.putString("Shooter1 Control Mode", shooterTalon1.getControlMode().toString());
+				SmartDashboard.putNumber("Shooter1 Voltage", shooterTalon1.getMotorOutputVoltage());
+                SmartDashboard.putNumber("Shooter1 Raw Position Ticks", shooterTalon1.getSelectedSensorPosition());
+
+                SmartDashboard.putString("Shooter2 Control Mode", shooterTalon2.getControlMode().toString());
+				SmartDashboard.putNumber("Shooter2 Voltage", shooterTalon2.getMotorOutputVoltage());
+                SmartDashboard.putNumber("Shooter2 Raw Position Ticks", shooterTalon2.getSelectedSensorPosition());
             }
             goalSpeed = new AngularSpeed( SmartDashboard.getNumber("Shooter Goal Speed", goalSpeed.get(Angle.Unit.DEGREE, Time.Unit.SECOND)), Angle.Unit.DEGREE, Time.Unit.SECOND);
         }
     }
 
-    public AngularSpeed getSpeed(){
-        if(shooterTalon != null){
-            return new AngularSpeed(shooterTalon.getSelectedSensorVelocity(), Angle.Unit.MAGNETIC_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND);
+    public AngularSpeed getSpeedShooter1(){
+        if(shooterTalon1 != null){
+            return new AngularSpeed(shooterTalon1.getSelectedSensorVelocity(), Angle.Unit.MAGNETIC_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND);
         }
         return AngularSpeed.ZERO;
     }
 
+    /*
+    public AngularSpeed getSpeedShooter2()
+    {
+        if(shooterTalon2 != null)
+        {
+            return new AngularSpeed(shooterTalon2.getSelectedSensorVelocity(), Angle.Unit.MAGNETIC_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND);
+        }
+    }
+    */
+    /*
     public void setMotorSpeed(AngularSpeed speed)
     {
         if(shooterTalon != null){
@@ -191,10 +234,11 @@ public class Shooter extends NRSubsystem
             shooterTalon.set(ControlMode.Velocity, speedSetPointShooter.get(Angle.Unit.MAGNETIC_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND));
         }
     }
-
+    */
+/*
     public void setMotorSpeedRaw(double percent) {
         if(shooterTalon != null)
         shooterTalon.set(ControlMode.PercentOutput, percent);
     }
-
+*/
 }

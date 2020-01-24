@@ -1,11 +1,10 @@
-package edu.nr.robotics.subsystems.sparkIntake;
+package edu.nr.robotics.subsystems.intake;
 
 import edu.nr.lib.commandbased.NRCommand;
 
-
-public class IntakeExtendCommand extends NRCommand
+public class IntakeToggleDeployCommand extends NRCommand
 {
-    public IntakeExtendCommand()
+    public IntakeToggleDeployCommand()
     {
         super(Intake.getInstance());
     }
@@ -14,6 +13,8 @@ public class IntakeExtendCommand extends NRCommand
     {
         if(Intake.getInstance().isIntakeDeployed() == false)
             Intake.getInstance().deployIntake();
+        else
+            Intake.getInstance().retractIntake();
     }
 
     public boolean isFinishedNR()

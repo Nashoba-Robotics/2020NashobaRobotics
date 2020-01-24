@@ -4,9 +4,11 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
 
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.motorcontrollers.CTRECreator;
+import edu.nr.lib.motorcontrollers.SparkMax;
 import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Acceleration;
@@ -26,6 +28,7 @@ public class Turret extends NRSubsystem
 {
     private static Turret singleton;
     private TalonSRX turretTalon;
+    private CANSparkMax turretSpark;
 
     //TODO: Change below, speed and velocity to angular speed and velocity
 
@@ -82,6 +85,7 @@ public class Turret extends NRSubsystem
     {
         if(EnabledSubsystems.TURRET_ENABLED) {
             turretTalon = CTRECreator.createMasterTalon(RobotMap.TURRET_TALON);
+            turretSpark = SparkMax.createSpark(0, true);
 
             turretTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
             

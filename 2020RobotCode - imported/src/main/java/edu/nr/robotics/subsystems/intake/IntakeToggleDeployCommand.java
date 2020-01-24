@@ -1,4 +1,4 @@
-package edu.nr.robotics.subsystems.sparkIntake;
+package edu.nr.robotics.subsystems.intake;
 
 import edu.nr.lib.commandbased.NRCommand;
 
