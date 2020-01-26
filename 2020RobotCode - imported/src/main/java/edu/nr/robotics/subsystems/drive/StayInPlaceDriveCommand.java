@@ -24,6 +24,6 @@ public class StayInPlaceDriveCommand extends NRCommand
     public boolean isFinishedNR()
     {
         //Change to when button is released
-        return false;
+        return !OI.getInstance().getStayMode();
     }
 }

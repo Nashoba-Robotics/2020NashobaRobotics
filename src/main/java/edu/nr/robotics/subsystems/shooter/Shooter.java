@@ -4,8 +4,11 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.motorcontrollers.CTRECreator;
+import edu.nr.lib.motorcontrollers.SparkMax;
 import edu.nr.lib.units.AngularAcceleration;
 import edu.nr.lib.units.Angle;
 import edu.nr.lib.units.Time;
@@ -65,7 +68,7 @@ public class Shooter extends NRSubsystem
     {
         if(EnabledSubsystems.SHOOTER_ENABLED) {
             shooterTalon1 = CTRECreator.createMasterTalon(RobotMap.SHOOTER_TALON1);
-            shooterTalon2 = CTRECreator.createMasterTalon(RobotMap.SHOOTER_TALON2);
+            shooterTalon2 = CTRECreator.createFollowerTalon(RobotMap.SHOOTER_TALON2, shooterTalon1);
 
             shooterTalon1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
             shooterTalon2.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
@@ -148,6 +151,8 @@ public class Shooter extends NRSubsystem
     }
 
     public void smartDashboardInit(){
+
+        SmartDashboard.putNumber("TEST SHOOTER PERCENT", 0);
 
         if(EnabledSubsystems.SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED){
 

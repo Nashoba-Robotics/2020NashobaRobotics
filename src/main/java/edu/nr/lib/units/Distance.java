@@ -3,6 +3,7 @@ package edu.nr.lib.units;
 import edu.nr.lib.Units;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.hood.Hood;
+import edu.nr.robotics.subsystems.indexer.Indexer;
 
 
 public class Distance {
@@ -12,20 +13,18 @@ public class Distance {
 	private Unit type;
 	
 	public enum Unit implements GenericUnit {
-		FOOT, INCH, METER, MAGNETIC_ENCODER_TICK_DRIVE, MAGNETIC_ENCODER_TICK_HOOD;
+		FOOT, INCH, METER, MAGNETIC_ENCODER_TICK_DRIVE, MAGNETIC_ENCODER_TICK_HOOD, MAGNETIC_ENCODER_TICK_INDEXER;
 		
 		public static final Unit defaultUnit = INCH;
 		
 		/**
 		 * For the drive
 		 */
-		private static final double ENCODER_TICK_DRIVE_PER_INCH = Drive.EFFECTIVE_ENC_TICK_PER_INCH_DRIVE;		
-	
-	
-		
+		private static final double ENCODER_TICK_DRIVE_PER_INCH = Drive.EFFECTIVE_ENC_TICK_PER_INCH_DRIVE;			
 		private static final double FOOT_PER_INCH = 1.0/Units.INCHES_PER_FOOT;
 		private static final double METER_PER_INCH = 1.0/Units.INCHES_PER_METER;
 		private static final double ENCODER_TICK_HOOD_PER_INCH = Hood.ENCODER_TICKS_PER_DEGREE_HOOD * 4; // so garbage
+		private static final double ENCODER_TICK_INDEXER_PER_INCH = Indexer.ENCODER_TICKS_PER_INCH_BALL_MOVED;
 		
 		public double convertToDefault(double val) {
 			if(this == Unit.defaultUnit) {
@@ -44,8 +43,12 @@ public class Distance {
 			if(this == Unit.MAGNETIC_ENCODER_TICK_HOOD){
 				return val / ENCODER_TICK_HOOD_PER_INCH;
 			}
+			if(this == Unit.MAGNETIC_ENCODER_TICK_INDEXER){
+				return val / ENCODER_TICK_INDEXER_PER_INCH;
+			}
 			return 0;
 		}
+	
 		
 		public double convertFromDefault(double val) {
 			if(this == Unit.defaultUnit) {
@@ -63,9 +66,12 @@ public class Distance {
 			if(this == Unit.MAGNETIC_ENCODER_TICK_HOOD){
 				return ENCODER_TICK_HOOD_PER_INCH * val;
 			}
+			if(this == Unit.MAGNETIC_ENCODER_TICK_INDEXER){
+				return ENCODER_TICK_INDEXER_PER_INCH;
+			}
 			return 0;
 		}
-}
+	}
 	
 	public Distance(double val, Unit type) {
 		this.val = val;
@@ -124,5 +130,5 @@ public class Distance {
 	public double div(Distance distance) {
 		return this.get(Unit.defaultUnit) / distance.get(Unit.defaultUnit);
 	}
-
+	
 }
