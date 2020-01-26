@@ -150,17 +150,13 @@ public class Shooter extends NRSubsystem
     public void smartDashboardInit(){
 
         if(EnabledSubsystems.SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED){
-        SmartDashboard.putNumber("F_VEL_SHOOTER1", F_VEL_SHOOTER);
-        SmartDashboard.putNumber("P_VEL_SHOOTER1", P_VEL_SHOOTER);
-        SmartDashboard.putNumber("I_VEL_SHOOTER1", I_VEL_SHOOTER);
-        SmartDashboard.putNumber("D_VEL_SHOOTER1", D_VEL_SHOOTER);
 
         SmartDashboard.putNumber("Shooter Goal Speed", goalSpeed.get(Angle.Unit.DEGREE, Time.Unit.SECOND));
         
-        SmartDashboard.putNumber("F_VEL_SHOOTER2", F_VEL_SHOOTER);
-        SmartDashboard.putNumber("P_VEL_SHOOTER2", P_VEL_SHOOTER);
-        SmartDashboard.putNumber("I_VEL_SHOOTER2", I_VEL_SHOOTER);
-        SmartDashboard.putNumber("D_VEL_SHOOTER2", D_VEL_SHOOTER);
+        SmartDashboard.putNumber("F_VEL_SHOOTER", F_VEL_SHOOTER);
+        SmartDashboard.putNumber("P_VEL_SHOOTER", P_VEL_SHOOTER);
+        SmartDashboard.putNumber("I_VEL_SHOOTER", I_VEL_SHOOTER);
+        SmartDashboard.putNumber("D_VEL_SHOOTER", D_VEL_SHOOTER);
         }
     }
 
@@ -200,7 +196,9 @@ public class Shooter extends NRSubsystem
 				SmartDashboard.putNumber("Shooter2 Voltage", shooterTalon2.getMotorOutputVoltage());
                 SmartDashboard.putNumber("Shooter2 Raw Position Ticks", shooterTalon2.getSelectedSensorPosition());
             }
-            goalSpeed = new AngularSpeed( SmartDashboard.getNumber("Shooter Goal Speed", goalSpeed.get(Angle.Unit.DEGREE, Time.Unit.SECOND)), Angle.Unit.DEGREE, Time.Unit.SECOND);
+
+            shooterTalon1.set(ControlMode.PercentOutput, SmartDashboard.getNumber("Shooter Goal Speed", 0));
+         //   goalSpeed = new AngularSpeed( SmartDashboard.getNumber("Shooter Goal Speed", goalSpeed.get(Angle.Unit.ROTATION, Time.Unit.MINUTE)), Angle.Unit.ROTATION, Time.Unit.MINUTE);
         }
     }
 
@@ -221,7 +219,13 @@ public class Shooter extends NRSubsystem
     }
     */
     /*
-    public void setMotorSpeed(AngularSpeed speed)
+    public void 
+    
+    
+    
+    
+    
+    Speed(AngularSpeed speed)
     {
         if(shooterTalon != null){
             shooterTalon.selectProfileSlot(VEL_SLOT, DEFAULT_TIMEOUT);
@@ -236,4 +240,11 @@ public class Shooter extends NRSubsystem
         shooterTalon.set(ControlMode.PercentOutput, percent);
     }
 */
+
+    public void setMotorSpeed(AngularSpeed speed){
+        if(shooterTalon1 != null){
+            shooterTalon1.set(ControlMode.Velocity, speed.get(Angle.Unit.MAGNETIC_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND));
+            shooterTalon2.set(ControlMode.Velocity, speed.get(Angle.Unit.MAGNETIC_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND));
+        }
+    }
 }

@@ -203,7 +203,7 @@ public class Turret extends NRSubsystem
                 deltaAngle = new Angle(SmartDashboard.getNumber("Delta Angle: ", deltaAngle.get(Angle.Unit.DEGREE)), Angle.Unit.DEGREE);
 			}
         }
-        System.out.println(goalAngle.get(Angle.Unit.DEGREE));
+        //System.out.println("Turret angle" + goalAngle.get(Angle.Unit.DEGREE));
 
 
     }

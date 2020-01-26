@@ -12,9 +12,9 @@ public class RobotMap {
     public static final int LEFT_DRIVE_FOLLOW_1_CURRENT = 1;
     public static final int LEFT_DRIVE_FOLLOW_2_CURRENT = 2;
     public static final int TURRET_TALON = 2;
-    public static final int HOOD_TALON = 5;
-    public static final int SHOOTER_TALON1 = 6; // motor on 2019 bot at pdp six is slot 0
-    public static final int SHOOTER_TALON2 = 5;
+    public static final int HOOD_TALON = 0;
+    public static final int SHOOTER_TALON1 = 1500; // motor on 2019 bot at pdp six is slot 0,
+    public static final int SHOOTER_TALON2 = 111111111;
     public static final int PIGEON_ID = 10;
 
     public static final int PCM_ID = 1;
