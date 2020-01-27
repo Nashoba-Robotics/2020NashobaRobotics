@@ -64,7 +64,7 @@ public class Indexer extends NRSubsystem {
 
     public static Distance distanceSetPoint = Distance.ZERO;
     public static Distance DeltaPosition = Distance.ZERO;
-    public static final Distance SHOOT_ONE_DISTANCE = new Distance(0, Distance.Unit.INCH);
+    public static final Distance SHOOT_ONE_DISTANCE = Distance.ZERO;
 
     private Indexer(){
         if(EnabledSubsystems.INDEXER_ENABLED){

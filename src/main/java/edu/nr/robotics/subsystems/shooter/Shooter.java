@@ -191,7 +191,9 @@ public class Shooter extends NRSubsystem
                 
                 shooterTalon1.set(ControlMode.Velocity, SmartDashboard.getNumber("Set Shooter Speed: ", DEFAULT_TIMEOUT));
             }
-            goalSpeed = new AngularSpeed( SmartDashboard.getNumber("Shooter Goal Speed", goalSpeed.get(Angle.Unit.DEGREE, Time.Unit.SECOND)), Angle.Unit.DEGREE, Time.Unit.SECOND);
+
+            shooterTalon1.set(ControlMode.PercentOutput, SmartDashboard.getNumber("Shooter Goal Speed", 0));
+         //   goalSpeed = new AngularSpeed( SmartDashboard.getNumber("Shooter Goal Speed", goalSpeed.get(Angle.Unit.ROTATION, Time.Unit.MINUTE)), Angle.Unit.ROTATION, Time.Unit.MINUTE);
         }
     }
 
@@ -201,16 +203,17 @@ public class Shooter extends NRSubsystem
         }
         return AngularSpeed.ZERO;
     }
-    public void setMotorSpeed(AngularSpeed speed)
-    {
-        if(shooterTalon1 != null){
-            shooterTalon1.selectProfileSlot(VEL_SLOT, DEFAULT_TIMEOUT);
-            speedSetPointShooter = speed;
-            shooterTalon1.set(ControlMode.Velocity, speedSetPointShooter.get(Angle.Unit.MAGNETIC_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND));
-        }
-    }
+   
     public void setMotorSpeedRaw(double percent) {
         if(shooterTalon1 != null)
         shooterTalon1.set(ControlMode.PercentOutput, percent);
+    }
+
+    public void setMotorSpeed(AngularSpeed speed){
+        if(shooterTalon1 != null){
+            shooterTalon1.set(ControlMode.Velocity, speed.get(Angle.Unit.MAGNETIC_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND));
+            shooterTalon2.set(ControlMode.Velocity, speed.get(Angle.Unit.MAGNETIC_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND));
+            speedSetPointShooter = speed;
+        }
     }
 }

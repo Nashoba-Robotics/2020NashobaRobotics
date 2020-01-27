@@ -1,10 +1,10 @@
 package edu.nr.robotics;
-
+ 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import edu.nr.lib.motorcontrollers.SparkMax;
-
+ 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -32,6 +32,7 @@ import edu.nr.robotics.subsystems.drive.EnableReverseTwoDMotionProfileSmartDashb
 import edu.nr.robotics.subsystems.drive.EnableTwoDMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.TurnSmartDashboardCommand;
 import edu.nr.robotics.subsystems.hood.Hood;
+import edu.nr.robotics.subsystems.hood.SetHoodAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.indexer.IndexerDeltaPositionSmartDashboardCommand;
 import edu.nr.robotics.subsystems.sensors.ISquaredCSensor;
 import edu.nr.robotics.subsystems.shooter.SetShooterSpeedSmartDashboardCommand;
@@ -39,7 +40,6 @@ import edu.nr.robotics.subsystems.shooter.Shooter;
 import edu.nr.robotics.subsystems.turret.DeltaTurretAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.turret.SetTurretAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.turret.Turret;
-
 /*import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;*/
 import edu.wpi.first.wpilibj.Compressor;
@@ -47,9 +47,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+ 
 public class Robot extends TimedRobot {
-
+ 
     private static Robot singleton;
 
     private static double period = 0.02;
@@ -67,7 +67,7 @@ public class Robot extends TimedRobot {
     double dt;
     double dtTot = 0;
     int count = 0;
-
+ 
     private double prevTime = 0;
 
     //private CANSparkMax protoSparkMax1;
@@ -77,55 +77,60 @@ public class Robot extends TimedRobot {
    
     public double autoWaitTime;
     //public Compressor robotCompressor;
-
+ 
     public synchronized static Robot getInstance() {
         return singleton;
     }
-
+ 
     public void robotInit() {
         singleton = this;
-
+ 
         m_period = period; // period that the code runs at
-
+ 
         smartDashboardInit();
         autoChooserInit();
         OI.init();
         Drive.getInstance();
         //Turret.getInstance();
         //Shooter.getInstance();
-        //Hood.getInstance();
+        Hood.getInstance();
        
         //robotCompressor = new Compressor(RobotMap.PCM_ID);
         //robotCompressor.start();
-
+ 
         // CameraInit();
-
+ 
         LimelightNetworkTable.getInstance().lightLED(true);
         LimelightNetworkTable.getInstance().setPipeline(Pipeline.Target);
+ 
         //System.out.println("end of robot init");
     }
-
+ 
     public void autoChooserInit() {
         
     }
-
+ 
     public void smartDashboardInit() {
-
+ 
         SmartDashboard.putData(new CSVSaverEnable());
         SmartDashboard.putData(new CSVSaverDisable());
         SmartDashboard.putNumber("Auto Wait Time", 0);
-
+ 
         if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putData(new DriveForwardBasicSmartDashboardCommand());
             SmartDashboard.putData(new EnableMotionProfileSmartDashboardCommand());
-			SmartDashboard.putData(new TurnSmartDashboardCommand());
+            SmartDashboard.putData(new TurnSmartDashboardCommand());
             SmartDashboard.putData(new EnableTwoDMotionProfileSmartDashboardCommand());
             SmartDashboard.putData(new EnableReverseTwoDMotionProfileSmartDashboardCommand());
         }
-
+ 
         if(EnabledSubsystems.TURRET_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putData(new SetTurretAngleSmartDashboardCommand());
             SmartDashboard.putData(new DeltaTurretAngleSmartDashboardCommand());
+        }
+ 
+        if(EnabledSubsystems.SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED){
+            SmartDashboard.putData(new SetShooterSpeedSmartDashboardCommand());
         }
 
         if(EnabledSubsystems.INDEXER_SMARTDASHBOARD_DEBUG_ENABLED){
@@ -142,7 +147,9 @@ public class Robot extends TimedRobot {
     
 
     }
-
+        
+    
+ 
         @Override
         public void disabledInit() {
             for(NRSubsystem subsystem : NRSubsystem.subsystems) {
@@ -153,37 +160,37 @@ public class Robot extends TimedRobot {
         public void testInit() {
             enabledInit();
         }
-
+ 
         public void disabledPeriodic() {
-
+ 
         }
-
+ 
         public void autonomousInit() {
             enabledInit();
-
+ 
             
-
+ 
         }
-
+ 
         public void autonomousPeriodic() {
-
+ 
         }
-
+ 
         public void teleopInit() {
             enabledInit();
             //new CancelAllCommand().start(); maybe? depending on gameplay
-
+ 
            // LimelightNetworkTable.getInstance().lightLED(true);
            // LimelightNetworkTable.getInstance().lightLED(false);
         }
-
+ 
         public void teleopPeriodic() {
-
+ 
             dt = edu.wpi.first.wpilibj.Timer.getFPGATimestamp() - prevTime;
             prevTime = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
             dtTot += dt;
             count++;
-
+ 
             if (count % 100 == 0) {
                 //System.out.println(dtTot / 100);
                 dtTot = 0;
@@ -200,21 +207,21 @@ public class Robot extends TimedRobot {
             }).start();
             
         }*/
-
+ 
         @Override
         public void testPeriodic() {
-
+ 
         } 
         @Override
         public void robotPeriodic() {
-
+ 
             CommandScheduler.getInstance().run();
             Periodic.runAll();
             SmartDashboardSource.runAll();
-
-
+ 
+ 
         }
-
+ 
         public void enabledInit() {
 
         }
@@ -222,11 +229,9 @@ public class Robot extends TimedRobot {
         public Command getAutoCommand() {
            return  new DoNothingCommand();
         }
-
+ 
         public double getPeriod() {
             return period;
         }
-
+ 
     }
-
-    
