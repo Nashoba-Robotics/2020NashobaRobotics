@@ -1,5 +1,6 @@
 package edu.nr.robotics.subsystems.arm;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -13,7 +14,7 @@ import edu.nr.lib.units.Acceleration;
 
 public class Arm extends NRSubsystem
 {
-    private Arm Singleton;
+    private Arm singleton;
 
     private TalonSRX armTalon;
 
@@ -58,20 +59,22 @@ public class Arm extends NRSubsystem
 
     public void init()
     {
-        if(Singleton == null)
-            Singleton = new Arm();
+        if(singleton == null)
+            singleton = new Arm();
     }
 
     public Arm getInstance()
     {
-        if(Singleton == null)
+        if(singleton == null)
             init();
-        return Singleton; 
+        return singleton; 
     }
 
     public void disable()
     {
-
+        if(armTalon != null){
+            armTalon.set(ControlMode.PercentOutput, 0);
+        }
     }
 
     public void smartDashboardInit()
