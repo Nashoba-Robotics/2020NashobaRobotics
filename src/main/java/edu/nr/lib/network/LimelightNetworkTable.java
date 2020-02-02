@@ -50,7 +50,7 @@ public class LimelightNetworkTable extends TimerTask {
 	private static LimelightNetworkTable singleton;
 	
 	public enum Pipeline {
-		Cargo, DriverCam, Target
+		Cargo, DriverCam, Target, Ball
 	}
 	
 	public static LimelightNetworkTable getInstance() {
@@ -160,7 +160,10 @@ public class LimelightNetworkTable extends TimerTask {
 			limelightTable.getEntry("pipeline").setDouble(1);
 		} else if (pipeline == Pipeline.Target) {
 			limelightTable.getEntry("pipeline").setDouble(2);
+		} else if (pipeline == Pipeline.Ball){
+			limelightTable.getEntry("pipeline").setDouble(3);
 		}
+
 	}
 	
 	public double getLED() {

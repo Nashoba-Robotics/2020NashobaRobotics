@@ -1,30 +1,32 @@
 package edu.nr.robotics.subsystems.drive;
 
 import edu.nr.lib.commandbased.NRCommand;
-import edu.nr.lib.units.Distance;
+import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.robotics.OI;
 
-public class StayInPlaceDriveCommand extends NRCommand
+public class StayInPlace2Command extends NRCommand
 {
-
-
-    public StayInPlaceDriveCommand()
+    public StayInPlace2Command()
     {
-        
+
     }
 
     public void onStart()
     {
-        Drive.getInstance().stayInPlaceOnStart();
+        Drive.getInstance().stayInPlaceOnStart2();
     }
 
+    @Override
     public void onEnd()
     {
-        Drive.getInstance().stayInPlaceOnEnd();
+        Drive.getInstance().stayInPlaceOnEnd2();
     }
 
+    @Override
     public boolean isFinishedNR()
     {
         return OI.getInstance().isPushModeEnabled();
     }
+
+    public void disable() {}
 }

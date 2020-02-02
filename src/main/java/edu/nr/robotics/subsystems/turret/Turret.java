@@ -27,12 +27,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Turret extends NRSubsystem
 {
     private static Turret singleton;
-    private TalonSRX turretTalon;
+    //private TalonSRX turretTalon;
     private CANSparkMax turretSpark;
 
     //TODO: Change below, speed and velocity to angular speed and velocity
 
-    public static final double ENCODER_TICKS_PER_DEGREE = 0.0;
+    public static final double ENCODER_TICKS_PER_DEGREE_TALON = 0.0;
+    public static final double ENCODER_TICKS_PER_DEGREE_SPARK = 0.0;
 	public static final AngularAcceleration MAX_ACCEL = new AngularAcceleration(580, Angle.Unit.DEGREE, Time.Unit.SECOND, Time.Unit.SECOND);
 	public static final AngularSpeed MAX_SPEED = new AngularSpeed(80, Angle.Unit.DEGREE, Time.Unit.SECOND);
     public static final double VOLTAGE_VELOCITY_SLOPE = 0.0;
@@ -84,54 +85,56 @@ public class Turret extends NRSubsystem
     private Turret()
     {
         if(EnabledSubsystems.TURRET_ENABLED) {
-            turretTalon = CTRECreator.createMasterTalon(RobotMap.TURRET_TALON);
+            //turretTalon = CTRECreator.createMasterTalon(RobotMap.TURRET_TALON);
             turretSpark = SparkMax.createSpark(0, true);
 
-            turretTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
+            //turretTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
             
-            turretTalon.config_kF(VEL_SLOT, 0, DEFAULT_TIMEOUT);
-            turretTalon.config_kP(VEL_SLOT, P_VEL_TURRET, DEFAULT_TIMEOUT);
-            turretTalon.config_kI(VEL_SLOT, I_VEL_TURRET, DEFAULT_TIMEOUT);
-            turretTalon.config_kD(VEL_SLOT, D_VEL_TURRET, DEFAULT_TIMEOUT);
-            turretTalon.config_kF(MOTION_MAGIC_SLOT, F_POS_TURRET, DEFAULT_TIMEOUT);
-            turretTalon.config_kP(MOTION_MAGIC_SLOT, P_POS_TURRET, DEFAULT_TIMEOUT);
-            turretTalon.config_kI(MOTION_MAGIC_SLOT, I_POS_TURRET, DEFAULT_TIMEOUT);
-            turretTalon.config_kD(MOTION_MAGIC_SLOT, D_POS_TURRET, DEFAULT_TIMEOUT);
+            //turretTalon.config_kF(VEL_SLOT, 0, DEFAULT_TIMEOUT);
+            //turretTalon.config_kP(VEL_SLOT, P_VEL_TURRET, DEFAULT_TIMEOUT);
+            //turretTalon.config_kI(VEL_SLOT, I_VEL_TURRET, DEFAULT_TIMEOUT);
+            //turretTalon.config_kD(VEL_SLOT, D_VEL_TURRET, DEFAULT_TIMEOUT);
+            //turretTalon.config_kF(MOTION_MAGIC_SLOT, F_POS_TURRET, DEFAULT_TIMEOUT);
+            //turretTalon.config_kP(MOTION_MAGIC_SLOT, P_POS_TURRET, DEFAULT_TIMEOUT);
+            //turretTalon.config_kI(MOTION_MAGIC_SLOT, I_POS_TURRET, DEFAULT_TIMEOUT);
+            //turretTalon.config_kD(MOTION_MAGIC_SLOT, D_POS_TURRET, DEFAULT_TIMEOUT);
 
-            turretTalon.config_kF(POS_SLOT, F_POS_TURRET, DEFAULT_TIMEOUT);
-            turretTalon.config_kP(POS_SLOT, P_POS_TURRET, DEFAULT_TIMEOUT);
-            turretTalon.config_kI(POS_SLOT, I_POS_TURRET, DEFAULT_TIMEOUT);
-            turretTalon.config_kD(POS_SLOT, D_POS_TURRET, DEFAULT_TIMEOUT);
+            //turretTalon.config_kF(POS_SLOT, F_POS_TURRET, DEFAULT_TIMEOUT);
+            //turretTalon.config_kP(POS_SLOT, P_POS_TURRET, DEFAULT_TIMEOUT);
+            //turretTalon.config_kI(POS_SLOT, I_POS_TURRET, DEFAULT_TIMEOUT);
+            //turretTalon.config_kD(POS_SLOT, D_POS_TURRET, DEFAULT_TIMEOUT);
 
-            turretTalon.setNeutralMode(NEUTRAL_MODE_TURRET);
+            //turretTalon.setNeutralMode(NEUTRAL_MODE_TURRET);
 
-            turretTalon.setInverted(false);
+            //turretTalon.setInverted(false);
             //Change to Talon Version
-            turretTalon.setSensorPhase(false);
+            //turretTalon.setSensorPhase(false);
 
-            turretTalon.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT_TURRET);
+            //turretTalon.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT_TURRET);
 
-            turretTalon.enableVoltageCompensation(true);
-            turretTalon.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL, DEFAULT_TIMEOUT);
+            //turretTalon.enableVoltageCompensation(true);
+            //turretTalon.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL, DEFAULT_TIMEOUT);
             
-            turretTalon.enableCurrentLimit(true);
-            turretTalon.configPeakCurrentLimit(PEAK_CURRENT_TURRET, DEFAULT_TIMEOUT);
-            turretTalon.configPeakCurrentDuration(CONTINUOUS_CURRENT_LIMIT_TURRET, DEFAULT_TIMEOUT);
+            //turretTalon.enableCurrentLimit(true);
+            //turretTalon.configPeakCurrentLimit(PEAK_CURRENT_TURRET, DEFAULT_TIMEOUT);
+            //turretTalon.configPeakCurrentDuration(CONTINUOUS_CURRENT_LIMIT_TURRET, DEFAULT_TIMEOUT);
 
-            turretTalon.configClosedloopRamp(VOLTAGE_RAMP_RATE_TURRET.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
-            turretTalon.configOpenloopRamp(VOLTAGE_RAMP_RATE_TURRET.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
+            //turretTalon.configClosedloopRamp(VOLTAGE_RAMP_RATE_TURRET.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
+            //turretTalon.configOpenloopRamp(VOLTAGE_RAMP_RATE_TURRET.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
 
             //Change Magnetic_encoder_tick_aux_drive to angle stuff, angular acc and velocity
-            turretTalon.configMotionCruiseVelocity((int) MAX_SPEED.mul(PROFILE_VEL_PERCENT_TURRET).get(Angle.Unit.TURRET_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
-            turretTalon.configMotionAcceleration((int) MAX_ACCEL.mul(PROFILE_ACCEL_PERCENT_TURRET).get(Angle.Unit.TURRET_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
+            //turretTalon.configMotionCruiseVelocity((int) MAX_SPEED.mul(PROFILE_VEL_PERCENT_TURRET).get(Angle.Unit.TURRET_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
+            //turretTalon.configMotionAcceleration((int) MAX_ACCEL.mul(PROFILE_ACCEL_PERCENT_TURRET).get(Angle.Unit.TURRET_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
 
-            turretTalon.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
+            //turretTalon.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
 
             if(EnabledSubsystems.TURRET_DUMB_ENABLED) {
-                turretTalon.set(ControlMode.PercentOutput, 0);
+                //turretTalon.set(ControlMode.PercentOutput, 0);
+                turretSpark.set(0);
             }
             else{
-                turretTalon.set(ControlMode.Velocity, 0);
+                //turretTalon.set(ControlMode.Velocity, 0);
+                turretSpark.set(0);
             }
         }
         smartDashboardInit();
@@ -152,10 +155,16 @@ public class Turret extends NRSubsystem
 
     public void disable()
     {
+        /*
         if(turretTalon != null){
         turretTalon.set(ControlMode.PercentOutput, 0);
         setAngle(getAngle());
-    }
+        */
+        if(turretSpark != null)
+        {
+            turretSpark.stopMotor();
+            setAngle(getAngle());
+        }
     }
 
     public void smartDashboardInit()
@@ -185,19 +194,23 @@ public class Turret extends NRSubsystem
 
     public void smartDashboardInfo()
     {
-        if(turretTalon != null)
+        if(turretSpark != null)
         {
             if(EnabledSubsystems.TURRET_SMARTDASHBOARD_BASIC_ENABLED)
             {
                 SmartDashboard.putNumber("Turret Position: ", getAngle().get(Angle.Unit.DEGREE));
-                SmartDashboard.putNumber("Turret Current", turretTalon.getStatorCurrent());
+                //SmartDashboard.putNumber("Turret Current", turretTalon.getStatorCurrent());
+                SmartDashboard.putNumber("Turret Current: ", turretSpark.getOutputCurrent());
 				SmartDashboard.putString("Turret Speed", getSpeed().get(Angle.Unit.DEGREE, Time.Unit.SECOND) + " : " + speedSetPoint.get(Angle.Unit.DEGREE, Time.Unit.SECOND));
 				SmartDashboard.putString("Turret Angle", getAngle().get(Angle.Unit.DEGREE) + " : " + setAngle.get(Angle.Unit.DEGREE));	
 			}
 			if(EnabledSubsystems.TURRET_SMARTDASHBOARD_DEBUG_ENABLED){
-				SmartDashboard.putString("Turret Control Mode", turretTalon.getControlMode().toString());
-				SmartDashboard.putNumber("Turret Voltage", turretTalon.getMotorOutputVoltage());
-                SmartDashboard.putNumber("Turret Raw Position Ticks", turretTalon.getSelectedSensorPosition());
+				//SmartDashboard.putString("Turret Control Mode", turretTalon.getControlMode().toString());
+				//SmartDashboard.putNumber("Turret Voltage", turretTalon.getMotorOutputVoltage());
+                //SmartDashboard.putNumber("Turret Raw Position Ticks", turretTalon.getSelectedSensorPosition());
+
+                SmartDashboard.putNumber("Turret Output Current: ", turretSpark.getOutputCurrent());
+                SmartDashboard.putNumber("Turret Raw Position Ticks: ", turretSpark.getEncoder().getPosition());
                 
                 goalAngle = new Angle(SmartDashboard.getNumber("Target Angle: ", goalAngle.get(Angle.Unit.DEGREE)), Angle.Unit.DEGREE);
                 deltaAngle = new Angle(SmartDashboard.getNumber("Delta Angle: ", deltaAngle.get(Angle.Unit.DEGREE)), Angle.Unit.DEGREE);
@@ -210,43 +223,69 @@ public class Turret extends NRSubsystem
 
     public Angle getAngle()
     {
+        /*
         if(turretTalon != null)
         {
-            return new Angle(turretTalon.getSelectedSensorPosition() / ENCODER_TICKS_PER_DEGREE, Angle.Unit.DEGREE);
+            return new Angle(turretTalon.getSelectedSensorPosition() / ENCODER_TICKS_PER_DEGREE_TALON, Angle.Unit.DEGREE);
+        }
+        */
+        if(turretSpark != null)
+        {
+            return new Angle(turretSpark.getEncoder().getPosition() / ENCODER_TICKS_PER_DEGREE_SPARK, Angle.Unit.DEGREE);
         }
         return Angle.ZERO;
     }
 
     public void setMotorSpeedInPercent(double percent){
-        turretTalon.set(ControlMode.PercentOutput, percent);
+        //turretTalon.set(ControlMode.PercentOutput, percent);
+
+        if(turretSpark != null)
+        turretSpark.set(percent);
     }
 
     public void setMotorSpeedInDegreesPerSecond(AngularSpeed speed){
         speedSetPoint = speed;
+        //double ratio = speed.get(Unit.DEGREE, Time.Unit.SECOND) / MAX_SPEED.get(Unit.DEGREE, Time.Unit.SECOND);
         double ratio = speed.get(Unit.DEGREE, Time.Unit.SECOND) / MAX_SPEED.get(Unit.DEGREE, Time.Unit.SECOND);
-
+        /*
         if(turretTalon != null){
             turretTalon.set(ControlMode.PercentOutput, ratio);
+        }
+        */
+        if(turretSpark != null)
+        {
+            turretSpark.set(ratio);
         }
 
     }
 
     public AngularSpeed getSpeed(){
+        /*
         if(turretTalon != null){
             return speedSetPoint;
         }
+        */
+        if(turretSpark != null)
+        {
+            return speedSetPoint;
+        }
+
         return AngularSpeed.ZERO;
     }
 
     public void setAngle(Angle targetAngle){
         goalAngle = targetAngle;
-        turretTalon.selectProfileSlot(POS_SLOT, DEFAULT_TIMEOUT);
+        //turretTalon.selectProfileSlot(POS_SLOT, DEFAULT_TIMEOUT);
 
-        turretTalon.set(ControlMode.Position, goalAngle.get(Unit.TURRET_ENCODER_TICK));
+        //turretTalon.set(ControlMode.Position, goalAngle.get(Unit.TURRET_ENCODER_TICK));
+
+        turretSpark.getEncoder().setPosition(targetAngle.get(Unit.TURRET_ENCODER_TICK));
+
     }
 
     public void periodic()
     {
+        /*
         if(turretTalon != null)
         {
             if(limSwitchLeft.get()){
@@ -256,12 +295,31 @@ public class Turret extends NRSubsystem
                 setAngle(rightmost);
             }
         }
+        */
+
+        if(turretSpark != null)
+        {
+            if(limSwitchLeft.get())
+            {
+                setAngle(leftmost);
+            }
+            else if(limSwitchRight.get())
+            {
+                setAngle(rightmost);
+            }
+        }
     //    System.out.println(goalAngle.get(Angle.Unit.DEGREE));
     }
 
     public double getCurrent(){
+        /*
         if(turretTalon != null){
-            return turretTalon.getStatorCurrent();
+            return turretTalon.getStatorCurret();
+        }
+        */
+        if(turretSpark != null)
+        {
+            return turretSpark.getOutputCurrent();
         }
         return 0;
     }

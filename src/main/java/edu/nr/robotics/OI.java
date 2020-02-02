@@ -14,10 +14,11 @@ import edu.nr.robotics.subsystems.drive.DumbDriveToggleCommand;
 import edu.nr.robotics.subsystems.drive.EnableSniperForwardMode;
 import edu.nr.robotics.subsystems.drive.EnableSniperTurnMode;
 import edu.nr.robotics.subsystems.drive.TurnCommand;
-import edu.nr.robotics.subsystems.drive.StayInPlaceDriveCommand;
+import edu.nr.robotics.subsystems.drive.StayInPlace2Command;
 import edu.nr.lib.commandbased.DoNothingCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.nr.robotics.subsystems.turret.SetTurretLimelightCommand;
 
 
 public class OI implements SmartDashboardSource {
@@ -68,6 +69,10 @@ public class OI implements SmartDashboardSource {
     private static final int STICK_OPERATOR_LEFT = 2;
     private static final int STICK_OPERATOR_RIGHT = 3;
 
+    public static boolean stayInPlace = false;
+
+    private JoystickButton pushModeButton;
+
     public static final Drive.DriveMode driveMode = Drive.DriveMode.cheesyDrive; // set default type of drive here
 
     private OI() {
@@ -91,8 +96,14 @@ public class OI implements SmartDashboardSource {
 
     public void initDriveLeft() {
         //buttons go here
-        new JoystickButton(driveLeft, 1).whileHeld(new StayInPlaceDriveCommand());
-        new JoystickButton(driveLeft, 1).whenReleased(new DoNothingCommand());
+        //pushModeButton = new JoystickButton(driveLeft, 1);
+        //pushModeButton.whenPressed(new StayInPlace2Command());
+
+        //new SetTurretLimelightCommand();
+
+        
+        //end PID loop cancel into velocity PID
+
     }
 
     public void initDriveRight() {
@@ -220,5 +231,10 @@ public class OI implements SmartDashboardSource {
     public boolean isKidModeOn(){
         //do later if needed
         return false; //kidModeSwitch.get();
+    }
+    public boolean isPushModeEnabled()
+    {
+        //Might Need To Be Changed
+        return !pushModeButton.get(); // !?
     }
 }

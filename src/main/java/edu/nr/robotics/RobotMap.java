@@ -13,14 +13,14 @@ public class RobotMap {
     public static final int LEFT_DRIVE_FOLLOW_2_CURRENT = 2;
     public static final int TURRET_TALON = 2;
     public static final int HOOD_TALON = 0;
-    public static final int SHOOTER_TALON1 = 1500; // motor on 2019 bot at pdp six is slot 0,
-    public static final int SHOOTER_TALON2 = 111111111;
+    public static final int SHOOTER_TALON1 = 0; // motor on 2019 bot at pdp six is slot 0,
+    public static final int SHOOTER_TALON2 = 4;
     public static final int PIGEON_ID = 10;
 
     public static final int PCM_ID = 1;
     public static final int PDP_ID = 62;
 
-    public static final int LIM_HOOD_UPPER = 5;
+    public static final int LIM_HOOD_UPPER = 6;
     public static final int LIM_HOOD_LOWER = 1;
 
     public static final int LIM_TURRET_LEFT = 2;
@@ -32,8 +32,8 @@ public class RobotMap {
     public static final int INDEXER_READY_SHOT = 0;
 
     //Change to thing
-    public static final int INTAKE_SPARKMAX = 0;
-    public static final int INTAKE_SOLENOID_PCM_PORT = 0;
+//    public static final int INTAKE_SPARKMAX = 0;
+//    public static final int INTAKE_SOLENOID_PCM_PORT = 0;
 	public static final int INDEXER_TALON = 0;
 
 
