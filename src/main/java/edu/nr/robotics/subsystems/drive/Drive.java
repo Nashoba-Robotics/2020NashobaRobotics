@@ -46,8 +46,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     private static Drive singleton;
  
-    private TalonSRX leftDrive, rightDrive; 
-    private TalonSRX testing;
+    private TalonSRX leftDrive, rightDrive;
+    
     private TalonSRX leftDriveFollow1, leftDriveFollow2, rightDriveFollow1, rightDriveFollow2;
     private PowerDistributionPanel pdp;
     // these may change because of new talons
@@ -149,7 +149,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     public static final int POS_SLOT = 0;
 
-    public static final int VEL_SLOT = 0;
+    public static final int VEL_SLOT = 1;
  
     // No timeout for talon configuration functions
     public static final int DEFAULT_TIMEOUT = 0;
@@ -190,15 +190,11 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
         if (EnabledSubsystems.DRIVE_ENABLED) {
             leftDrive = CTRECreator.createMasterTalon(RobotMap.LEFT_DRIVE);
             rightDrive = CTRECreator.createMasterTalon(RobotMap.RIGHT_DRIVE);
-            testing = CTRECreator.createMasterTalon(0); // so garbage
 
             pdp = new PowerDistributionPanel(RobotMap.PDP_ID);
  
             leftDriveFollow1 = CTRECreator.createFollowerTalon(RobotMap.LEFT_DRIVE_FOLLOW_1, leftDrive);
             leftDriveFollow2 = CTRECreator.createFollowerTalon(RobotMap.LEFT_DRIVE_FOLLOW_2, leftDrive);
-            //leftDriveFollow1 = CTRECreator.createMasterVictor(RobotMap.LEFT_DRIVE_FOLLOW_1, RobotMap.LEFT_DRIVE);
-            //leftDriveFollow2 = CTRECreator.createMasterVictor(RobotMap.LEFT_DRIVE_FOLLOW_2);
-            //leftDriveFollow1 = CTRECreator.createMasterVictor(RobotMap.LEFT_DRIVE_FOLLOW_1);
  
             rightDriveFollow1 = CTRECreator.createFollowerTalon(RobotMap.RIGHT_DRIVE_FOLLOW_1, rightDrive);
             rightDriveFollow2 = CTRECreator.createFollowerTalon(RobotMap.RIGHT_DRIVE_FOLLOW_2, rightDrive);
@@ -206,7 +202,6 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
             if (EnabledSubsystems.DRIVE_DUMB_ENABLED) {
                 leftDrive.set(ControlMode.PercentOutput, 0);
                 rightDrive.set(ControlMode.PercentOutput, 0); // .set sets sparkmax motor as a percent auomatically
-                testing.set(ControlMode.PercentOutput, 0);
             } else {
                 leftDrive.set(ControlMode.Velocity, 0);
                 rightDrive.set(ControlMode.Velocity, 0);
@@ -370,20 +365,23 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     public void stayInPlaceOnStart()
     {
-        leftDrivePosition = leftDrive.getSelectedSensorPosition();
-        rightDrivePosition = rightDrive.getSelectedSensorPosition();
-    }
+        leftDrive.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
+        rightDrive.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
 
-    public void stayInPlace()
-    {
         leftDrive.selectProfileSlot(POS_SLOT, DEFAULT_TIMEOUT);
-        leftDrive.set(ControlMode.Position, leftDrivePosition);
+        leftDrive.set(ControlMode.Position, 0);
 
         rightDrive.selectProfileSlot(POS_SLOT, DEFAULT_TIMEOUT);
-        rightDrive.set(ControlMode.Position, rightDrivePosition);
+        rightDrive.set(ControlMode.Position, 0);
     }
 
-    public void stayInPlaceOnEnd(){
+    public void stayInPlaceOnEnd()
+    {
+        leftDrive.neutralOutput();
+        rightDrive.neutralOutput();
+
+        leftDrive.set(ControlMode.Disabled, 0);
+        rightDrive.set(ControlMode.Disabled, 0);
     }
  
     public void setMotorSpeedInPercent(double left, double right) {
@@ -564,8 +562,6 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
             SmartDashboard.putData(new ResetGyroCommand());
         }
         if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
-            SmartDashboard.putNumber("TESTING PERCENT", 0);
-            SmartDashboard.putNumber("TESTING CURRENT", testing.getStatorCurrent());
 
             SmartDashboard.putNumber("Wheel Base Multiplier: ", wheelBaseMultiplier);
  
@@ -615,8 +611,6 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
             if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_BASIC_ENABLED) {
  
-                testing.set(ControlMode.PercentOutput, SmartDashboard.getNumber("TESTING PERCENT", 0));
-                SmartDashboard.putNumber("TESTING CURRENT", testing.getStatorCurrent());
 
                 
  
@@ -700,9 +694,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     public void periodic() {
         //call iqsuaredc sensor periodic?
-        
-
-
+        //System.out.println("Left Drive Sensor Position: " + leftDrive.getSelectedSensorPosition());
     }
  
     public void disable() {

@@ -150,10 +150,20 @@ public class Turret extends NRSubsystem
         return Angle.ZERO;
     }
  
-    public AngularSpeed getSpeed(){
+    public AngularSpeed getActualSpeed(){
         if(turretSpark != null)
         {
- 
+            return new AngularSpeed(turretEncoder.getVelocity(), Angle.Unit.ROTATION, Time.Unit.MINUTE);
+        }
+
+        return AngularSpeed.ZERO;
+    }
+
+    public AngularSpeed getSetSpeed()
+    {
+        if(turretSpark != null)
+        {
+            
         }
         return AngularSpeed.ZERO;
     }

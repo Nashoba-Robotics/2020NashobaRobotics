@@ -23,15 +23,15 @@ public class RobotMap {
  
     public static final int PCM_ID = 1;
     public static final int PDP_ID = 62;
- 
-    public static final int LIM_HOOD_UPPER = 5;
-    public static final int LIM_HOOD_LOWER = 6;
- 
-    public static final int LIM_TURRET_LEFT = 7;
-    public static final int LIM_TURRET_RIGHT = 8;
- 
-    public static final int INDEXER_INPUT = 1;
-    public static final int INDEXER_SPACING_CLOSE = 2;
+
+    public static final int LIM_HOOD_UPPER = 6;
+    public static final int LIM_HOOD_LOWER = 1;
+
+    public static final int LIM_TURRET_LEFT = 2;
+    public static final int LIM_TURRET_RIGHT = 3;
+
+    public static final int INDEXER_INPUT = 0;
+    public static final int INDEXER_SPACING_CLOSE = 0;
     public static final int INDEXER_SPACING_FAR = 0;
     public static final int INDEXER_READY_SHOT = 3;
     public static final int TRANSFER_SENSOR = 4;
@@ -45,5 +45,13 @@ public class RobotMap {
     
     public static final int CLIMB_RETRACT_TALON = 0;
  
+//    public static final int INTAKE_SPARKMAX = 0;
+//    public static final int INTAKE_SOLENOID_PCM_PORT = 0;
+
+
+
+
+    ///sensor ports too
+
 
 }

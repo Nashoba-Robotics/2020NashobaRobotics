@@ -26,7 +26,7 @@ import edu.nr.lib.motorcontrollers.SparkMax;
 
 public class Intake extends NRSubsystem
 {
-    private static Intake Singleton;
+    private static Intake singleton;
 
     private CANSparkMax IntakeSparkMax;
     private TalonSRX IntakeTalon;
@@ -45,26 +45,26 @@ public class Intake extends NRSubsystem
         super();
         if(EnabledSubsystems.INTAKE_ENABLED)
         {
-            IntakeSparkMax = SparkMax.createSpark(RobotMap.INTAKE_SPARKMAX, true);
             IntakeTalon = CTRECreator.createMasterTalon(0);
         }
+        SmartDashboardInit();
     }
 
     public static void init()
     {
-        if(Singleton == null)
+        if(singleton == null)
         {
-            Singleton = new Intake();
+            singleton = new Intake();
         }
     }
 
     public static Intake getInstance()
     {
-        if(Singleton == null)
+        if(singleton == null)
         {
             init();
         }
-        return Singleton;
+        return singleton;
     }
 
     public void disable() 
@@ -132,7 +132,8 @@ public class Intake extends NRSubsystem
             if (EnabledSubsystems.INTAKE_ENABLED)
                 setMotorSpeedRaw(percent);
             else
-                setMotorSpeed(MAX_SPEED_INTAKE.mul(percent));
+               // setMotorSpeed(MAX_SPEED_INTAKE.mul(percent));
+               setMotorSpeedPercent(percent);
     }
     */
 
@@ -146,13 +147,18 @@ public class Intake extends NRSubsystem
     //Hopefully returns actual motor speed
     public double getActualMotorSpeed()
     {
-        return IntakeSparkMax.get();
+        if (IntakeSparkMax != null){
+            return IntakeSparkMax.get();
+        }
+        return 0;
     }
 
     public void SmartDashboardInit() {
 		if (EnabledSubsystems.INTAKE_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putBoolean("Intake deployed: ", isIntakeDeployed());
-            SmartDashboard.putNumber("Intake Motor Speed: ", 0);
+            SmartDashboard.putNumber("Intake Motor Speed: ", getActualMotorSpeed());
+            SmartDashboard.putNumber("SET SPEED INTAKE", 0);
+
 		}
 	}
 
@@ -160,8 +166,9 @@ public class Intake extends NRSubsystem
 	public void smartDashboardInfo() {
         if(EnabledSubsystems.INTAKE_SMARTDASHBOARD_DEBUG_ENABLED)
         {
-            //SmartDashboard.putNumber("Intake Motor Speed: ", getMotorSpeed().getDefault());
             SmartDashboard.putBoolean("Intake Deployed: ", isIntakeDeployed());
+            setMotorSpeedRaw(SmartDashboard.getNumber("SET SPEED INTAKE", 0));
+
         }
 	}
 

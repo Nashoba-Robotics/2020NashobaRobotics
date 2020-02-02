@@ -10,7 +10,7 @@ import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.wpi.first.wpilibj.Timer;
 
 public class DriveToBallCommand extends NRCommand {
-
+    //make sure that the limelight can consistently read the ball so it isnt jerk
     //returns the distance in inches based on the height of the box drawn by the limelight
     Equation dist = new Equation() {
     
@@ -48,7 +48,7 @@ public class DriveToBallCommand extends NRCommand {
 	@Override
 	protected void onStart() {
         //new EnableLimelightCommand(true).start();
-        LimelightNetworkTable.getInstance().setPipeline(Pipeline.Cargo);
+        LimelightNetworkTable.getInstance().setPipeline(Pipeline.Ball);
 	}
 	
 	@Override
@@ -80,8 +80,8 @@ public class DriveToBallCommand extends NRCommand {
 			headingAdjustment = Drive.MIN_PROFILE_TURN_PERCENT * Math.signum(headingAdjustment);
 		}
         
-        System.out.println("move val: " + moveValue);
-        System.out.println("heading adjustment: " + headingAdjustment);
+        //System.out.println("move val: " + moveValue);
+        //System.out.println("heading adjustment: " + headingAdjustment);
 
 		outputLeft = moveValue - headingAdjustment;
 		outputRight = moveValue + headingAdjustment;

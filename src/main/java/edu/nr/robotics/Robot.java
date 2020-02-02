@@ -28,6 +28,7 @@ import edu.nr.robotics.subsystems.drive.CSVSaverDisable;
 import edu.nr.robotics.subsystems.drive.CSVSaverEnable;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.DriveForwardBasicSmartDashboardCommand;
+import edu.nr.robotics.subsystems.drive.DriveToBallCommand;
 import edu.nr.robotics.subsystems.drive.EnableMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.EnableReverseTwoDMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.EnableTwoDMotionProfileSmartDashboardCommand;
@@ -37,6 +38,9 @@ import edu.nr.robotics.subsystems.hood.SetHoodAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.transfer.Transfer;
 
 import edu.nr.robotics.subsystems.indexer.IndexerDeltaPositionSmartDashboardCommand;
+import edu.nr.robotics.subsystems.indexer.IndexerSetVelocityCommand;
+import edu.nr.robotics.subsystems.indexer.IndexerSetVelocitySmartDashboardCommand;
+import edu.nr.robotics.subsystems.intake.Intake;
 import edu.nr.robotics.subsystems.sensors.ISquaredCSensor;
 import edu.nr.robotics.subsystems.shooter.SetShooterSpeedSmartDashboardCommand;
 import edu.nr.robotics.subsystems.shooter.Shooter;
@@ -94,11 +98,11 @@ public class Robot extends TimedRobot {
         smartDashboardInit();
         autoChooserInit();
         //OI.init();
-        //Drive.getInstance();
-        //Turret.getInstance();
-        //Shooter.getInstance();
-        //Hood.getInstance();
-        Transfer.getInstance();
+        //Drive.init();
+        //Turret.init();
+        //Shooter.init();
+        //Hood.init();
+        //Intake.init();
         //robotCompressor = new Compressor(RobotMap.PCM_ID);
         //robotCompressor.start();
  
@@ -119,7 +123,9 @@ public class Robot extends TimedRobot {
         SmartDashboard.putData(new CSVSaverEnable());
         SmartDashboard.putData(new CSVSaverDisable());
         SmartDashboard.putNumber("Auto Wait Time", 0);
- 
+    //    SmartDashboard.putData(new DriveToBallCommand());
+        SmartDashboard.putData(new IndexerSetVelocitySmartDashboardCommand());
+
         if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putData(new DriveForwardBasicSmartDashboardCommand());
             SmartDashboard.putData(new EnableMotionProfileSmartDashboardCommand());
@@ -219,7 +225,7 @@ public class Robot extends TimedRobot {
  
         @Override
         public void testPeriodic() {
- 
+
         } 
         @Override
         public void robotPeriodic() {
