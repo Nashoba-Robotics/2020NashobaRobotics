@@ -35,6 +35,7 @@ public class RobotMap {
 //    public static final int INTAKE_SPARKMAX = 0;
 //    public static final int INTAKE_SOLENOID_PCM_PORT = 0;
 	public static final int INDEXER_TALON = 0;
+	public static final int ARM_TALON = 42; // change later
 
 
 

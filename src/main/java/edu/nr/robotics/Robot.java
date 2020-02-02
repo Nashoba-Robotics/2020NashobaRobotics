@@ -9,6 +9,8 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import org.ietf.jgss.Oid;
+
 import edu.nr.lib.commandbased.DoNothingCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.interfaces.Periodic;
@@ -53,25 +55,28 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
  
     private static Robot singleton;
- 
+
     private static double period = 0.02;
- 
-    private CANSparkMax protoShooter1;
-    private CANSparkMax protoShooter2;
- 
-    public static double F_VEL_SHOOTER = 0.000184;
-    public static double P_VEL_SHOOTER = 0.0003;
+
+    //private CANSparkMax protoShooter1;
+    //private CANSparkMax //protoShooter2;
+
+    /*public static double F_VEL_SHOOTER = 0;
+    public static double P_VEL_SHOOTER = 0;
     public static double I_VEL_SHOOTER = 0;
     public static double D_VEL_SHOOTER = 0;
- 
-    public static AngularSpeed shooterSetSpeed;
- 
+
+    public static AngularSpeed shooterSetSpeed;*/
+
     double dt;
     double dtTot = 0;
     int count = 0;
  
     private double prevTime = 0;
- 
+
+    //private CANSparkMax protoSparkMax1;
+    //private CANSparkMax protoSparkMax2;
+
     private Command autonomousCommand;
    
     public double autoWaitTime;
@@ -103,14 +108,10 @@ public class Robot extends TimedRobot {
         LimelightNetworkTable.getInstance().setPipeline(Pipeline.Target);
  
         //System.out.println("end of robot init");
-
     }
  
     public void autoChooserInit() {
         
- 
-      
- 
     }
  
     public void smartDashboardInit() {
@@ -143,12 +144,14 @@ public class Robot extends TimedRobot {
         }
 
         if(EnabledSubsystems.SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED){
-            
+            //SmartDashboard.putData(new SetShooterSpeedSmartDashboardCommand());
+            //SmartDashboard.putNumber("Prototype Speed Percent: ", 0);
+            //SmartDashboard.putNumber("1 Prototype Current Reading: ", 0);
+            //SmartDashboard.putNumber("2 Prototype Current Reading: ", 0);
         }
 
-        if(EnabledSubsystems.HOOD_SMARTDASHBOARD_DEBUG_ENABLED){
-            SmartDashboard.putData(new SetHoodAngleSmartDashboardCommand());
-        }
+    
+
     }
         
     
@@ -199,30 +202,9 @@ public class Robot extends TimedRobot {
                 dtTot = 0;
                 count = 0;
             }
+            
+        }
 
-           
- 
-           
-            //protoShooter1.set(SmartDashboard.getNumber("Prototype Speed Percent", 0));
-            //protoShooter2.set(-1 * SmartDashboard.getNumber("Prototype Speed Percent", 0));
-
- 
-            //protoShooter1.getPIDController().setReference(SmartDashboard.getNumber("Prototype Speed Percent", 0), ControlType.kVelocity, 0);
-            //protoShooter1.getPIDController().setReference(shooterSetSpeed.get(Angle.Unit.ROTATION, Time.Unit.MINUTE), ControlType.kVelocity, 0);
-            //protoShooter2.getPIDController().setReference(-1 * shooterSetSpeed.get(Angle.Unit.ROTATION, Time.Unit.MINUTE), ControlType.kVelocity, 0);
- 
-            //protoShooter1.getPIDController().setReference(180, ControlType.kVelocity, 0);
-            //protoShooter2.getPIDController().setReference(SmartDashboard.getNumber("Prototype Speed Percent", 0), ControlType.kVelocity, 0);
- 
- 
-            //SmartDashboard.putNumber("Shooter1 Current: ", protoShooter1.getOutputCurrent());
-            //SmartDashboard.putNumber("Shooter2 Current: ", protoShooter2.getOutputCurrent());
- 
-           
-            //SmartDashboard.putNumber("Shooter1 Speed: ", protoShooter1.getEncoder().getVelocity());
-            //SmartDashboard.putNumber("Shooter2 Speed: ", protoShooter2.getEncoder().getVelocity());
-            }
- 
        /* public void CameraInit() {
             new Thread(() -> {
                 UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
@@ -247,7 +229,7 @@ public class Robot extends TimedRobot {
         }
  
         public void enabledInit() {
-            //new LiftLockMechanismRetractCommand().start();
+
         }
     
         public Command getAutoCommand() {

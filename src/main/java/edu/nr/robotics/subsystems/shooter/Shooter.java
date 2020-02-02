@@ -165,6 +165,8 @@ public class Shooter extends NRSubsystem
         SmartDashboard.putNumber("P_VEL_SHOOTER", P_VEL_SHOOTER);
         SmartDashboard.putNumber("I_VEL_SHOOTER", I_VEL_SHOOTER);
         SmartDashboard.putNumber("D_VEL_SHOOTER", D_VEL_SHOOTER);
+
+        SmartDashboard.putNumber("Set Shooter Speed: ", 0);
         }
     }
 
@@ -173,14 +175,14 @@ public class Shooter extends NRSubsystem
         if(shooterTalon1 != null && shooterTalon2 != null){
 
             if(EnabledSubsystems.SHOOTER_SMARTDASHBOARD_BASIC_ENABLED){
-                SmartDashboard.putNumber("Shooter1 Speed", getSpeedShooter1().get(Angle.Unit.ROTATION, Time.Unit.MINUTE));
+            //    SmartDashboard.putNumber("Shooter1 Speed", getSpeedShooter1().get(Angle.Unit.ROTATION, Time.Unit.MINUTE));
                 SmartDashboard.putNumber("Shooter2 Speed", getSpeedShooter2().get(Angle.Unit.ROTATION, Time.Unit.MINUTE));
                 
                 SmartDashboard.putNumber("Shooter 1 Position", shooterTalon1.getSelectedSensorPosition());
 
                 SmartDashboard.putNumber("Shooter1 Current", shooterTalon1.getStatorCurrent());
 
-                //SmartDashboard.putNumber("Shooter2 Speed", getSpeedShooter2().get(Angle.Unit.DEGREE, Time.Unit.SECOND));
+                SmartDashboard.putNumber("Shooter1 Current", shooterTalon1.getStatorCurrent());
                 SmartDashboard.putNumber("Shooter2 Current", shooterTalon2.getStatorCurrent());
 
                 F_VEL_SHOOTER = SmartDashboard.getNumber("F_VEL_SHOOTER", 0);
@@ -207,6 +209,8 @@ public class Shooter extends NRSubsystem
                 SmartDashboard.putString("Shooter2 Control Mode", shooterTalon2.getControlMode().toString());
 				SmartDashboard.putNumber("Shooter2 Voltage", shooterTalon2.getMotorOutputVoltage());
                 SmartDashboard.putNumber("Shooter2 Raw Position Ticks", shooterTalon2.getSelectedSensorPosition());
+                
+                shooterTalon1.set(ControlMode.Velocity, SmartDashboard.getNumber("Set Shooter Speed: ", DEFAULT_TIMEOUT));
             }
 
             //shooterTalon1.set(ControlMode.PercentOutput, SmartDashboard.getNumber("Shooter Goal Speed", 0));
@@ -215,7 +219,7 @@ public class Shooter extends NRSubsystem
         }
     }
 
-    public AngularSpeed getSpeedShooter1(){
+    public AngularSpeed getSpeedShooter(){
         if(shooterTalon1 != null){
             return new AngularSpeed(shooterTalon1.getSelectedSensorVelocity(), Angle.Unit.MAGNETIC_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND);
         }
@@ -248,19 +252,18 @@ public class Shooter extends NRSubsystem
         }
     }
     */
-/*
+
+   
     public void setMotorSpeedRaw(double percent) {
-        if(shooterTalon != null)
-        shooterTalon.set(ControlMode.PercentOutput, percent);
+        if(shooterTalon1 != null)
+        shooterTalon1.set(ControlMode.PercentOutput, percent);
     }
-*/
 
     public void setMotorSpeed(AngularSpeed speed){
         if(shooterTalon1 != null){
-            int rawNumber = 0;
-            SmartDashboard.putNumber("Commanding Shooter Speed", rawNumber);
-            shooterTalon1.set(ControlMode.Velocity, rawNumber);
-            //shooterTalon2.set(ControlMode.Velocity, speed.get(Angle.Unit.SHOOTER_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND));
+            shooterTalon1.set(ControlMode.Velocity, speed.get(Angle.Unit.MAGNETIC_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND));
+            shooterTalon2.set(ControlMode.Velocity, speed.get(Angle.Unit.MAGNETIC_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND));
+            speedSetPointShooter = speed;
         }
     }
 }

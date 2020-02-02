@@ -412,7 +412,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     public void setMotorSpeed(Speed left, Speed right) {
         if (leftDrive != null && rightDrive != null) {
- 
+            System.out.println(right.get(Distance.Unit.FOOT, Time.Unit.SECOND) + "right setm speed");
             leftMotorSetpoint = left;
             rightMotorSetpoint = right;
  
@@ -554,9 +554,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
             System.out.println("No Distances Set");
         }
         // fix
-        System.out.println("distX: " + distX.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE));
+        /*System.out.println("distX: " + distX.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE));
         System.out.println("minvel: " + minVel);
-        System.out.println("minaccel: " + minAccel);
+        System.out.println("minaccel: " + minAccel);*/
  
         diagonalProfiler = new OneDimensionalMotionProfilerTwoMotor(this, this, kVOneD, kAOneD, kPOneD, kIOneD, kDOneD,
                 kP_thetaOneD);
@@ -732,6 +732,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
     }
  
     public void invertDrive() {
+
         leftDrive.setInverted(!leftDrive.getInverted());
         leftDriveFollow1.setInverted(!leftDriveFollow1.getInverted());
         leftDriveFollow2.setInverted(!leftDriveFollow2.getInverted());

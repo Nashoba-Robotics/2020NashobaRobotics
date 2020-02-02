@@ -37,6 +37,39 @@ public abstract class NRSubsystem extends SubsystemBase implements SmartDashboar
     }
     
  
+    /**
+     * Set the joystick command to be used by the subsystem.
+     * @param joystickCommand
+     */
+    public final void setJoystickCommand(JoystickCommand joystickCommand) {
+        this.joystickCommand = joystickCommand;
+        
+        switchToJoystickTimer = new Timer();
+        switchToJoystickTimer.schedule(new JoystickSwitchChecker(), 1000, joystickCommand.getPeriodOfCheckingForSwitchToJoystick());
+        //initDefaultCommand();
+    }
+    
+    /**
+     * Chooses the default command when the class is initialized
+     */
+    protected final void initDefaultCommand() {
+        //setDefaultCommand(joystickCommand);
+    }
+    
+    private final class JoystickSwitchChecker extends TimerTask {
+ 
+        @Override
+        public void run() {
+            if(joystickCommand.shouldSwitchToJoystick()) {
+                Command currentCommand = getCurrentCommand();
+                if(currentCommand != joystickCommand) {
+                //    System.err.println(joystickCommand + " is overriding.");
+                    NRCommand.cancelCommand(getCurrentCommand());
+                }
+            }
+        }
+        
+    }
  
     public void periodic()
     {

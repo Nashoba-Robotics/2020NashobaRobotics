@@ -91,7 +91,7 @@ public class Intake extends NRSubsystem
 		if(IntakeSolenoid != null) {
 			return State.getDeployState(IntakeSolenoid.get());
 		} else {
-			return State.DEPLOYED;
+			return State.RETRACTED;
 		}
     }
 

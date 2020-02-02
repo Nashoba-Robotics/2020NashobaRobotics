@@ -104,6 +104,8 @@ public class OI implements SmartDashboardSource {
         
         //end PID loop cancel into velocity PID
 
+        //new JoystickButton(driveLeft, 1).whileHeld(new StayInPlaceDriveCommand());
+        //new JoystickButton(driveLeft, 1).whenReleased(new DoNothingCommand());
     }
 
     public void initDriveRight() {
