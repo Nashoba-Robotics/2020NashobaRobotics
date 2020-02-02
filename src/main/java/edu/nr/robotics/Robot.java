@@ -1,10 +1,10 @@
 package edu.nr.robotics;
- 
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import edu.nr.lib.motorcontrollers.SparkMax;
- 
+
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -23,6 +23,7 @@ import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Time;
 import edu.nr.lib.units.Time.Unit;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.nr.robotics.subsystems.climbdeploy.ClimbDeploySmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.CSVSaverDisable;
 import edu.nr.robotics.subsystems.drive.CSVSaverEnable;
 import edu.nr.robotics.subsystems.drive.Drive;
@@ -33,6 +34,8 @@ import edu.nr.robotics.subsystems.drive.EnableTwoDMotionProfileSmartDashboardCom
 import edu.nr.robotics.subsystems.drive.TurnSmartDashboardCommand;
 import edu.nr.robotics.subsystems.hood.Hood;
 import edu.nr.robotics.subsystems.hood.SetHoodAngleSmartDashboardCommand;
+import edu.nr.robotics.subsystems.transfer.Transfer;
+
 import edu.nr.robotics.subsystems.indexer.IndexerDeltaPositionSmartDashboardCommand;
 import edu.nr.robotics.subsystems.sensors.ISquaredCSensor;
 import edu.nr.robotics.subsystems.shooter.SetShooterSpeedSmartDashboardCommand;
@@ -40,6 +43,7 @@ import edu.nr.robotics.subsystems.shooter.Shooter;
 import edu.nr.robotics.subsystems.turret.DeltaTurretAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.turret.SetTurretAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.turret.Turret;
+import edu.nr.robotics.subsystems.turret.TurretLimelightCommand;
 /*import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;*/
 import edu.wpi.first.wpilibj.Compressor;
@@ -89,12 +93,12 @@ public class Robot extends TimedRobot {
  
         smartDashboardInit();
         autoChooserInit();
-        OI.init();
-        Drive.getInstance();
+        //OI.init();
+        //Drive.getInstance();
         //Turret.getInstance();
         //Shooter.getInstance();
-        Hood.getInstance();
-       
+        //Hood.getInstance();
+        Transfer.getInstance();
         //robotCompressor = new Compressor(RobotMap.PCM_ID);
         //robotCompressor.start();
  
@@ -127,6 +131,7 @@ public class Robot extends TimedRobot {
         if(EnabledSubsystems.TURRET_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putData(new SetTurretAngleSmartDashboardCommand());
             SmartDashboard.putData(new DeltaTurretAngleSmartDashboardCommand());
+            SmartDashboard.putData(new TurretLimelightCommand());
         }
  
         if(EnabledSubsystems.SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED){
@@ -144,6 +149,10 @@ public class Robot extends TimedRobot {
             //SmartDashboard.putNumber("2 Prototype Current Reading: ", 0);
         }
 
+        if(EnabledSubsystems.CLIMB_DEPLOY_SMARTDASHBOARD_DEBUG_ENABLED)
+        {
+            SmartDashboard.putData(new ClimbDeploySmartDashboardCommand());
+        }
     
 
     }

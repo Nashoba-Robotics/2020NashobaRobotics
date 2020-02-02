@@ -3,6 +3,7 @@ package edu.nr.lib.units;
 import edu.nr.lib.Units;
 import edu.nr.robotics.subsystems.hood.Hood;
 import edu.nr.robotics.subsystems.shooter.Shooter;
+import edu.nr.robotics.subsystems.transfer.Transfer;
 import edu.nr.robotics.subsystems.turret.Turret;
 
 public class Angle {
@@ -13,7 +14,7 @@ public class Angle {
 	
 	public enum Unit implements GenericUnit {
 		DEGREE, ROTATION, RADIAN, MAGNETIC_ENCODER_NATIVE_UNITS, 
-		MAGNETIC_ENCODER_TICK, TURRET_ENCODER_TICK, SHOOTER_ENCODER_TICK, HOOD_ENCODER_TICK;
+		MAGNETIC_ENCODER_TICK, TURRET_ENCODER_TICK, SHOOTER_ENCODER_TICK, HOOD_ENCODER_TICK, TRANSFER_ENCODER_TICK;
 		
 		public static final Unit defaultUnit = DEGREE;
 		
@@ -25,6 +26,7 @@ public class Angle {
 		private static final double TURRET_ENCODER_TICKS_PER_DEGREE = Turret.ENCODER_TICKS_PER_DEGREE;
 		private static final double SHOOTER_ENCODER_TICKS_PER_DEGREE = Shooter.ENCODER_TICKS_PER_DEGREE_SHOOTER;
 		private static final double HOOD_ENCODER_TICKS_PER_DEGREE = Hood.ENCODER_TICKS_PER_DEGREE_HOOD;
+		private static final double TRANSFER_ENCODER_TICKS_PER_DEGREE = Transfer.ENCODER_TICKS_PER_DEGREE;
 
 		
 		public double convertToDefault(double val) {
@@ -51,6 +53,9 @@ public class Angle {
 			}
 			if(this == Unit.HOOD_ENCODER_TICK){
 				return val / HOOD_ENCODER_TICKS_PER_DEGREE;
+			}
+			if(this == Unit.TRANSFER_ENCODER_TICK){
+				return val / TRANSFER_ENCODER_TICKS_PER_DEGREE;
 			}
 			return 0;
 		}
@@ -79,6 +84,9 @@ public class Angle {
 			}
 			if(this == HOOD_ENCODER_TICK){
 				return val * HOOD_ENCODER_TICKS_PER_DEGREE;
+			}
+			if(this == Unit.TRANSFER_ENCODER_TICK){
+				return val * TRANSFER_ENCODER_TICKS_PER_DEGREE;
 			}
 			return 0;
 		}

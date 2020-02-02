@@ -155,6 +155,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
     public static final int DEFAULT_TIMEOUT = 0;
  
     public static boolean sniperModeEnabled = false;
+    public static boolean pushModeEnabled = false;
  
     // tracking drive motor setpoints
     private Speed leftMotorSetpoint = Speed.ZERO;
@@ -381,6 +382,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
         rightDrive.selectProfileSlot(POS_SLOT, DEFAULT_TIMEOUT);
         rightDrive.set(ControlMode.Position, rightDrivePosition);
     }
+
+    public void stayInPlaceOnEnd(){
+    }
  
     public void setMotorSpeedInPercent(double left, double right) {
         if (EnabledSubsystems.DRIVE_DUMB_ENABLED) {
@@ -393,7 +397,6 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     public void setMotorSpeed(Speed left, Speed right) {
         if (leftDrive != null && rightDrive != null) {
-            System.out.println(right.get(Distance.Unit.FOOT, Time.Unit.SECOND) + "right setm speed");
             leftMotorSetpoint = left;
             rightMotorSetpoint = right;
  
@@ -697,7 +700,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     public void periodic() {
         //call iqsuaredc sensor periodic?
- 
+        
+
+
     }
  
     public void disable() {

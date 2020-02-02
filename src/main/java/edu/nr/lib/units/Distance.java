@@ -1,6 +1,8 @@
 package edu.nr.lib.units;
 
 import edu.nr.lib.Units;
+import edu.nr.robotics.subsystems.climbdeploy.ClimbDeploy;
+import edu.nr.robotics.subsystems.climbretract.ClimbRetract;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.hood.Hood;
 import edu.nr.robotics.subsystems.indexer.Indexer;
@@ -13,7 +15,7 @@ public class Distance {
 	private Unit type;
 	
 	public enum Unit implements GenericUnit {
-		FOOT, INCH, METER, MAGNETIC_ENCODER_TICK_DRIVE, MAGNETIC_ENCODER_TICK_HOOD, MAGNETIC_ENCODER_TICK_INDEXER;
+		FOOT, INCH, METER, MAGNETIC_ENCODER_TICK_DRIVE, MAGNETIC_ENCODER_TICK_HOOD, MAGNETIC_ENCODER_TICK_INDEXER, MAGNETIC_ENCODER_TICK_CLIMB_DEPLOY, MAGNETIC_ENCODER_TICK_CLIMB_RETRACT;
 		
 		public static final Unit defaultUnit = INCH;
 		
@@ -25,26 +27,34 @@ public class Distance {
 		private static final double METER_PER_INCH = 1.0/Units.INCHES_PER_METER;
 		private static final double ENCODER_TICK_HOOD_PER_INCH = Hood.ENCODER_TICKS_PER_DEGREE_HOOD * 4; // so garbage
 		private static final double ENCODER_TICK_INDEXER_PER_INCH = Indexer.ENCODER_TICKS_PER_INCH_BALL_MOVED;
+		private static final double ENCODER_TICKS_CLIMB_DEPLOY_PER_INCH = ClimbDeploy.ENCODER_TICKS_PER_INCH_CLIMB_DEPLOY;
+		private static final double ENCODER_TICKS_CLIMB_RETRACT_PER_INCH = ClimbRetract.ENCODER_TICKS_PER_INCH_CLIMB_RETRACT;
 		
 		public double convertToDefault(double val) {
 			if(this == Unit.defaultUnit) {
 				return val;
 			}
-			if(this == Unit.FOOT) {
+			else if(this == Unit.FOOT) {
 				return val / FOOT_PER_INCH;
 			}
-			if(this == Unit.METER) {
+			else if(this == Unit.METER) {
 				return val / METER_PER_INCH;
 			}
-			if(this == Unit.MAGNETIC_ENCODER_TICK_DRIVE) {
+			else if(this == Unit.MAGNETIC_ENCODER_TICK_DRIVE) {
 				return val / ENCODER_TICK_DRIVE_PER_INCH;
 			}
-
-			if(this == Unit.MAGNETIC_ENCODER_TICK_HOOD){
+			else if(this == Unit.MAGNETIC_ENCODER_TICK_HOOD){
 				return val / ENCODER_TICK_HOOD_PER_INCH;
 			}
-			if(this == Unit.MAGNETIC_ENCODER_TICK_INDEXER){
+			else if(this == Unit.MAGNETIC_ENCODER_TICK_INDEXER){
 				return val / ENCODER_TICK_INDEXER_PER_INCH;
+			}
+			else if(this == Unit.MAGNETIC_ENCODER_TICK_CLIMB_DEPLOY){
+				return val / ENCODER_TICKS_CLIMB_DEPLOY_PER_INCH;
+			}
+			else if(this == Unit.MAGNETIC_ENCODER_TICK_CLIMB_DEPLOY)
+			{
+				return val / ENCODER_TICKS_CLIMB_RETRACT_PER_INCH;
 			}
 			return 0;
 		}
@@ -54,20 +64,23 @@ public class Distance {
 			if(this == Unit.defaultUnit) {
 				return val;
 			}
-			if(this == Unit.FOOT) {
+			else if(this == Unit.FOOT) {
 				return FOOT_PER_INCH * val;
 			}
-			if(this == Unit.METER) {
+			else if(this == Unit.METER) {
 				return METER_PER_INCH * val;
 			}
-			if(this == Unit.MAGNETIC_ENCODER_TICK_DRIVE) {
+			else if(this == Unit.MAGNETIC_ENCODER_TICK_DRIVE) {
 				return ENCODER_TICK_DRIVE_PER_INCH * val;
 			}
-			if(this == Unit.MAGNETIC_ENCODER_TICK_HOOD){
+			else if(this == Unit.MAGNETIC_ENCODER_TICK_HOOD){
 				return ENCODER_TICK_HOOD_PER_INCH * val;
 			}
-			if(this == Unit.MAGNETIC_ENCODER_TICK_INDEXER){
+			else if(this == Unit.MAGNETIC_ENCODER_TICK_INDEXER){
 				return ENCODER_TICK_INDEXER_PER_INCH;
+			}
+			else if(this == Unit.MAGNETIC_ENCODER_TICK_CLIMB_DEPLOY){
+				return ENCODER_TICKS_CLIMB_DEPLOY_PER_INCH;
 			}
 			return 0;
 		}

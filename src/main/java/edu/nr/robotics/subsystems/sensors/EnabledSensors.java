@@ -3,6 +3,7 @@ package edu.nr.robotics.subsystems.sensors;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.indexer.Indexer;
+import edu.nr.robotics.subsystems.transfer.Transfer;
 
 public class EnabledSensors {
     
@@ -15,7 +16,7 @@ public class EnabledSensors {
 
 
 
-
+    public static AnalogSensor TransferSensor = new AnalogSensor(RobotMap.TRANSFER_SENSOR, Transfer.TRANSFER_THRESHOLD);
     //more sensors, way more sensors
 
     //public static DigitalInput cargoIntakeSensorOne = new DigitalInput(RobotMap.CARGO_INTAKE_SENSOR_PORT_1);

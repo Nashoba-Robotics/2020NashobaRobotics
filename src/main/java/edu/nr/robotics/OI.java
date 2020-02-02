@@ -14,7 +14,6 @@ import edu.nr.robotics.subsystems.drive.DumbDriveToggleCommand;
 import edu.nr.robotics.subsystems.drive.EnableSniperForwardMode;
 import edu.nr.robotics.subsystems.drive.EnableSniperTurnMode;
 import edu.nr.robotics.subsystems.drive.TurnCommand;
-import edu.nr.robotics.subsystems.drive.StayInPlaceDriveCommand;
 import edu.nr.lib.commandbased.DoNothingCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -44,15 +43,12 @@ public class OI implements SmartDashboardSource {
     private static final int DUMB_DRIVE_NUMBER = 14;
     private static final int TOGGLE_KID_MODE_NUMBER = 5;
 
-    private static final int TEST_COMMAND_NUMBER = 6;
-    private static final int TEST2_COMMAND_NUMBER = 5;
-
     private double driveSpeedMultiplier = 1;
 
     private static OI singleton;
 
-    private final Joystick driveLeft;
-    private final Joystick driveRight;
+    public static Joystick driveLeft;
+    public static Joystick driveRight;
 
     private final Joystick operatorLeft;
     private final Joystick operatorRight;
@@ -91,8 +87,7 @@ public class OI implements SmartDashboardSource {
 
     public void initDriveLeft() {
         //buttons go here
-        //new JoystickButton(driveLeft, 1).whileHeld(new StayInPlaceDriveCommand());
-        //new JoystickButton(driveLeft, 1).whenReleased(new DoNothingCommand());
+                
     }
 
     public void initDriveRight() {
