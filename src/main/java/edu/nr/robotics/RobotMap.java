@@ -44,6 +44,8 @@ public class RobotMap {
     public static final int CLIMB_DEPLOY_TALON = 0;
     
     public static final int CLIMB_RETRACT_TALON = 0;
+
+    public static final int BASH_BAR_SOLENOID = 110000;
  
 //    public static final int INTAKE_SPARKMAX = 0;
 //    public static final int INTAKE_SOLENOID_PCM_PORT = 0;
