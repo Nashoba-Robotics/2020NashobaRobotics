@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.nr.lib.commandbased.NRCommand;
+import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.motorcontrollers.CTRECreator;
 import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Time;
@@ -13,7 +14,7 @@ import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class ClimbRetract extends NRCommand
+public class ClimbRetract extends NRSubsystem
 {
     private static ClimbRetract singleton;
 
@@ -65,7 +66,7 @@ public class ClimbRetract extends NRCommand
 
     }
 
-    public void init()
+    public static void init()
     {
         if(singleton == null)
         {
@@ -73,7 +74,7 @@ public class ClimbRetract extends NRCommand
         }
     }
 
-    public ClimbRetract getInstance()
+    public static ClimbRetract getInstance()
     {
         if(singleton == null)
         {
@@ -98,7 +99,7 @@ public class ClimbRetract extends NRCommand
         }
     }
 
-    public void SmartDashboardInit()
+    public void smartDashboardInit()
     {
         if(EnabledSubsystems.CLIMB_RETRACT_SMARTDASHBOARD_DEBUG_ENABLED)
         {
@@ -115,7 +116,7 @@ public class ClimbRetract extends NRCommand
         }
     }
 
-    public void SmartDashboardInfo()
+    public void smartDashboardInfo()
     {
         if(EnabledSubsystems.CLIMB_RETRACT_SMARTDASHBOARD_DEBUG_ENABLED)
         {
@@ -127,5 +128,18 @@ public class ClimbRetract extends NRCommand
             I_POS_CLIMB_RETRACT = SmartDashboard.getNumber("I_POS_CLIMB_RETRACT", I_POS_CLIMB_RETRACT);
             D_POS_CLIMB_RETRACT = SmartDashboard.getNumber("D_POS_CLIMB_RETRACT", D_POS_CLIMB_RETRACT);
         }
+    }
+
+    public void setMotorSpeedRaw(double percent)
+    {
+        if(ClimbRetractTalon != null)
+        {
+            ClimbRetractTalon.set(ControlMode.PercentOutput, percent);
+        }
+    }
+
+    public void disable()
+    {
+
     }
 }

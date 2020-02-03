@@ -3,19 +3,19 @@ package edu.nr.robotics.subsystems.climbdeploy;
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.units.Distance;
 
-public class setClimberPositionCommand extends NRCommand
+public class ClimbDeployCommand extends NRCommand
 {
-    private Distance distance;
+    private Distance targetHeight;
 
-    public setClimberPositionCommand(Distance distance)
+    public ClimbDeployCommand(Distance targetHeight)
     {
         super(ClimbDeploy.getInstance());
-        this.distance = distance;
+        this.targetHeight = targetHeight;
     }
 
     public void onStart()
     {
-        ClimbDeploy.getInstance().setPosition(distance);
+        ClimbDeploy.getInstance().setPosition(targetHeight);
     }
 
     public boolean isFinishedNR()

@@ -7,7 +7,7 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
- 
+
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.motorcontrollers.SparkMax;
 import edu.nr.lib.units.Angle;

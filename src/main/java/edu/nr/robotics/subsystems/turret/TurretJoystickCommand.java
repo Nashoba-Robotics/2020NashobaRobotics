@@ -11,7 +11,8 @@ import edu.nr.lib.commandbased.JoystickCommand;
 import edu.nr.robotics.OI;
 
 public class TurretJoystickCommand extends JoystickCommand {
-  public TurretJoystickCommand() {
+  public TurretJoystickCommand() 
+  {
     super(Turret.getInstance());
   }
 

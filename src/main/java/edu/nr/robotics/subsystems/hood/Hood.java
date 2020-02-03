@@ -50,8 +50,8 @@
 
         //Change this
 
-        public final Angle uppermost = new Angle(45, Angle.Unit.DEGREE);
-        public final Angle lowermost = new Angle(0, Angle.Unit.DEGREE);
+        public static final Angle upperMost = new Angle(45, Angle.Unit.DEGREE);
+        public static final Angle lowerMost = new Angle(0, Angle.Unit.DEGREE);
 
         public static double F_POS_HOOD = 0;
         public static double P_POS_HOOD = 0;

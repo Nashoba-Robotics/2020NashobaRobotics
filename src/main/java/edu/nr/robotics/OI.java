@@ -57,6 +57,7 @@ public class OI implements SmartDashboardSource {
 
     private final Joystick turretStick;
     private final Joystick hoodStick;
+    private final Joystick climbStick;
 
     private JoystickButton kidModeSwitch;
     private JoystickButton elevGearSwitcherSwitch;
@@ -78,8 +79,10 @@ public class OI implements SmartDashboardSource {
 
         operatorLeft = new Joystick(STICK_OPERATOR_LEFT);
         operatorRight = new Joystick(STICK_OPERATOR_RIGHT);
+        
         turretStick = operatorRight;
         hoodStick = operatorLeft;
+        climbStick = operatorLeft; // only if climbing and no turret, but figure out later
 
        initDriveLeft();
        initDriveRight();
@@ -196,6 +199,11 @@ public class OI implements SmartDashboardSource {
 
     public double getHoodTurn(){
         return snapDriveJoysticks(hoodStick.getX(), JOYSTICK_DEAD_ZONE);
+    }
+
+    public double getClimbTurn()
+    {
+        return snapDriveJoysticks(climbStick.getY(), JOYSTICK_DEAD_ZONE);
     }
 
     private double getTurnAdjust() {

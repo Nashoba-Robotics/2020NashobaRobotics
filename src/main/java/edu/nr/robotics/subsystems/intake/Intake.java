@@ -34,11 +34,19 @@ public class Intake extends NRSubsystem
     private Solenoid IntakeSolenoid;
 
     public static final Time ACTUATION_TIME = new Time(0.5, Time.Unit.SECOND);
-
+    /*
     public static final AngularSpeed MAX_SPEED_INTAKE = new AngularSpeed(1, Angle.Unit.DEGREE, Time.Unit.SECOND);
     public static final AngularAcceleration MAX_ACCELERATION_INTAKE = new AngularAcceleration(1, Angle.Unit.DEGREE, Time.Unit.SECOND, Time.Unit.SECOND);
 
     public static AngularSpeed currentAngularSpeed = AngularSpeed.ZERO;
+    */
+    // Change Percent values
+    public static final double MAX_PERCENT_INTAKE = 1.0;
+    public static final double MIN_PERCENTINTAKE = -1.0;
+
+    public static double currentIntakePercent = 0.0;
+
+    public static final double INTAKE_PERCENT = 0;
 
     private Intake()
     {
@@ -120,35 +128,20 @@ public class Intake extends NRSubsystem
     }
 
     public void setMotorSpeedRaw(double percent) {
-        if (IntakeSparkMax != null)
-            IntakeSparkMax.set(percent);
         if (IntakeTalon != null)
             IntakeTalon.set(ControlMode.PercentOutput, percent);
+            currentIntakePercent = percent;
     }
-    
-    /*
-    public void setMotorSpeedPercent(double percent) {
-        if (IntakeSparkMax != null)
-            if (EnabledSubsystems.INTAKE_ENABLED)
-                setMotorSpeedRaw(percent);
-            else
-               // setMotorSpeed(MAX_SPEED_INTAKE.mul(percent));
-               setMotorSpeedPercent(percent);
-    }
-    */
 
-
-
-    public AngularSpeed getIdealMotorSpeed()
+    public double getIdealMotorSpeed()
     {
-        return currentAngularSpeed;
+        return currentIntakePercent;
     }
 
-    //Hopefully returns actual motor speed
     public double getActualMotorSpeed()
     {
         if (IntakeSparkMax != null){
-            return IntakeSparkMax.get();
+            return IntakeSparkMax.getEncoder().getVelocity();
         }
         return 0;
     }
@@ -176,6 +169,4 @@ public class Intake extends NRSubsystem
 	public void periodic() {
 
     }
-    
-
 }

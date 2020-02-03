@@ -11,7 +11,7 @@ public class TransferSetSpeedSmartDashboardCommand extends NRCommand{
     }
  
     public void onStart(){
-        Transfer.getInstance().setSpeed(Transfer.MAX_SPEED_TRANSFER.mul( Transfer.goalSpeed));
+        Transfer.getInstance().setMotorSpeedInPercent(Transfer.goalSpeed);
     }
  
     protected boolean isFinishedNR(){

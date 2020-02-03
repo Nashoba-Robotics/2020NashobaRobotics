@@ -29,6 +29,5 @@ public class TransferCommand extends NRCommand {
         currentTime = Timer.getFPGATimestamp();
         return (currentTime - start) > transferTime.get(Time.Unit.SECOND);
     }
- 
 }
  

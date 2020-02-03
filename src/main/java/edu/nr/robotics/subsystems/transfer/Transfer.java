@@ -1,4 +1,3 @@
-
 package edu.nr.robotics.subsystems.transfer;
  
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -15,7 +14,6 @@ import edu.nr.lib.units.AngularSpeed;
 import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
-import edu.nr.lib.units.Distance.Unit;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
@@ -30,6 +28,9 @@ public class Transfer extends NRSubsystem{
     public static final int VOLTAGE_COMPENSATION_LEVEL = 12;
     public static final double MIN_MOVE_VOLTAGE = 0.0;
     public static final int DEFAULT_TIMEOUT = 0;
+ 
+    public static final double PUKE_PERCENT = -0.9;
+    public static final Time PUKE_TIME = new Time(1, Time.Unit.SECOND);
  
     public static double F_POS_TRANSFER = 0;
     public static double P_POS_TRANSFER = 0;
@@ -59,7 +60,7 @@ public class Transfer extends NRSubsystem{
     public static final AngularSpeed MAX_SPEED_TRANSFER = new AngularSpeed(2000, Angle.Unit.ROTATION, Time.Unit.SECOND);
     public static final AngularAcceleration MAX_ACCEL_TRANSFER = new AngularAcceleration(2000, Angle.Unit.ROTATION, Time.Unit.SECOND, Time.Unit.SECOND);
  
-    public static final double ENCODER_TICKS_PER_INCH_BALL_MOVED = 0;
+    public static final double ENCODER_TICKS_PER_INCH_BALL_MOVED = 400; // not realy... have to change this one
     public static final double ENCODER_TICKS_PER_DEGREE = 2048 / 360;
  
     public static Distance distanceSetPoint = Distance.ZERO;
@@ -68,10 +69,10 @@ public class Transfer extends NRSubsystem{
     public static AngularSpeed speedSetPoint = AngularSpeed.ZERO;
  
     public static final Distance TRANSFER_DISTANCE = new Distance(8, Distance.Unit.INCH); // change for real robot
-    //public static AngularSpeed goalSpeed = AngularSpeed.ZERO;
     public static double goalSpeed = 0;
  
     public static final Time TRANSFER_TIME = new Time(0.1, Time.Unit.SECOND);
+    public static final Time TRANSFER_ALL_TIME = new Time(1, Time.Unit.SECOND);
  
     public static final int TRANSFER_THRESHOLD = 0;
  
@@ -92,7 +93,8 @@ public class Transfer extends NRSubsystem{
             transferTalon.config_kP(VEL_SLOT, P_VEL_TRANSFER, DEFAULT_TIMEOUT);
             transferTalon.config_kI(VEL_SLOT, I_VEL_TRANSFER, DEFAULT_TIMEOUT);
             transferTalon.config_kD(VEL_SLOT, D_VEL_TRANSFER, DEFAULT_TIMEOUT);
-
+ 
+ 
             transferTalon.setNeutralMode(NEUTRAL_MODE_TRANSFER);
  
             transferTalon.setInverted(false);
@@ -149,9 +151,7 @@ public class Transfer extends NRSubsystem{
             if(transferTalon != null){
                 SmartDashboard.putNumber("Transfer Encoder Position", transferTalon.getSelectedSensorPosition());
                 SmartDashboard.putNumber("Transfer Set Position", distanceSetPoint.get(Distance.Unit.INCH));
-                SmartDashboard.putNumber("Motor speed maybe", getSpeed().get(Angle.Unit.ROTATION, Time.Unit.SECOND));
-                SmartDashboard.putNumber("Transfer Goal Speed in Percent", goalSpeed);
-
+                
                 SmartDashboard.putNumber("F_POS_TRANSFER: ", F_POS_TRANSFER);
                 SmartDashboard.putNumber("P_POS_TRANSFER: ", P_POS_TRANSFER);
                 SmartDashboard.putNumber("I_POS_TRANSFER: ", I_POS_TRANSFER);
@@ -173,8 +173,7 @@ public class Transfer extends NRSubsystem{
  
         if(EnabledSubsystems.TRANSFER_SMARTDASHBOARD_DEBUG_ENABLED){
             if(transferTalon != null){
-                goalSpeed = SmartDashboard.getNumber("Transfer Goal Speed", goalSpeed);
-
+ 
                 F_POS_TRANSFER = SmartDashboard.getNumber("F_POS_TRANSFER: ", F_POS_TRANSFER);
                 P_POS_TRANSFER = SmartDashboard.getNumber("P_POS_TRANSFER: ", P_POS_TRANSFER);
                 I_POS_TRANSFER = SmartDashboard.getNumber("I_POS_TRANSFER: ", I_POS_TRANSFER);
@@ -184,26 +183,14 @@ public class Transfer extends NRSubsystem{
                 P_VEL_TRANSFER = SmartDashboard.getNumber("P_VEL_TRANSFER: ", P_VEL_TRANSFER);
                 I_VEL_TRANSFER = SmartDashboard.getNumber("I_VEL_TRANSFER: ", I_VEL_TRANSFER);
                 D_VEL_TRANSFER = SmartDashboard.getNumber("D_VEL_TRANSFER: ", D_VEL_TRANSFER);
-                
-               setMotorSpeedInPercent(SmartDashboard.getNumber("Motor speed maybe", 0));
-               transferTalon.config_kF(POS_SLOT, F_POS_TRANSFER, DEFAULT_TIMEOUT);
-               transferTalon.config_kP(POS_SLOT, P_POS_TRANSFER, DEFAULT_TIMEOUT);
-               transferTalon.config_kI(POS_SLOT, I_POS_TRANSFER, DEFAULT_TIMEOUT);
-               transferTalon.config_kD(POS_SLOT, D_POS_TRANSFER, DEFAULT_TIMEOUT);
  
-               transferTalon.config_kF(VEL_SLOT, F_VEL_TRANSFER, DEFAULT_TIMEOUT);
-               transferTalon.config_kP(VEL_SLOT, P_VEL_TRANSFER, DEFAULT_TIMEOUT);
-               transferTalon.config_kI(VEL_SLOT, I_VEL_TRANSFER, DEFAULT_TIMEOUT);
-               transferTalon.config_kD(VEL_SLOT, D_VEL_TRANSFER , DEFAULT_TIMEOUT);
-
                 SmartDashboard.putNumber("Transfer Current", transferTalon.getStatorCurrent());
  
                 deltaDistance = new Distance(SmartDashboard.getNumber("Transfer Delta Position", deltaDistance.get(Distance.Unit.INCH)), Distance.Unit.INCH);
-                //goalSpeed = new AngularSpeed(SmartDashboard.getNumber("Transfer Goal Speed", goalSpeed.get(Angle.Unit.DEGREE, Time.Unit.SECOND)), Angle.Unit.DEGREE, Time.Unit.SECOND);
+                goalSpeed = SmartDashboard.getNumber("Transfer Goal Speed", goalSpeed);
                 
                 SmartDashboard.putBoolean("Transfer Sensor", EnabledSensors.TransferSensor.get());
             }
-            setMotorSpeedInPercent(goalSpeed);
         }
     }
  
@@ -238,18 +225,14 @@ public class Transfer extends NRSubsystem{
  
     public void periodic(){
         //check sensors and see if we can kick a ball into the indexer
-        //System.out.println(goalSpeed);
-
+        //Yo soy intelligente.
+ 
     }
-    public void setMotorSpeed(AngularSpeed speed){
-        if(transferTalon != null){
-         //   SmartDashboard.putNumber("Commanding Shooter Speed", 17060);
-         //   shooterTalon1.set(ControlMode.Velocity, -17060);
-            transferTalon.set(ControlMode.PercentOutput, goalSpeed);
-            //shooterTalon2.set(ControlMode.Velocity, speed.get(Angle.Unit.SHOOTER_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND));
-        }
+ 
+    public boolean hasBall(){
+        return EnabledSensors.TransferSensor.get();
     }
     
 }
  
-
+ 

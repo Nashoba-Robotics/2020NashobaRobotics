@@ -41,6 +41,7 @@ public class ClimbDeploy extends NRSubsystem{
     NeutralMode NEUTRAL_MODE_CLIMB_DEPLOY = NeutralMode.Brake;
 
     public static final int POS_SLOT = 0;
+    public static final int VEL_SLOT = 1;
 
     public static Distance setPositionClimb;
     public static Distance goalPositionClimb;
@@ -138,8 +139,20 @@ public class ClimbDeploy extends NRSubsystem{
 
     public void Deploy()
     {
-        climbDeployTalon.selectProfileSlot(POS_SLOT, DEFAULT_TIMEOUT);
-        climbDeployTalon.set(ControlMode.Position, DEPLOY_DISTANCE.get(Unit.MAGNETIC_ENCODER_TICK_CLIMB_DEPLOY));
+        if(climbDeployTalon != null)
+        {
+            climbDeployTalon.selectProfileSlot(POS_SLOT, DEFAULT_TIMEOUT);
+            climbDeployTalon.set(ControlMode.Position, DEPLOY_DISTANCE.get(Unit.MAGNETIC_ENCODER_TICK_CLIMB_DEPLOY));
+        }
+    }
+
+    public void setMotorSpeedRaw(double percent)
+    {
+        if(climbDeployTalon != null)
+        {
+            climbDeployTalon.selectProfileSlot(VEL_SLOT, DEFAULT_TIMEOUT);
+            climbDeployTalon.set(ControlMode.Velocity, percent);
+        }
     }
 
     public void smartDashboardInfo(){
