@@ -1,10 +1,9 @@
-package edu.nr.robotics.subsystems.climbretract;
+package edu.nr.robotics.subsystems.winch;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.motorcontrollers.CTRECreator;
 import edu.nr.lib.units.Distance;
@@ -14,11 +13,11 @@ import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class ClimbRetract extends NRSubsystem
+public class Winch extends NRSubsystem
 {
-    private static ClimbRetract singleton;
+    private static Winch singleton;
 
-    private TalonSRX ClimbRetractTalon;
+    private TalonSRX WinchTalon;
 
     private double F_POS_CLIMB_RETRACT = 0;
     private double P_POS_CLIMB_RETRACT = 0;
@@ -28,7 +27,7 @@ public class ClimbRetract extends NRSubsystem
     private static final int POS_SLOT = 0;
 
     private static Distance setPositionClimb;
-    private static Distance goalPositionClimb;
+    public static Distance goalPositionClimb;
 
     private NeutralMode NEUTRAL_MODE_CLIMB_DEPLOY = NeutralMode.Brake;
 
@@ -42,26 +41,28 @@ public class ClimbRetract extends NRSubsystem
 
     public static final double ENCODER_TICKS_PER_INCH_CLIMB_RETRACT = 0;
 
-    public ClimbRetract()
+    public static final double WINCH_PERCENT = 0.0;
+
+    public Winch()
     {
-        ClimbRetractTalon = CTRECreator.createMasterTalon(RobotMap.CLIMB_RETRACT_TALON);
-        ClimbRetractTalon.config_kF(POS_SLOT, F_POS_CLIMB_RETRACT);
-        ClimbRetractTalon.config_kP(POS_SLOT, P_POS_CLIMB_RETRACT);
-        ClimbRetractTalon.config_kI(POS_SLOT, I_POS_CLIMB_RETRACT);
-        ClimbRetractTalon.config_kD(POS_SLOT, D_POS_CLIMB_RETRACT);
+        WinchTalon = CTRECreator.createMasterTalon(RobotMap.WINCH_TALON);
+        WinchTalon.config_kF(POS_SLOT, F_POS_CLIMB_RETRACT);
+        WinchTalon.config_kP(POS_SLOT, P_POS_CLIMB_RETRACT);
+        WinchTalon.config_kI(POS_SLOT, I_POS_CLIMB_RETRACT);
+        WinchTalon.config_kD(POS_SLOT, D_POS_CLIMB_RETRACT);
 
-        ClimbRetractTalon.enableCurrentLimit(true);
-        ClimbRetractTalon.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT_CLIMB_RETRACT);
-        ClimbRetractTalon.configPeakCurrentLimit(PEAK_CURRENT_CLIMB_RETRACT);
+        WinchTalon.enableCurrentLimit(true);
+        WinchTalon.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT_CLIMB_RETRACT);
+        WinchTalon.configPeakCurrentLimit(PEAK_CURRENT_CLIMB_RETRACT);
 
-        ClimbRetractTalon.setNeutralMode(NeutralMode.Brake);
+        WinchTalon.setNeutralMode(NeutralMode.Brake);
 
-        ClimbRetractTalon.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
+        WinchTalon.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
 
-        if(EnabledSubsystems.CLIMB_RETRACT_DUMB_ENABLED){
-            ClimbRetractTalon.set(ControlMode.PercentOutput, 0);
+        if(EnabledSubsystems.WINCH_DUMB_ENABLED){
+            WinchTalon.set(ControlMode.PercentOutput, 0);
         }else{
-            ClimbRetractTalon.set(ControlMode.Velocity, 0);
+            WinchTalon.set(ControlMode.Velocity, 0);
         }
 
     }
@@ -70,11 +71,11 @@ public class ClimbRetract extends NRSubsystem
     {
         if(singleton == null)
         {
-            singleton = new ClimbRetract();
+            singleton = new Winch();
         }
     }
 
-    public static ClimbRetract getInstance()
+    public static Winch getInstance()
     {
         if(singleton == null)
         {
@@ -85,23 +86,23 @@ public class ClimbRetract extends NRSubsystem
 
     public Distance getPosition()
     {
-        if(ClimbRetractTalon != null)
-            return new Distance(ClimbRetractTalon.getSelectedSensorPosition(), Distance.Unit.MAGNETIC_ENCODER_TICK_CLIMB_DEPLOY);
+        if(WinchTalon != null)
+            return new Distance(WinchTalon.getSelectedSensorPosition(), Distance.Unit.MAGNETIC_ENCODER_TICK_CLIMB_DEPLOY);
         return Distance.ZERO;
     }
 
     public void setPosition(Distance distance)
     {
-        if(ClimbRetractTalon != null)
+        if(WinchTalon != null)
         {
-            ClimbRetractTalon.selectProfileSlot(POS_SLOT, DEFAULT_TIMEOUT);
-            ClimbRetractTalon.set(ControlMode.Position, distance.get(Distance.Unit.INCH));
+            WinchTalon.selectProfileSlot(POS_SLOT, DEFAULT_TIMEOUT);
+            WinchTalon.set(ControlMode.Position, distance.get(Distance.Unit.INCH));
         }
     }
 
     public void smartDashboardInit()
     {
-        if(EnabledSubsystems.CLIMB_RETRACT_SMARTDASHBOARD_DEBUG_ENABLED)
+        if(EnabledSubsystems.WINCH_SMARTDASHBOARD_DEBUG_ENABLED)
         {
             SmartDashboard.putNumber("Set Distance Climb Retract: ", setPositionClimb.get(Distance.Unit.INCH));
             
@@ -118,7 +119,7 @@ public class ClimbRetract extends NRSubsystem
 
     public void smartDashboardInfo()
     {
-        if(EnabledSubsystems.CLIMB_RETRACT_SMARTDASHBOARD_DEBUG_ENABLED)
+        if(EnabledSubsystems.WINCH_SMARTDASHBOARD_DEBUG_ENABLED)
         {
             //maybe make the 0 a goalposclimb get inches...
             goalPositionClimb = new Distance(SmartDashboard.getNumber("Goal Position Climb Retract", 0), Distance.Unit.INCH);
@@ -132,9 +133,9 @@ public class ClimbRetract extends NRSubsystem
 
     public void setMotorSpeedRaw(double percent)
     {
-        if(ClimbRetractTalon != null)
+        if(WinchTalon != null)
         {
-            ClimbRetractTalon.set(ControlMode.PercentOutput, percent);
+            WinchTalon.set(ControlMode.PercentOutput, percent);
         }
     }
 

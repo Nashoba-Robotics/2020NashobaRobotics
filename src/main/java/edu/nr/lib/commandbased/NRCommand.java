@@ -48,31 +48,25 @@ public class NRCommand extends CommandBase {
         super();
         setName(name);
         requires(subsystems);
-        
     }
- 
+
     public NRCommand(ArrayList<NRSubsystem> subsystems, String name, double timeout) {
         //super(timeout);
         super();
         
         setName(name);
         requires(subsystems);
-        
- 
     }
  
     public NRCommand(ArrayList<NRSubsystem> subsystems, double timeout) {
         //super(timeout);
         super();
-        
         requires(subsystems);
-        
     }
     
     public NRCommand(NRSubsystem subsystem) {
         super();
         addRequirements(subsystem);
-        
     }
  
     /**
@@ -84,7 +78,6 @@ public class NRCommand extends CommandBase {
         super();
         setName(name);
         addRequirements(subsystem);
-        
     }
  
     public NRCommand(NRSubsystem subsystem, String name, double timeout) {
@@ -93,7 +86,6 @@ public class NRCommand extends CommandBase {
         
         setName(name);
         addRequirements(subsystem);
-        
     }
  
     public NRCommand(NRSubsystem subsystem, double timeout) {
@@ -101,7 +93,6 @@ public class NRCommand extends CommandBase {
         super();
         
         addRequirements(subsystem);
-        
     }
  
     /**
@@ -112,21 +103,17 @@ public class NRCommand extends CommandBase {
     public NRCommand(String name) {
         super();
         setName(name);
-        
     }
  
     public NRCommand(String name, double timeout) {
         //super(timeout);
         super();
-        
         setName(name);
-        
     }
  
     //Ethan has small arms
     public NRCommand(double timeout) {
         //super(timeout);
-        
         
     }
     
@@ -154,10 +141,12 @@ public class NRCommand extends CommandBase {
     * @param interrupted
     *            True if the command was interrupted
     */
-    protected void onEnd(boolean interrupted) {onEnd();}
+    protected void onEnd(boolean interrupted) {
+        onEnd();
+    }
     
     protected void onEnd() {}
- 
+    
     @Override
     public void initialize() {
         onStart();
@@ -171,18 +160,17 @@ public class NRCommand extends CommandBase {
             onStart();
             reset = false;
         }
- 
+
         onExecute();
     }
- 
-    
-    protected void end() {
+
+    @Override
+    public void end(boolean interrupted) {
         reset = true;
         forceCancel = false;
         onEnd(false);
     }
- 
-    
+
     protected final void interrupted() {
         reset = true;
         forceCancel = false;

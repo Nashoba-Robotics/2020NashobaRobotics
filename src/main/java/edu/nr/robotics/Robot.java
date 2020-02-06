@@ -36,7 +36,7 @@ import edu.nr.robotics.subsystems.drive.TurnSmartDashboardCommand;
 import edu.nr.robotics.subsystems.hood.Hood;
 import edu.nr.robotics.subsystems.hood.SetHoodAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.transfer.Transfer;
-
+import edu.nr.robotics.subsystems.transfer.TransferCommand;
 import edu.nr.robotics.subsystems.indexer.IndexerDeltaPositionSmartDashboardCommand;
 import edu.nr.robotics.subsystems.indexer.IndexerSetVelocityCommand;
 import edu.nr.robotics.subsystems.indexer.IndexerSetVelocitySmartDashboardCommand;
@@ -48,6 +48,16 @@ import edu.nr.robotics.subsystems.turret.DeltaTurretAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.turret.SetTurretAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.turret.Turret;
 import edu.nr.robotics.subsystems.turret.TurretLimelightCommand;
+import edu.nr.robotics.subsystems.winch.SetWinchPositionCommand;
+import edu.nr.robotics.subsystems.winch.WinchClimbRetractCommand;
+import edu.nr.robotics.subsystems.indexer.Indexer;
+import edu.nr.robotics.subsystems.indexer.IndexerDeltaPositionCommand;
+import edu.nr.robotics.subsystems.indexer.IndexerDeltaPositionSmartDashboardCommand;
+import edu.nr.robotics.subsystems.indexer.IndexerSetVelocityCommand;
+import edu.nr.robotics.subsystems.indexer.IndexerSetVelocitySmartDashboardCommand;
+
+
+
 /*import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;*/
 import edu.wpi.first.wpilibj.Compressor;
@@ -97,14 +107,16 @@ public class Robot extends TimedRobot {
  
         smartDashboardInit();
         autoChooserInit();
-        //OI.init();
-        //Drive.init();
+        OI.init();
+        Drive.init();
         //Turret.init();
         //Shooter.init();
         //Hood.init();
         //Intake.init();
         //robotCompressor = new Compressor(RobotMap.PCM_ID);
         //robotCompressor.start();
+        //Indexer.init();
+        //Transfer.init();
  
         // CameraInit();
  
@@ -124,9 +136,13 @@ public class Robot extends TimedRobot {
         SmartDashboard.putData(new CSVSaverDisable());
         SmartDashboard.putNumber("Auto Wait Time", 0);
     //    SmartDashboard.putData(new DriveToBallCommand());
-        SmartDashboard.putData(new IndexerSetVelocitySmartDashboardCommand());
+    //    SmartDashboard.putData(new IndexerSetVelocitySmartDashboardCommand());
 
         if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
+            SmartDashboard.putNumber("Right Current", Drive.getInstance().getRightCurrent());
+            SmartDashboard.putNumber("Left Current", Drive.getInstance().getLeftCurrent());
+
+
             SmartDashboard.putData(new DriveForwardBasicSmartDashboardCommand());
             SmartDashboard.putData(new EnableMotionProfileSmartDashboardCommand());
             SmartDashboard.putData(new TurnSmartDashboardCommand());
@@ -143,9 +159,9 @@ public class Robot extends TimedRobot {
         if(EnabledSubsystems.SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED){
             SmartDashboard.putData(new SetShooterSpeedSmartDashboardCommand());
         }
-
         if(EnabledSubsystems.INDEXER_SMARTDASHBOARD_DEBUG_ENABLED){
             SmartDashboard.putData(new IndexerDeltaPositionSmartDashboardCommand());
+            SmartDashboard.putData(new IndexerSetVelocitySmartDashboardCommand());
         }
 
         if(EnabledSubsystems.SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED){
@@ -160,7 +176,18 @@ public class Robot extends TimedRobot {
             SmartDashboard.putData(new ClimbDeploySmartDashboardCommand());
         }
     
+        if(EnabledSubsystems.WINCH_SMARTDASHBOARD_DEBUG_ENABLED)
+        {
+            SmartDashboard.putData(new SetWinchPositionCommand());
+            SmartDashboard.putData(new WinchClimbRetractCommand());
+        }
 
+        if(EnabledSubsystems.TRANSFER_SMARTDASHBOARD_DEBUG_ENABLED)
+        {
+            //SmartDashboard.putData(new TransferCommand2(Transfer.TRANSFER_TIME));
+            //RIP TransferCommand2. You made your country proud
+            SmartDashboard.putData(new TransferCommand(Transfer.TRANSFER_TIME));
+        }
     }
         
     

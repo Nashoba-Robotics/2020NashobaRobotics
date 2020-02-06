@@ -2,13 +2,7 @@ package edu.nr.robotics.subsystems.intake;
 
 import edu.nr.lib.commandbased.NRSubsystem;
 
-import edu.nr.lib.units.AngularSpeed;
-import edu.nr.lib.units.Distance;
-import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
-import edu.nr.lib.units.Time.Unit;
-import edu.nr.lib.units.Angle;
-import edu.nr.lib.units.AngularAcceleration;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
@@ -34,12 +28,7 @@ public class Intake extends NRSubsystem
     private Solenoid IntakeSolenoid;
 
     public static final Time ACTUATION_TIME = new Time(0.5, Time.Unit.SECOND);
-    /*
-    public static final AngularSpeed MAX_SPEED_INTAKE = new AngularSpeed(1, Angle.Unit.DEGREE, Time.Unit.SECOND);
-    public static final AngularAcceleration MAX_ACCELERATION_INTAKE = new AngularAcceleration(1, Angle.Unit.DEGREE, Time.Unit.SECOND, Time.Unit.SECOND);
 
-    public static AngularSpeed currentAngularSpeed = AngularSpeed.ZERO;
-    */
     // Change Percent values
     public static final double MAX_PERCENT_INTAKE = 1.0;
     public static final double MIN_PERCENTINTAKE = -1.0;
@@ -53,7 +42,7 @@ public class Intake extends NRSubsystem
         super();
         if(EnabledSubsystems.INTAKE_ENABLED)
         {
-            IntakeTalon = CTRECreator.createMasterTalon(0);
+            IntakeTalon = CTRECreator.createMasterTalon(RobotMap.INTAKE_SPARKMAX);
         }
         SmartDashboardInit();
     }

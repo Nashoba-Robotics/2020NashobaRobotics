@@ -7,8 +7,6 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
  
 import edu.nr.lib.NRMath;
 import edu.nr.lib.commandbased.NRSubsystem;
@@ -49,11 +47,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
     private TalonSRX leftDrive, rightDrive;
     
     private TalonSRX leftDriveFollow1, leftDriveFollow2, rightDriveFollow1, rightDriveFollow2;
+    
     private PowerDistributionPanel pdp;
     // these may change because of new talons
- 
-    private double leftDrivePosition;
-    private double rightDrivePosition;
 
     // TODO: fix all of these
     public static final double REAL_ENC_TICK_PER_INCH_DRIVE = 8192 / (6 * Math.PI);
@@ -181,6 +177,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
     public OneDimensionalMotionProfilerTwoMotor diagonalProfiler;
     public TwoDimensionalMotionProfilerPathfinder twoDProfiler;
     private Waypoint[] points;
+
+    double speed = 0;
  
     public static enum DriveMode {
         arcadeDrive, tankDrive, cheesyDrive, fieldCentricDrive
@@ -207,8 +205,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
                 rightDrive.set(ControlMode.Velocity, 0);
             }
  
-            leftDrive.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
- 
+            leftDrive.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, PID_TYPE, DEFAULT_TIMEOUT);
+            rightDrive.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, PID_TYPE, DEFAULT_TIMEOUT);
+            
             leftDrive.config_kF(VEL_SLOT, 0, DEFAULT_TIMEOUT);
             leftDrive.config_kP(VEL_SLOT, P_LEFT, DEFAULT_TIMEOUT);
             leftDrive.config_kI(VEL_SLOT, I_LEFT, DEFAULT_TIMEOUT);
@@ -334,13 +333,13 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     public double getRightFollow1Current() {
         if (rightDriveFollow1 != null)
-            return pdp.getCurrent(RobotMap.RIGHT_DRIVE_FOLLOW_1_CURRENT);
+            return rightDriveFollow1.getStatorCurrent();
         return 0;
     }
  
     public double getRightFollow2Current() {
         if (rightDriveFollow2 != null)
-            return pdp.getCurrent(RobotMap.RIGHT_DRIVE_FOLLOW_2_CURRENT);
+            return rightDriveFollow2.getStatorCurrent();
         return 0;
     }
  
@@ -353,13 +352,13 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     public double getLeftFollow1Current() {
         if (leftDriveFollow1 != null)
-            return pdp.getCurrent(RobotMap.LEFT_DRIVE_FOLLOW_1_CURRENT);
+            return leftDriveFollow1.getStatorCurrent();
         return 0;
     }
  
     public double getLeftFollow2Current() {
         if (leftDriveFollow2 != null)
-            return pdp.getCurrent(RobotMap.LEFT_DRIVE_FOLLOW_2_CURRENT);
+            return leftDriveFollow2.getStatorCurrent();
         return 0;
     }
  
@@ -556,7 +555,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     private void smartDashboardInit() {
  
-        //SmartDashboard.putNumber("MOTOR RUNNING", 0);////test
+        SmartDashboard.putNumber("MOTOR RUNNING", 0);////test
  
         if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_BASIC_ENABLED) {
             SmartDashboard.putData(new ResetGyroCommand());
@@ -607,6 +606,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     public void smartDashboardInfo() {
         if (leftDrive != null && rightDrive != null) {
+            speed = SmartDashboard.getNumber("MOTOR RUNNING", speed);
+            setMotorSpeedInPercent(speed, speed);
             
  
             if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_BASIC_ENABLED) {

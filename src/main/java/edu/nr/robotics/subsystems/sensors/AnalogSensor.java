@@ -21,7 +21,7 @@ public class AnalogSensor implements Sensor {
     }
 
     public AnalogSensor(int sensorID, int threshold) {
-        sensor = new AnalogInput(sensorID);
+        this.sensor = new AnalogInput(sensorID);
         this.threshold = threshold;
         negate = false;
     }

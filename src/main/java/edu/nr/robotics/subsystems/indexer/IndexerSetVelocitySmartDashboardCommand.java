@@ -8,6 +8,7 @@ public class IndexerSetVelocitySmartDashboardCommand extends NRCommand {
         super(Indexer.getInstance());
     }
 
+    @Override
     public void onStart(){
         Indexer.getInstance().setSpeed(Indexer.goalSpeed);
     }

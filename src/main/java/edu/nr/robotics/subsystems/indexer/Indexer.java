@@ -45,6 +45,11 @@ public class Indexer extends NRSubsystem {
     public static double P_POS_INDEXER = 0;
     public static double I_POS_INDEXER = 0;
     public static double D_POS_INDEXER = 0;
+
+    public static double F_VEL_INDEXER = 0;
+    public static double P_VEL_INDEXER = 0;
+    public static double I_VEL_INDEXER = 0;
+    public static double D_VEL_INDEXER = 0;
  
     public static final double PROFILE_VEL_PERCENT_INDEXER = 0.6; //change
     public static final double PROFILE_ACCEL_PERCENT_INDEXER = 0.6;
@@ -70,10 +75,10 @@ public class Indexer extends NRSubsystem {
  
     private Indexer(){
         if(EnabledSubsystems.INDEXER_ENABLED){
-            indexerTalon = CTRECreator.createMasterTalon(RobotMap.INDEXER_TALON);
+            indexerTalon = new TalonSRX(RobotMap.INDEXER_TALON); //ctrecreator?
  
-            indexerTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
- 
+            indexerTalon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, PID_TYPE, DEFAULT_TIMEOUT);
+
             indexerTalon.config_kF(MOTION_MAGIC_SLOT, F_POS_INDEXER, DEFAULT_TIMEOUT);
             indexerTalon.config_kP(MOTION_MAGIC_SLOT, P_POS_INDEXER, DEFAULT_TIMEOUT);
             indexerTalon.config_kI(MOTION_MAGIC_SLOT, I_POS_INDEXER, DEFAULT_TIMEOUT);
@@ -142,16 +147,55 @@ public class Indexer extends NRSubsystem {
         if(EnabledSubsystems.INDEXER_SMARTDASHBOARD_DEBUG_ENABLED){
  
             SmartDashboard.putNumber("Sensor Threshold", 0);
+
+            SmartDashboard.putNumber("Indexer Speed" , getSpeed().get(Distance.Unit.INCH, Time.Unit.SECOND));
+
             SmartDashboard.putNumber("Indexer Goal Speed", goalSpeed.get(Distance.Unit.INCH, Time.Unit.SECOND));
  
+            SmartDashboard.putNumber("F_VEL_INDEXER", F_VEL_INDEXER);
+            SmartDashboard.putNumber("P_VEL_INDEXER", P_VEL_INDEXER);
+            SmartDashboard.putNumber("I_VEL_INDEXER", I_VEL_INDEXER);
+            SmartDashboard.putNumber("D_VEL_INDEXER", D_VEL_INDEXER);
+
+            SmartDashboard.putNumber("F_POS_INDEXER", F_POS_INDEXER);
+            SmartDashboard.putNumber("P_POS_INDEXER", P_POS_INDEXER);
+            SmartDashboard.putNumber("I_POS_INDEXER", I_POS_INDEXER);
+            SmartDashboard.putNumber("D_POS_INDEXER", D_POS_INDEXER);
+
+            SmartDashboard.putNumber("Sensor Position", 0);
         }
     }
  
     public void smartDashboardInfo(){
         if(EnabledSubsystems.INDEXER_SMARTDASHBOARD_DEBUG_ENABLED){
             //pid stuff eventually
+
+            SmartDashboard.putNumber("Indexer Speed" , getSpeed().get(Distance.Unit.INCH, Time.Unit.SECOND));
+
+            F_POS_INDEXER = SmartDashboard.getNumber("F_POS_INDEXER", F_POS_INDEXER);
+            P_POS_INDEXER = SmartDashboard.getNumber("P_POS_INDEXER", P_POS_INDEXER);
+            I_POS_INDEXER = SmartDashboard.getNumber("I_POS_INDEXER", I_POS_INDEXER);
+            D_POS_INDEXER = SmartDashboard.getNumber("D_POS_INDEXER", D_POS_INDEXER);
+
+            F_VEL_INDEXER = SmartDashboard.getNumber("F_VEL_INDEXER", F_VEL_INDEXER);
+            P_VEL_INDEXER = SmartDashboard.getNumber("P_VEL_INDEXER", P_VEL_INDEXER);
+            I_VEL_INDEXER = SmartDashboard.getNumber("I_VEL_INDEXER", I_VEL_INDEXER);
+            D_VEL_INDEXER = SmartDashboard.getNumber("D_VEL_INDEXER", D_VEL_INDEXER);
+
+            indexerTalon.config_kF(VEL_SLOT, F_VEL_INDEXER);
+            indexerTalon.config_kP(VEL_SLOT, P_VEL_INDEXER);
+            indexerTalon.config_kI(VEL_SLOT, I_VEL_INDEXER);
+            indexerTalon.config_kD(VEL_SLOT, D_VEL_INDEXER);
+
+            indexerTalon.config_kF(POS_SLOT, F_POS_INDEXER);
+            indexerTalon.config_kP(POS_SLOT, P_POS_INDEXER);
+            indexerTalon.config_kI(POS_SLOT, I_POS_INDEXER);
+            indexerTalon.config_kD(POS_SLOT, D_POS_INDEXER);
+
+            SmartDashboard.putNumber("Sensor Position", indexerTalon.getSelectedSensorPosition());
+
             SmartDashboard.putNumber("Indexer Delta Position", DeltaPosition.get(Distance.Unit.INCH));
-            SmartDashboard.putNumber("Indexer Goal Speed", goalSpeed.get(Distance.Unit.INCH, Time.Unit.SECOND));
+            //SmartDashboard.putNumber("Indexer Goal Speed", goalSpeed.get(Distance.Unit.INCH, Time.Unit.SECOND));
  
             EnabledSensors.IndexerInput.setThreshold(INDEXER_INPUT_THRESHOLD);
  
@@ -176,9 +220,10 @@ public class Indexer extends NRSubsystem {
             indexerTalon.set(ControlMode.PercentOutput, percent);
         }
     }
- 
+
     public Speed getSpeed(){
         if(indexerTalon != null){
+            
             return new Speed(indexerTalon.getSelectedSensorVelocity(), Distance.Unit.MAGNETIC_ENCODER_TICK_INDEXER, Time.Unit.HUNDRED_MILLISECOND);
         }
         return Speed.ZERO;

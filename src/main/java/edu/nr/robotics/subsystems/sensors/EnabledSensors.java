@@ -13,9 +13,6 @@ public class EnabledSensors {
     public static AnalogSensor IndexerSpacingClose = new AnalogSensor(RobotMap.INDEXER_SPACING_CLOSE, Indexer.INDEXER_SPACING_CLOSE_THRESHOLD);
     public static AnalogSensor IndexerSpacingFar = new AnalogSensor(RobotMap.INDEXER_SPACING_FAR, Indexer.INDEXER_SPACING_FAR_THRESHOLD);
     public static AnalogSensor IndexerReadyShot = new AnalogSensor(RobotMap.INDEXER_READY_SHOT, Indexer.INDEXER_READY_SHOT_THRESHOLD);
-
-
-
     public static AnalogSensor TransferSensor = new AnalogSensor(RobotMap.TRANSFER_SENSOR, Transfer.TRANSFER_THRESHOLD);
     //more sensors, way more sensors
 

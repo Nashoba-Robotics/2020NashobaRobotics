@@ -67,9 +67,7 @@ public class OI implements SmartDashboardSource {
     private static final int STICK_OPERATOR_LEFT = 2;
     private static final int STICK_OPERATOR_RIGHT = 3;
 
-    public static boolean stayInPlace = false;
-
-    private JoystickButton pushModeButton;
+    private JoystickButton stayInPlaceModeButton;
 
     public static final Drive.DriveMode driveMode = Drive.DriveMode.cheesyDrive; // set default type of drive here
 
@@ -90,14 +88,14 @@ public class OI implements SmartDashboardSource {
        initOperatorLeft();
        initOperatorRight();
 
-        SmartDashboardSource.sources.add(this);
+       SmartDashboardSource.sources.add(this);
 
     }
 
     public void initDriveLeft() {
         //buttons go here
-        //pushModeButton = new JoystickButton(driveLeft, 1);
-        //pushModeButton.whenPressed(new StayInPlace2Command());
+        //stayInPlaceModeButton = new JoystickButton(driveLeft, 1);
+        //stayInPlaceModeButton.whenPressed(new StayInPlace2Command());
 
         //new SetTurretLimelightCommand();
 
@@ -117,7 +115,6 @@ public class OI implements SmartDashboardSource {
     }
 
     public void initOperatorRight() {
-       
        
         
     }
@@ -239,9 +236,10 @@ public class OI implements SmartDashboardSource {
         //do later if needed
         return false; //kidModeSwitch.get();
     }
-    public boolean isPushModeEnabled()
+    public boolean isStayInPlaceModeEnabled()
     {
         //Might Need To Be Changed
-        return !pushModeButton.get(); // !?
+        //return !stayInPlaceModeButton.get(); // !?
+        return false;
     }
 }

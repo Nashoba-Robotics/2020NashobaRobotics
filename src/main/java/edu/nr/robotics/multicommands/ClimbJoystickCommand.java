@@ -4,13 +4,13 @@ import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.robotics.OI;
 import edu.nr.robotics.subsystems.climbdeploy.ClimbDeploy;
-import edu.nr.robotics.subsystems.climbretract.ClimbRetract;
+import edu.nr.robotics.subsystems.winch.Winch;
 
 public class ClimbJoystickCommand extends NRCommand
 {
     public ClimbJoystickCommand()
     {
-        super(new NRSubsystem[] {ClimbDeploy.getInstance(), ClimbRetract.getInstance()});
+        super(new NRSubsystem[] {ClimbDeploy.getInstance(), Winch.getInstance()});
     }
 
     public void onExecute()
@@ -18,7 +18,7 @@ public class ClimbJoystickCommand extends NRCommand
         if(OI.getInstance().getClimbTurn() > 0)
             ClimbDeploy.getInstance().setMotorSpeedRaw(OI.getInstance().getClimbTurn());
         else if(OI.getInstance().getClimbTurn() < 0)
-            ClimbRetract.getInstance().setMotorSpeedRaw(OI.getInstance().getClimbTurn());
+            Winch.getInstance().setMotorSpeedRaw(OI.getInstance().getClimbTurn());
     }
 
     public boolean isFinishedNR()

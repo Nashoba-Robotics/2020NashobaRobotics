@@ -29,7 +29,8 @@ public class Transfer extends NRSubsystem{
     public static final double MIN_MOVE_VOLTAGE = 0.0;
     public static final int DEFAULT_TIMEOUT = 0;
  
-    public static final double PUKE_PERCENT = -0.9;
+    public static final double PUKE_PERCENT = -0.4;
+    public static final double TRANSFER_PERCENT = 0.4; // more for real
     public static final Time PUKE_TIME = new Time(1, Time.Unit.SECOND);
  
     public static double F_POS_TRANSFER = 0;
@@ -60,7 +61,7 @@ public class Transfer extends NRSubsystem{
     public static final AngularSpeed MAX_SPEED_TRANSFER = new AngularSpeed(2000, Angle.Unit.ROTATION, Time.Unit.SECOND);
     public static final AngularAcceleration MAX_ACCEL_TRANSFER = new AngularAcceleration(2000, Angle.Unit.ROTATION, Time.Unit.SECOND, Time.Unit.SECOND);
  
-    public static final double ENCODER_TICKS_PER_INCH_BALL_MOVED = 400; // not realy... have to change this one
+    public static final double ENCODER_TICKS_PER_INCH_BALL_MOVED = 400; // not really... have to change this one
     public static final double ENCODER_TICKS_PER_DEGREE = 2048 / 360;
  
     public static Distance distanceSetPoint = Distance.ZERO;
@@ -71,8 +72,8 @@ public class Transfer extends NRSubsystem{
     public static final Distance TRANSFER_DISTANCE = new Distance(8, Distance.Unit.INCH); // change for real robot
     public static double goalSpeed = 0;
  
-    public static final Time TRANSFER_TIME = new Time(0.1, Time.Unit.SECOND);
-    public static final Time TRANSFER_ALL_TIME = new Time(1, Time.Unit.SECOND);
+    public static final Time TRANSFER_TIME = new Time(1, Time.Unit.SECOND);
+    public static final Time TRANSFER_ALL_TIME = new Time(0.1, Time.Unit.SECOND);
  
     public static final int TRANSFER_THRESHOLD = 0;
  
@@ -119,7 +120,6 @@ public class Transfer extends NRSubsystem{
             }else{
                 transferTalon.set(ControlMode.Velocity, 0);
             }
- 
         }
         smartDashboardInit();
  
@@ -132,7 +132,7 @@ public class Transfer extends NRSubsystem{
         return singleton;
     }
  
-    private synchronized static void init(){
+    public synchronized static void init(){
         if(singleton == null){
             singleton = new Transfer();
         }
@@ -189,7 +189,7 @@ public class Transfer extends NRSubsystem{
                 deltaDistance = new Distance(SmartDashboard.getNumber("Transfer Delta Position", deltaDistance.get(Distance.Unit.INCH)), Distance.Unit.INCH);
                 goalSpeed = SmartDashboard.getNumber("Transfer Goal Speed", goalSpeed);
                 
-                SmartDashboard.putBoolean("Transfer Sensor", EnabledSensors.TransferSensor.get());
+                //SmartDashboard.putBoolean("Transfer Sensor", EnabledSensors.TransferSensor.get());
             }
         }
     }

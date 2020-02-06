@@ -2,10 +2,11 @@ package edu.nr.lib.units;
 
 import edu.nr.lib.Units;
 import edu.nr.robotics.subsystems.climbdeploy.ClimbDeploy;
-import edu.nr.robotics.subsystems.climbretract.ClimbRetract;
+import edu.nr.robotics.subsystems.winch.Winch;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.hood.Hood;
 import edu.nr.robotics.subsystems.indexer.Indexer;
+import edu.nr.robotics.subsystems.winch.Winch;
 
 
 public class Distance {
@@ -28,7 +29,7 @@ public class Distance {
 		private static final double ENCODER_TICK_HOOD_PER_INCH = Hood.ENCODER_TICKS_PER_DEGREE_HOOD * 4; // so garbage
 		private static final double ENCODER_TICK_INDEXER_PER_INCH = Indexer.ENCODER_TICKS_PER_INCH_BALL_MOVED;
 		private static final double ENCODER_TICKS_CLIMB_DEPLOY_PER_INCH = ClimbDeploy.ENCODER_TICKS_PER_INCH_CLIMB_DEPLOY;
-		private static final double ENCODER_TICKS_CLIMB_RETRACT_PER_INCH = ClimbRetract.ENCODER_TICKS_PER_INCH_CLIMB_RETRACT;
+		private static final double ENCODER_TICKS_CLIMB_RETRACT_PER_INCH = Winch.ENCODER_TICKS_PER_INCH_CLIMB_RETRACT;
 		
 		public double convertToDefault(double val) {
 			if(this == Unit.defaultUnit) {
