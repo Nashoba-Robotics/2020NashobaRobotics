@@ -1,11 +1,12 @@
 package edu.nr.robotics.subsystems.drive;
- 
+
 import java.io.File;
- 
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
  
 import edu.nr.lib.NRMath;
@@ -44,9 +45,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     private static Drive singleton;
  
-    private TalonSRX leftDrive, rightDrive;
+    private TalonFX leftDrive, rightDrive;
     
-    private TalonSRX leftDriveFollow1, leftDriveFollow2, rightDriveFollow1, rightDriveFollow2;
+    private TalonFX leftDriveFollow1, leftDriveFollow2, rightDriveFollow1, rightDriveFollow2;
     
     private PowerDistributionPanel pdp;
     // these may change because of new talons
@@ -186,16 +187,20 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     private Drive() {
         if (EnabledSubsystems.DRIVE_ENABLED) {
-            leftDrive = CTRECreator.createMasterTalon(RobotMap.LEFT_DRIVE);
-            rightDrive = CTRECreator.createMasterTalon(RobotMap.RIGHT_DRIVE);
+            leftDrive = new TalonFX(RobotMap.LEFT_DRIVE);
+            rightDrive = new TalonFX(RobotMap.RIGHT_DRIVE);
 
             pdp = new PowerDistributionPanel(RobotMap.PDP_ID);
  
-            leftDriveFollow1 = CTRECreator.createFollowerTalon(RobotMap.LEFT_DRIVE_FOLLOW_1, leftDrive);
-            leftDriveFollow2 = CTRECreator.createFollowerTalon(RobotMap.LEFT_DRIVE_FOLLOW_2, leftDrive);
+            leftDriveFollow1 = new TalonFX(RobotMap.LEFT_DRIVE_FOLLOW_1);
+            leftDriveFollow1.follow(leftDrive);
+            leftDriveFollow2 = new TalonFX(RobotMap.LEFT_DRIVE_FOLLOW_2);
+            leftDriveFollow2.follow(leftDrive);
  
-            rightDriveFollow1 = CTRECreator.createFollowerTalon(RobotMap.RIGHT_DRIVE_FOLLOW_1, rightDrive);
-            rightDriveFollow2 = CTRECreator.createFollowerTalon(RobotMap.RIGHT_DRIVE_FOLLOW_2, rightDrive);
+            rightDriveFollow1 = new TalonFX(RobotMap.RIGHT_DRIVE_FOLLOW_1);
+            rightDriveFollow1.follow(rightDrive);
+            rightDriveFollow2 = new TalonFX(RobotMap.RIGHT_DRIVE_FOLLOW_2);
+            rightDriveFollow2.follow(rightDrive);
  
             if (EnabledSubsystems.DRIVE_DUMB_ENABLED) {
                 leftDrive.set(ControlMode.PercentOutput, 0);
@@ -226,10 +231,10 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
             leftDrive.enableVoltageCompensation(true);
             leftDrive.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL, DEFAULT_TIMEOUT);
  
-            leftDrive.enableCurrentLimit(true);
-            leftDrive.configPeakCurrentLimit(PEAK_DRIVE_CURRENT, DEFAULT_TIMEOUT);
-            leftDrive.configPeakCurrentDuration(PEAK_DRIVE_CURRENT_DURATION, DEFAULT_TIMEOUT);
-            leftDrive.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT, DEFAULT_TIMEOUT);
+        //    leftDrive.enableCurrentLimit(true);
+        //    leftDrive.configPeakCurrentLimit(PEAK_DRIVE_CURRENT, DEFAULT_TIMEOUT);
+        //    leftDrive.configPeakCurrentDuration(PEAK_DRIVE_CURRENT_DURATION, DEFAULT_TIMEOUT);
+        //    leftDrive.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT, DEFAULT_TIMEOUT);
  
             leftDrive.configVelocityMeasurementPeriod(VELOCITY_MEASUREMENT_PERIOD_DRIVE, DEFAULT_TIMEOUT);
             leftDrive.configVelocityMeasurementWindow(VELOCITY_MEASUREMENT_WINDOW_DRIVE, DEFAULT_TIMEOUT);
@@ -259,10 +264,10 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
             rightDrive.enableVoltageCompensation(true);
             rightDrive.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL, DEFAULT_TIMEOUT);
  
-            rightDrive.enableCurrentLimit(true);
-            rightDrive.configPeakCurrentLimit(PEAK_DRIVE_CURRENT, DEFAULT_TIMEOUT);
-            rightDrive.configPeakCurrentDuration(PEAK_DRIVE_CURRENT_DURATION, DEFAULT_TIMEOUT);
-            rightDrive.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT, DEFAULT_TIMEOUT);
+        //    rightDrive.enableCurrentLimit(true);
+        //    rightDrive.configPeakCurrentLimit(PEAK_DRIVE_CURRENT, DEFAULT_TIMEOUT);
+        //    rightDrive.configPeakCurrentDuration(PEAK_DRIVE_CURRENT_DURATION, DEFAULT_TIMEOUT);
+        //    rightDrive.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT, DEFAULT_TIMEOUT);
  
             rightDrive.configVelocityMeasurementPeriod(VELOCITY_MEASUREMENT_PERIOD_DRIVE, DEFAULT_TIMEOUT);
             rightDrive.configVelocityMeasurementWindow(VELOCITY_MEASUREMENT_WINDOW_DRIVE, DEFAULT_TIMEOUT);
@@ -364,8 +369,12 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     public void stayInPlaceOnStart()
     {
-        leftDrive.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
-        rightDrive.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
+
+    
+        System.out.println(leftDrive.getSensorCollection().getIntegratedSensorPosition() + "RIP TEST COMMAND ZEBRA");
+        
+    //    leftDrive.getSensorCollection().setIntegratedSensorPosition(0, DEFAULT_TIMEOUT);
+    //    rightDrive.getSensorCollection().setIntegratedSensorPosition(0, DEFAULT_TIMEOUT);
 
         leftDrive.selectProfileSlot(POS_SLOT, DEFAULT_TIMEOUT);
         leftDrive.set(ControlMode.Position, 0);
@@ -376,11 +385,13 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
     public void stayInPlaceOnEnd()
     {
-        leftDrive.neutralOutput();
-        rightDrive.neutralOutput();
+    //    leftDrive.neutralOutput();
+    //    rightDrive.neutralOutput();
+        
 
-        leftDrive.set(ControlMode.Disabled, 0);
-        rightDrive.set(ControlMode.Disabled, 0);
+
+        leftDrive.set(ControlMode.PercentOutput, 0);
+        rightDrive.set(ControlMode.PercentOutput, 0);
     }
  
     public void setMotorSpeedInPercent(double left, double right) {
@@ -555,7 +566,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     private void smartDashboardInit() {
  
-        SmartDashboard.putNumber("MOTOR RUNNING", 0);////test
+    //    SmartDashboard.putNumber("MOTOR RUNNING", 0);////test
  
         if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_BASIC_ENABLED) {
             SmartDashboard.putData(new ResetGyroCommand());
@@ -606,14 +617,11 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     public void smartDashboardInfo() {
         if (leftDrive != null && rightDrive != null) {
-            speed = SmartDashboard.getNumber("MOTOR RUNNING", speed);
-            setMotorSpeedInPercent(speed, speed);
+        //    speed = SmartDashboard.getNumber("MOTOR RUNNING", speed);
+        //    setMotorSpeedInPercent(speed, speed);
             
  
             if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_BASIC_ENABLED) {
- 
-
-                
  
                 SmartDashboard.putNumberArray("Drive Left Current",
                         new double[] { getLeftCurrent(), getLeftFollow1Current(), getLeftFollow2Current() });

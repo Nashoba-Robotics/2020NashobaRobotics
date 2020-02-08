@@ -28,7 +28,8 @@ public class HoodPrepShotCommand extends NRCommand
     protected void onExecute()
     {
         this.limeLightDistance = LimelightNetworkTable.getInstance().getDistance();
-        Hood.getInstance().setAngle( new Angle (hoodAngle.getValue(limeLightDistance.get(Distance.Unit.INCH)), Angle.Unit.DEGREE));
+        //implement this right
+    //    Hood.getInstance().setAngle( new Angle (hoodAngle.getValue(limeLightDistance.get(Distance.Unit.INCH)), Angle.Unit.DEGREE));
     }
 
     @Override

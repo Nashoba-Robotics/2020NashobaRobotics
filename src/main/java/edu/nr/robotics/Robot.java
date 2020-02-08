@@ -23,6 +23,7 @@ import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Time;
 import edu.nr.lib.units.Time.Unit;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.nr.robotics.subsystems.climbdeploy.ClimbDeploy;
 import edu.nr.robotics.subsystems.climbdeploy.ClimbDeploySmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.CSVSaverDisable;
 import edu.nr.robotics.subsystems.drive.CSVSaverEnable;
@@ -108,15 +109,18 @@ public class Robot extends TimedRobot {
         smartDashboardInit();
         autoChooserInit();
         OI.init();
-        Drive.init();
+        //Winch.init();
+        //ClimbDeploy.init();
+        //Drive.init();
         //Turret.init();
         //Shooter.init();
         //Hood.init();
         //Intake.init();
         //robotCompressor = new Compressor(RobotMap.PCM_ID);
         //robotCompressor.start();
-        //Indexer.init();
+        Indexer.init();
         //Transfer.init();
+
  
         // CameraInit();
  

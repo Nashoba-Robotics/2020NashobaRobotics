@@ -17,13 +17,15 @@ import jdk.jfr.Threshold;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
  
 public class Indexer extends NRSubsystem {
  
     private static Indexer singleton;
  
-    private TalonSRX indexerTalon;
+    private TalonFX indexerTalon;
     
     public static int INDEXER_INPUT_THRESHOLD = 0; // needs to be final for real code in comp.
     public static final int INDEXER_SPACING_CLOSE_THRESHOLD = 0;
@@ -65,6 +67,9 @@ public class Indexer extends NRSubsystem {
     public static final int POS_SLOT = 1;
  
     public static final int MOTION_MAGIC_SLOT = 2;
+
+    public static final double PUKE_PERCENT = -0.6;
+    public static final Time PUKE_TIME = new Time(1, Time.Unit.SECOND);
  
     public static Speed speedSetPoint = Speed.ZERO;
     public static Speed goalSpeed = Speed.ZERO;
@@ -75,7 +80,7 @@ public class Indexer extends NRSubsystem {
  
     private Indexer(){
         if(EnabledSubsystems.INDEXER_ENABLED){
-            indexerTalon = new TalonSRX(RobotMap.INDEXER_TALON); //ctrecreator?
+            indexerTalon = new TalonFX(RobotMap.INDEXER_TALON); //no ctrecreator
  
             indexerTalon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, PID_TYPE, DEFAULT_TIMEOUT);
 
@@ -95,14 +100,14 @@ public class Indexer extends NRSubsystem {
             //Change to Talon Version
             indexerTalon.setSensorPhase(false);
  
-            indexerTalon.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT_INDEXER);
- 
+        //    indexerTalon.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration() ); // does nothing, look up eventually
+
             indexerTalon.enableVoltageCompensation(true);
             indexerTalon.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL, DEFAULT_TIMEOUT);
             
-            indexerTalon.enableCurrentLimit(true);
-            indexerTalon.configPeakCurrentLimit(PEAK_CURRENT_INDEXER, DEFAULT_TIMEOUT);
-            indexerTalon.configPeakCurrentDuration(CONTINUOUS_CURRENT_LIMIT_INDEXER, DEFAULT_TIMEOUT);
+        //    indexerTalon.enableCurrentLimit(true);
+        //    indexerTalon.configPeakCurrentLimit(PEAK_CURRENT_INDEXER, DEFAULT_TIMEOUT);
+        //    indexerTalon.configPeakCurrentDuration(CONTINUOUS_CURRENT_LIMIT_INDEXER, DEFAULT_TIMEOUT);
  
             indexerTalon.configClosedloopRamp(VOLTAGE_RAMP_RATE_INDEXER.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
             indexerTalon.configOpenloopRamp(VOLTAGE_RAMP_RATE_INDEXER.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
@@ -111,7 +116,7 @@ public class Indexer extends NRSubsystem {
             indexerTalon.configMotionAcceleration((int) MAX_ACCELERATION_INDEXER.mul(PROFILE_ACCEL_PERCENT_INDEXER)
                     .get(Distance.Unit.METER, Time.Unit.SECOND, Time.Unit.SECOND));
  
-            indexerTalon.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
+            indexerTalon.getSensorCollection().setIntegratedSensorPosition(0, DEFAULT_TIMEOUT);
  
             if(EnabledSubsystems.INDEXER_DUMB_ENABLED){
                 indexerTalon.set(ControlMode.PercentOutput, 0);
@@ -203,7 +208,7 @@ public class Indexer extends NRSubsystem {
             SmartDashboard.putBoolean("Sensor Triggered", EnabledSensors.IndexerInput.get());
             SmartDashboard.putNumber("Sensor value", EnabledSensors.IndexerInput.getSensor().getValue());
  
- 
+            //setMotorSpeedInPercent(SmartDashboard.getNumber("Indexer Goal Speed", 0));
             goalSpeed = new Speed(SmartDashboard.getNumber("Indexer Goal Speed", goalSpeed.get(Distance.Unit.INCH, Time.Unit.SECOND)), Distance.Unit.INCH, Time.Unit.SECOND);
         }
     }
@@ -246,6 +251,7 @@ public class Indexer extends NRSubsystem {
         
         if(indexerTalon != null){
             indexerTalon.selectProfileSlot(VEL_SLOT, DEFAULT_TIMEOUT);
+            //System.out.println(target.get(Distance.Unit.INCH, Time.Unit.SECOND) + "setSpeeed working");
             indexerTalon.set(ControlMode.Velocity, target.get(Distance.Unit.MAGNETIC_ENCODER_TICK_INDEXER, Time.Unit.HUNDRED_MILLISECOND));
         }
     }

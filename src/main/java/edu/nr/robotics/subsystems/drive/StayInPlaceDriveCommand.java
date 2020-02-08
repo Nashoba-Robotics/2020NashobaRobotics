@@ -11,7 +11,7 @@ public class StayInPlaceDriveCommand extends NRCommand
     }
 
     @Override
-    public void onStart()
+    public void onExecute()
     {
         Drive.getInstance().stayInPlaceOnStart();
     }
