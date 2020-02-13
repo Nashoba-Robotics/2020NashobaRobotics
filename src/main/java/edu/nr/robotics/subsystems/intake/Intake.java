@@ -11,18 +11,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
-import com.revrobotics.CANSparkMax.IdleMode;
-
-import edu.nr.lib.motorcontrollers.CTRECreator;
-import edu.nr.lib.motorcontrollers.SparkMax;
 
 public class Intake extends NRSubsystem
 {
     private static Intake singleton;
 
-    private CANSparkMax IntakeSparkMax;
     private TalonSRX IntakeTalon;
 
     private Solenoid IntakeSolenoid;
@@ -31,7 +24,7 @@ public class Intake extends NRSubsystem
 
     // Change Percent values
     public static final double MAX_PERCENT_INTAKE = 1.0;
-    public static final double MIN_PERCENTINTAKE = -1.0;
+    public static final double MIN_PERCENT_INTAKE = -1.0;
 
     public static double currentIntakePercent = 0.0;
 
@@ -42,7 +35,7 @@ public class Intake extends NRSubsystem
         super();
         if(EnabledSubsystems.INTAKE_ENABLED)
         {
-            IntakeTalon = CTRECreator.createMasterTalon(RobotMap.INTAKE_SPARKMAX);
+            IntakeTalon = new TalonSRX(RobotMap.INTAKE_TALON);
         }
         SmartDashboardInit();
     }
@@ -109,15 +102,21 @@ public class Intake extends NRSubsystem
 		}
     }
 
-    public double getCurrent()
+    public double getOutputCurrent()
     {
-        if(IntakeSparkMax != null)
-            return IntakeSparkMax.getOutputCurrent();
+        if(IntakeTalon != null)
+        {
+            return IntakeTalon.getStatorCurrent();
+        }
         return 0;
     }
 
     public void setMotorSpeedRaw(double percent) {
         if (IntakeTalon != null)
+            if(percent > MAX_PERCENT_INTAKE)
+                percent = MAX_PERCENT_INTAKE;
+            else if(percent < MIN_PERCENT_INTAKE)
+                percent = MIN_PERCENT_INTAKE;
             IntakeTalon.set(ControlMode.PercentOutput, percent);
             currentIntakePercent = percent;
     }
@@ -129,8 +128,9 @@ public class Intake extends NRSubsystem
 
     public double getActualMotorSpeed()
     {
-        if (IntakeSparkMax != null){
-            return IntakeSparkMax.getEncoder().getVelocity();
+        if(IntakeTalon != null)
+        {
+            return IntakeTalon.getSelectedSensorVelocity();
         }
         return 0;
     }
@@ -138,9 +138,9 @@ public class Intake extends NRSubsystem
     public void SmartDashboardInit() {
 		if (EnabledSubsystems.INTAKE_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putBoolean("Intake deployed: ", isIntakeDeployed());
-            SmartDashboard.putNumber("Intake Motor Speed: ", getActualMotorSpeed());
-            SmartDashboard.putNumber("SET SPEED INTAKE", 0);
-
+            SmartDashboard.putNumber("Intake Ideal Motor Speed: ", getIdealMotorSpeed());
+            SmartDashboard.putNumber("Intake Actual Motor Speed: ", getActualMotorSpeed());
+            SmartDashboard.putNumber("SET SPEED INTAKE (PERCENT)", 0);
 		}
 	}
 
@@ -149,8 +149,9 @@ public class Intake extends NRSubsystem
         if(EnabledSubsystems.INTAKE_SMARTDASHBOARD_DEBUG_ENABLED)
         {
             SmartDashboard.putBoolean("Intake Deployed: ", isIntakeDeployed());
-            setMotorSpeedRaw(SmartDashboard.getNumber("SET SPEED INTAKE", 0));
-
+            setMotorSpeedRaw(SmartDashboard.getNumber("SET SPEED INTAKE (PERCENT)", 0));
+            SmartDashboard.putNumber("Intake Ideal Motor Speed: ", getIdealMotorSpeed());
+            SmartDashboard.putNumber("Intake Actual Motor Speed: ", getActualMotorSpeed());
         }
 	}
 

@@ -73,7 +73,7 @@ public class LimelightNetworkTable extends TimerTask {
 		lightLED(DEFAULT_LED_LIGHT);
 		setPipeline(DEFAULT_PIPELINE);
 	}
-	
+
 	@Override
 	public void run() {
 	//	if (enabled) {

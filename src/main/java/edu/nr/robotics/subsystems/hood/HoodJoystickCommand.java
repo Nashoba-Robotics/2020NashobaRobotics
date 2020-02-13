@@ -28,9 +28,7 @@ public class HoodJoystickCommand extends JoystickCommand {
   }
 
   public boolean shouldSwitchToJoystick() {
-
     return OI.getInstance().isHoodNonZero();
-
   }
 
 }

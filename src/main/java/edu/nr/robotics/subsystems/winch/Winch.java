@@ -19,10 +19,10 @@ public class Winch extends NRSubsystem
 
     private TalonSRX WinchTalon;
 
-    private double F_POS_CLIMB_RETRACT = 0;
-    private double P_POS_CLIMB_RETRACT = 0;
-    private double I_POS_CLIMB_RETRACT = 0;
-    private double D_POS_CLIMB_RETRACT = 0;
+    private double F_POS_WINCH = 0;
+    private double P_POS_WINCH = 0;
+    private double I_POS_WINCH = 0;
+    private double D_POS_WINCH = 0;
 
     private static final int POS_SLOT = 0;
 
@@ -31,29 +31,29 @@ public class Winch extends NRSubsystem
 
     private NeutralMode NEUTRAL_MODE_CLIMB_DEPLOY = NeutralMode.Brake;
 
-    private static Time VOLTAGE_RAMP_RATE_CLIMB_RETRACT = new Time(0.05, Time.Unit.SECOND);
+    private static Time VOLTAGE_RAMP_RATE_WINCH = new Time(0.05, Time.Unit.SECOND);
     private static final int VOLTAGE_COMPENSATION_LEVEL = 12;
     private static final double MIN_MOVE_VOLTAGE = 0.0;
     private static final int DEFAULT_TIMEOUT = 0;
 
-    private static final int PEAK_CURRENT_CLIMB_RETRACT = 60;
-    private static final int CONTINUOUS_CURRENT_LIMIT_CLIMB_RETRACT = 40;
+    private static final int PEAK_CURRENT_WINCH = 60;
+    private static final int CONTINUOUS_CURRENT_LIMIT_WINCH = 40;
 
-    public static final double ENCODER_TICKS_PER_INCH_CLIMB_RETRACT = 0;
+    public static final double ENCODER_TICKS_PER_INCH_WINCH = 0;
 
     public static final double WINCH_PERCENT = 0.0;
 
     public Winch()
     {
         WinchTalon = CTRECreator.createMasterTalon(RobotMap.WINCH_TALON);
-        WinchTalon.config_kF(POS_SLOT, F_POS_CLIMB_RETRACT);
-        WinchTalon.config_kP(POS_SLOT, P_POS_CLIMB_RETRACT);
-        WinchTalon.config_kI(POS_SLOT, I_POS_CLIMB_RETRACT);
-        WinchTalon.config_kD(POS_SLOT, D_POS_CLIMB_RETRACT);
+        WinchTalon.config_kF(POS_SLOT, F_POS_WINCH);
+        WinchTalon.config_kP(POS_SLOT, P_POS_WINCH);
+        WinchTalon.config_kI(POS_SLOT, I_POS_WINCH);
+        WinchTalon.config_kD(POS_SLOT, D_POS_WINCH);
 
         WinchTalon.enableCurrentLimit(true);
-        WinchTalon.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT_CLIMB_RETRACT);
-        WinchTalon.configPeakCurrentLimit(PEAK_CURRENT_CLIMB_RETRACT);
+        WinchTalon.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT_WINCH);
+        WinchTalon.configPeakCurrentLimit(PEAK_CURRENT_WINCH);
 
         WinchTalon.setNeutralMode(NeutralMode.Brake);
 
@@ -104,16 +104,16 @@ public class Winch extends NRSubsystem
     {
         if(EnabledSubsystems.WINCH_SMARTDASHBOARD_DEBUG_ENABLED)
         {
-            SmartDashboard.putNumber("Set Distance Climb Retract: ", setPositionClimb.get(Distance.Unit.INCH));
+            SmartDashboard.putNumber("Set Distance Winch: ", setPositionClimb.get(Distance.Unit.INCH));
             
-            SmartDashboard.putNumber("F_POS_CLIMB_RETRACT", F_POS_CLIMB_RETRACT);
-            SmartDashboard.putNumber("P_POS_CLIMB_RETRACT", P_POS_CLIMB_RETRACT);
-            SmartDashboard.putNumber("I_POS_CLIMB_RETRACT", I_POS_CLIMB_RETRACT);
-            SmartDashboard.putNumber("D_POS_CLIMB_RETRACT", D_POS_CLIMB_RETRACT);
+            SmartDashboard.putNumber("F_POS_WINCH", F_POS_WINCH);
+            SmartDashboard.putNumber("P_POS_WINCH", P_POS_WINCH);
+            SmartDashboard.putNumber("I_POS_WINCH", I_POS_WINCH);
+            SmartDashboard.putNumber("D_POS_WINCH", D_POS_WINCH);
 
-            SmartDashboard.putNumber("Current Climb Retract Position", getPosition().get(Unit.MAGNETIC_ENCODER_TICK_CLIMB_RETRACT));
+            SmartDashboard.putNumber("Current Winch Position", getPosition().get(Unit.MAGNETIC_ENCODER_TICK_WINCH));
 
-            SmartDashboard.putNumber("Goal Position Climb Retract", goalPositionClimb.get(Distance.Unit.INCH));
+            SmartDashboard.putNumber("Goal Position Winch", goalPositionClimb.get(Distance.Unit.INCH));
         }
     }
 
@@ -122,12 +122,12 @@ public class Winch extends NRSubsystem
         if(EnabledSubsystems.WINCH_SMARTDASHBOARD_DEBUG_ENABLED)
         {
             //maybe make the 0 a goalposclimb get inches...
-            goalPositionClimb = new Distance(SmartDashboard.getNumber("Goal Position Climb Retract", 0), Distance.Unit.INCH);
+            goalPositionClimb = new Distance(SmartDashboard.getNumber("Goal Position Winch", 0), Distance.Unit.INCH);
 
-            F_POS_CLIMB_RETRACT = SmartDashboard.getNumber("F_POS_CLIMB_RETRACT", F_POS_CLIMB_RETRACT);
-            P_POS_CLIMB_RETRACT = SmartDashboard.getNumber("P_POS_CLIMB_RETRACT", P_POS_CLIMB_RETRACT);
-            I_POS_CLIMB_RETRACT = SmartDashboard.getNumber("I_POS_CLIMB_RETRACT", I_POS_CLIMB_RETRACT);
-            D_POS_CLIMB_RETRACT = SmartDashboard.getNumber("D_POS_CLIMB_RETRACT", D_POS_CLIMB_RETRACT);
+            F_POS_WINCH = SmartDashboard.getNumber("F_POS_WINCH", F_POS_WINCH);
+            P_POS_WINCH = SmartDashboard.getNumber("P_POS_WINCH", P_POS_WINCH);
+            I_POS_WINCH = SmartDashboard.getNumber("I_POS_WINCH", I_POS_WINCH);
+            D_POS_WINCH = SmartDashboard.getNumber("D_POS_WINCH", D_POS_WINCH);
         }
     }
 

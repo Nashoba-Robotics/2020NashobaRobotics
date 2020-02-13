@@ -12,14 +12,10 @@
     import edu.nr.lib.commandbased.NRSubsystem;
     import edu.nr.lib.motorcontrollers.CTRECreator;
     import edu.nr.lib.motorcontrollers.SparkMax;
-    import edu.nr.lib.units.Distance;
-    import edu.nr.lib.units.Speed;
-    import edu.nr.lib.units.Acceleration;
     import edu.nr.lib.units.Angle;
     import edu.nr.lib.units.AngularAcceleration;
     import edu.nr.lib.units.AngularSpeed;
     import edu.nr.lib.units.Time;
-    import edu.nr.lib.units.Angle.Unit;
     import edu.nr.robotics.RobotMap;
     import edu.nr.robotics.subsystems.EnabledSubsystems;
     import edu.nr.robotics.subsystems.sensors.DigitalSensor;
@@ -91,7 +87,6 @@
 
 
         private Hood(){
-            //n in northeastern stands for "nah". Y in emory stands for "y would anyone go there?"
             if(EnabledSubsystems.HOOD_ENABLED){
 
             hoodSpark = SparkMax.createSpark(RobotMap.HOOD_TALON, MotorType.kBrushless);

@@ -16,7 +16,7 @@ public class Distance {
 	private Unit type;
 	
 	public enum Unit implements GenericUnit {
-		FOOT, INCH, METER, MAGNETIC_ENCODER_TICK_DRIVE, MAGNETIC_ENCODER_TICK_HOOD, MAGNETIC_ENCODER_TICK_INDEXER, MAGNETIC_ENCODER_TICK_CLIMB_DEPLOY, MAGNETIC_ENCODER_TICK_CLIMB_RETRACT;
+		FOOT, INCH, METER, MAGNETIC_ENCODER_TICK_DRIVE, MAGNETIC_ENCODER_TICK_HOOD, MAGNETIC_ENCODER_TICK_INDEXER, MAGNETIC_ENCODER_TICK_CLIMB_DEPLOY, MAGNETIC_ENCODER_TICK_WINCH;
 		
 		public static final Unit defaultUnit = INCH;
 		
@@ -29,7 +29,7 @@ public class Distance {
 		private static final double ENCODER_TICK_HOOD_PER_INCH = Hood.ENCODER_TICKS_PER_DEGREE_HOOD * 4; // so garbage
 		private static final double ENCODER_TICK_INDEXER_PER_INCH = Indexer.ENCODER_TICKS_PER_INCH_BALL_MOVED;
 		private static final double ENCODER_TICKS_CLIMB_DEPLOY_PER_INCH = ClimbDeploy.ENCODER_TICKS_PER_INCH_CLIMB_DEPLOY;
-		private static final double ENCODER_TICKS_CLIMB_RETRACT_PER_INCH = Winch.ENCODER_TICKS_PER_INCH_CLIMB_RETRACT;
+		private static final double ENCODER_TICKS_CLIMB_RETRACT_PER_INCH = Winch.ENCODER_TICKS_PER_INCH_WINCH;
 		
 		public double convertToDefault(double val) {
 			if(this == Unit.defaultUnit) {
@@ -78,10 +78,10 @@ public class Distance {
 				return ENCODER_TICK_HOOD_PER_INCH * val;
 			}
 			else if(this == Unit.MAGNETIC_ENCODER_TICK_INDEXER){
-				return ENCODER_TICK_INDEXER_PER_INCH;
+				return ENCODER_TICK_INDEXER_PER_INCH * val;
 			}
 			else if(this == Unit.MAGNETIC_ENCODER_TICK_CLIMB_DEPLOY){
-				return ENCODER_TICKS_CLIMB_DEPLOY_PER_INCH;
+				return ENCODER_TICKS_CLIMB_DEPLOY_PER_INCH * val;
 			}
 			return 0;
 		}

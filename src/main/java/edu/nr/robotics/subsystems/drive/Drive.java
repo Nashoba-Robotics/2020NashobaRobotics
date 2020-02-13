@@ -7,7 +7,6 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
  
 import edu.nr.lib.NRMath;
 import edu.nr.lib.commandbased.NRSubsystem;
@@ -20,8 +19,7 @@ import edu.nr.lib.motionprofiling.OneDimensionalMotionProfilerTwoMotor;
 import edu.nr.lib.motionprofiling.OneDimensionalTrajectoryRamped;
 import edu.nr.lib.motionprofiling.TwoDimensionalMotionProfilerPathfinder;
 import edu.nr.lib.motionprofiling.PIDSourceType;
- 
-import edu.nr.lib.motorcontrollers.CTRECreator;
+
 import edu.nr.lib.network.LimelightNetworkTable;
 import edu.nr.lib.units.Acceleration;
 import edu.nr.lib.units.Angle;
@@ -63,7 +61,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
     public static double wheelBaseMultiplier = 1.3;
     public static final Distance WHEEL_BASE = new Distance(24, Distance.Unit.INCH);
  
-    public static final Speed MAX_SPEED_DRIVE = new Speed(13.98, Distance.Unit.FOOT, Time.Unit.SECOND);
+    public static final Speed MAX_SPEED_DRIVE = new Speed(18, Distance.Unit.FOOT, Time.Unit.SECOND);
  
     public static final Acceleration MAX_ACCEL_DRIVE = new Acceleration(25, Distance.Unit.FOOT, Time.Unit.SECOND,
             Time.Unit.SECOND);
@@ -72,24 +70,24 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
             Time.Unit.SECOND);
  
     public static final double MIN_MOVE_VOLTAGE_PERCENT_LEFT = 0.077;//0.065
-    public static final double MIN_MOVE_VOLTAGE_PERCENT_RIGHT = 0.097; // .095
+    public static final double MIN_MOVE_VOLTAGE_PERCENT_RIGHT = 0.077; // .095
  
     //public static final double MIN_MOVE_VOLTAGE_PERCENT_H = 0;
  
     public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_LEFT = 0.037; // .065
-    public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_RIGHT = 0.065; // .0645
+    public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_RIGHT = 0.037; // .0645
  
     //public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_H = 0;
  
 	public static Time DRIVE_RAMP_RATE = new Time(0.0, Time.Unit.SECOND);
 	 
-    public static double P_LEFT = 0.3;
+    public static double P_LEFT = 0.03;
     public static double I_LEFT = 0;
-    public static double D_LEFT = 3;
+    public static double D_LEFT = 0.3;
  
-    public static double P_RIGHT = 0.3;
+    public static double P_RIGHT = 0.03;
     public static double I_RIGHT = 0;
-    public static double D_RIGHT = 3;
+    public static double D_RIGHT = 0.3;
  
     public static double kVOneD = 1
             / MAX_SPEED_DRIVE.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND);
@@ -118,9 +116,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     public static final double MAX_PROFILE_TURN_PERCENT = 1;
     public static final double MIN_PROFILE_TURN_PERCENT = 0.02;
- 
-    public static final double DRIVE_TO_HATCH_PERCENT = 0;
-    public static final double DRIVE_TO_CARGO_PERCENT = 0;
+
 	 
     public static final Distance END_THRESHOLD = new Distance(3, Distance.Unit.INCH);
     public static final Speed PROFILE_END_TURN_SPEED_THRESHOLD = MAX_SPEED_DRIVE.mul(MIN_PROFILE_TURN_PERCENT + 0.01);
@@ -139,7 +135,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     public static final int VOLTAGE_COMPENSATION_LEVEL = 12;
  
-    public static final NeutralMode NEUTRAL_MODE = NeutralMode.Coast;
+    public static final NeutralMode NEUTRAL_MODE = NeutralMode.Brake;
  
     // Type of PID. 0 = primary. 1 = cascade
     public static final int PID_TYPE = 0;
@@ -243,8 +239,6 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
             leftDrive.configOpenloopRamp(DRIVE_RAMP_RATE.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
  
             leftDrive.selectProfileSlot(VEL_SLOT, DEFAULT_TIMEOUT);
- 
-            rightDrive.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
  
             rightDrive.config_kF(VEL_SLOT, 0, DEFAULT_TIMEOUT);
             rightDrive.config_kP(VEL_SLOT, P_RIGHT, DEFAULT_TIMEOUT);
@@ -369,13 +363,12 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     public void stayInPlaceOnStart()
     {
+        leftDrive.getSensorCollection().setIntegratedSensorPosition(0, DEFAULT_TIMEOUT);
+        rightDrive.getSensorCollection().setIntegratedSensorPosition(0, DEFAULT_TIMEOUT);
+    }
 
-    
-        System.out.println(leftDrive.getSensorCollection().getIntegratedSensorPosition() + "RIP TEST COMMAND ZEBRA");
-        
-    //    leftDrive.getSensorCollection().setIntegratedSensorPosition(0, DEFAULT_TIMEOUT);
-    //    rightDrive.getSensorCollection().setIntegratedSensorPosition(0, DEFAULT_TIMEOUT);
-
+    public void stayInPlaceOnExecute()
+    {
         leftDrive.selectProfileSlot(POS_SLOT, DEFAULT_TIMEOUT);
         leftDrive.set(ControlMode.Position, 0);
 
@@ -385,11 +378,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
     public void stayInPlaceOnEnd()
     {
-    //    leftDrive.neutralOutput();
-    //    rightDrive.neutralOutput();
+        leftDrive.neutralOutput();
+        rightDrive.neutralOutput();
         
-
-
         leftDrive.set(ControlMode.PercentOutput, 0);
         rightDrive.set(ControlMode.PercentOutput, 0);
     }
@@ -514,7 +505,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
                 WHEEL_DIAMETER.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE),
                 WHEEL_BASE.mul(wheelBaseMultiplier).get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE), false, profileFile);
  
-        System.out.println(profileFile.getName());
+        //System.out.println(profileFile.getName());
  
         if (!profileFile.exists()) {
             System.out.println("endX: " + endX.get(Distance.Unit.FOOT) + "  endY: " + endY.get(Distance.Unit.FOOT)
@@ -572,7 +563,6 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
             SmartDashboard.putData(new ResetGyroCommand());
         }
         if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
-
             SmartDashboard.putNumber("Wheel Base Multiplier: ", wheelBaseMultiplier);
  
             SmartDashboard.putNumber("Left P Value: ", P_LEFT);
@@ -641,8 +631,6 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
             if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
                 SmartDashboard.putNumber("Drive Left Percent", leftMotorSetpoint.div(MAX_SPEED_DRIVE));
                 SmartDashboard.putNumber("Drive Right Percent", rightMotorSetpoint.div(MAX_SPEED_DRIVE));
- 
-                // SmartDashboard.putData(this); what why BEN WHY???
  
                 SmartDashboard.putNumber("Drive Left Position", getLeftPosition().get(Distance.Unit.INCH));
                 SmartDashboard.putNumber("Drive Right Position", getRightPosition().get(Distance.Unit.INCH));

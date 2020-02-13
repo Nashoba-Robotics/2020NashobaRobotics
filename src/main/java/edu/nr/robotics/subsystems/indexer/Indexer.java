@@ -13,7 +13,9 @@ import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jdk.jfr.Threshold;
 //import jdk.jfr.internal.settings.ThresholdSetting;
- 
+
+import java.time.zone.ZoneOffsetTransitionRule.TimeDefinition;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -48,8 +50,8 @@ public class Indexer extends NRSubsystem {
     public static double I_POS_INDEXER = 0;
     public static double D_POS_INDEXER = 0;
 
-    public static double F_VEL_INDEXER = 0;
-    public static double P_VEL_INDEXER = 0;
+    public static double F_VEL_INDEXER = 1;
+    public static double P_VEL_INDEXER = 0.005;
     public static double I_VEL_INDEXER = 0;
     public static double D_VEL_INDEXER = 0;
  
@@ -78,6 +80,8 @@ public class Indexer extends NRSubsystem {
     public static Distance DeltaPosition = Distance.ZERO;
     public static final Distance SHOOT_ONE_DISTANCE = new Distance(0, Distance.Unit.INCH); // change for real robot, might just set velocity to shoot for real
  
+    public static final Speed SHOOTING_SPEED = new Speed(0, Distance.Unit.FOOT, Time.Unit.SECOND);
+
     private Indexer(){
         if(EnabledSubsystems.INDEXER_ENABLED){
             indexerTalon = new TalonFX(RobotMap.INDEXER_TALON); //no ctrecreator
@@ -156,6 +160,9 @@ public class Indexer extends NRSubsystem {
             SmartDashboard.putNumber("Indexer Speed" , getSpeed().get(Distance.Unit.INCH, Time.Unit.SECOND));
 
             SmartDashboard.putNumber("Indexer Goal Speed", goalSpeed.get(Distance.Unit.INCH, Time.Unit.SECOND));
+
+            SmartDashboard.putNumber("Indexer Position", getPosition().get(Distance.Unit.INCH));
+            SmartDashboard.putNumber("Indexer Delta Position", DeltaPosition.get(Distance.Unit.INCH));
  
             SmartDashboard.putNumber("F_VEL_INDEXER", F_VEL_INDEXER);
             SmartDashboard.putNumber("P_VEL_INDEXER", P_VEL_INDEXER);
@@ -167,13 +174,12 @@ public class Indexer extends NRSubsystem {
             SmartDashboard.putNumber("I_POS_INDEXER", I_POS_INDEXER);
             SmartDashboard.putNumber("D_POS_INDEXER", D_POS_INDEXER);
 
-            SmartDashboard.putNumber("Sensor Position", 0);
+        
         }
     }
  
     public void smartDashboardInfo(){
         if(EnabledSubsystems.INDEXER_SMARTDASHBOARD_DEBUG_ENABLED){
-            //pid stuff eventually
 
             SmartDashboard.putNumber("Indexer Speed" , getSpeed().get(Distance.Unit.INCH, Time.Unit.SECOND));
 
@@ -197,16 +203,21 @@ public class Indexer extends NRSubsystem {
             indexerTalon.config_kI(POS_SLOT, I_POS_INDEXER);
             indexerTalon.config_kD(POS_SLOT, D_POS_INDEXER);
 
-            SmartDashboard.putNumber("Sensor Position", indexerTalon.getSelectedSensorPosition());
+            SmartDashboard.putNumber("Indexer Encoder Position", indexerTalon.getSelectedSensorPosition());
 
-            SmartDashboard.putNumber("Indexer Delta Position", DeltaPosition.get(Distance.Unit.INCH));
-            //SmartDashboard.putNumber("Indexer Goal Speed", goalSpeed.get(Distance.Unit.INCH, Time.Unit.SECOND));
+            DeltaPosition = new Distance (SmartDashboard.getNumber("Indexer Delta Position", DeltaPosition.get(Distance.Unit.INCH)), Distance.Unit.INCH);
+            SmartDashboard.putNumber("Indexer Goal Speed", goalSpeed.get(Distance.Unit.INCH, Time.Unit.SECOND));
  
             EnabledSensors.IndexerInput.setThreshold(INDEXER_INPUT_THRESHOLD);
  
             INDEXER_INPUT_THRESHOLD = (int) SmartDashboard.getNumber("Sensor Threshold", INDEXER_INPUT_THRESHOLD);
             SmartDashboard.putBoolean("Sensor Triggered", EnabledSensors.IndexerInput.get());
             SmartDashboard.putNumber("Sensor value", EnabledSensors.IndexerInput.getSensor().getValue());
+
+            SmartDashboard.putNumber("Indexer Delta Position", DeltaPosition.get(Distance.Unit.INCH));
+            SmartDashboard.putNumber("Indexer Position", getPosition().get(Distance.Unit.INCH));
+            SmartDashboard.putNumber("Indexer Set Position", distanceSetPoint.get(Distance.Unit.INCH));
+            
  
             //setMotorSpeedInPercent(SmartDashboard.getNumber("Indexer Goal Speed", 0));
             goalSpeed = new Speed(SmartDashboard.getNumber("Indexer Goal Speed", goalSpeed.get(Distance.Unit.INCH, Time.Unit.SECOND)), Distance.Unit.INCH, Time.Unit.SECOND);
@@ -241,8 +252,9 @@ public class Indexer extends NRSubsystem {
     public void setPosition(Distance position){
         distanceSetPoint = position;
         if(indexerTalon != null){
-        indexerTalon.selectProfileSlot(POS_SLOT, DEFAULT_TIMEOUT);
-        indexerTalon.set(ControlMode.Position, distanceSetPoint.get(Distance.Unit.MAGNETIC_ENCODER_TICK_INDEXER));
+            indexerTalon.selectProfileSlot(POS_SLOT, DEFAULT_TIMEOUT);
+            System.out.println("setpos indexer" + distanceSetPoint.get(Distance.Unit.INCH));
+            indexerTalon.set(ControlMode.Position, distanceSetPoint.get(Distance.Unit.MAGNETIC_ENCODER_TICK_INDEXER));
         }
     }
  
@@ -252,6 +264,7 @@ public class Indexer extends NRSubsystem {
         if(indexerTalon != null){
             indexerTalon.selectProfileSlot(VEL_SLOT, DEFAULT_TIMEOUT);
             //System.out.println(target.get(Distance.Unit.INCH, Time.Unit.SECOND) + "setSpeeed working");
+            System.out.println(target.get(Distance.Unit.MAGNETIC_ENCODER_TICK_INDEXER,Time.Unit.SECOND)+ "target unitys"); // always 400?
             indexerTalon.set(ControlMode.Velocity, target.get(Distance.Unit.MAGNETIC_ENCODER_TICK_INDEXER, Time.Unit.HUNDRED_MILLISECOND));
         }
     }

@@ -11,14 +11,19 @@ public class StayInPlaceDriveCommand extends NRCommand
     }
 
     @Override
-    public void onExecute()
+    public void onStart()
     {
         Drive.getInstance().stayInPlaceOnStart();
     }
 
-    //Should also try overriding onEnd() and see if that works
     @Override
-    public void end(boolean interrupted)
+    protected void onExecute() 
+    {
+        Drive.getInstance().stayInPlaceOnExecute();
+    }
+
+    @Override
+    protected void onEnd(boolean interrupted)
     {
         Drive.getInstance().stayInPlaceOnEnd();
     }

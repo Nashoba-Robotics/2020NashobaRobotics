@@ -5,6 +5,9 @@ import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import edu.nr.lib.motorcontrollers.SparkMax;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -47,6 +50,7 @@ import edu.nr.robotics.subsystems.shooter.SetShooterSpeedSmartDashboardCommand;
 import edu.nr.robotics.subsystems.shooter.Shooter;
 import edu.nr.robotics.subsystems.turret.DeltaTurretAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.turret.SetTurretAngleSmartDashboardCommand;
+import edu.nr.robotics.subsystems.turret.SetTurretLimelightCommand;
 import edu.nr.robotics.subsystems.turret.Turret;
 import edu.nr.robotics.subsystems.turret.TurretLimelightCommand;
 import edu.nr.robotics.subsystems.winch.SetWinchPositionCommand;
@@ -72,6 +76,8 @@ public class Robot extends TimedRobot {
     private static Robot singleton;
 
     private static double period = 0.02;
+
+    //TalonFX tester;
 
     //private CANSparkMax protoShooter1;
     //private CANSparkMax //protoShooter2;
@@ -108,24 +114,29 @@ public class Robot extends TimedRobot {
  
         smartDashboardInit();
         autoChooserInit();
-        OI.init();
+        //OI.init();
         //Winch.init();
         //ClimbDeploy.init();
         //Drive.init();
-        //Turret.init();
+        Turret.init();
         //Shooter.init();
         //Hood.init();
         //Intake.init();
         //robotCompressor = new Compressor(RobotMap.PCM_ID);
         //robotCompressor.start();
-        Indexer.init();
+        //Indexer.init();
         //Transfer.init();
-
  
-        // CameraInit();
+        //CameraInit();
  
         LimelightNetworkTable.getInstance().lightLED(true);
         LimelightNetworkTable.getInstance().setPipeline(Pipeline.Target);
+
+        //tester = new TalonFX(20);
+
+        //tester.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
+        //tester.config_kF(0, 1);
+        //tester.config_kP(0, 0.01);
  
         //System.out.println("end of robot init");
     }
@@ -139,8 +150,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putData(new CSVSaverEnable());
         SmartDashboard.putData(new CSVSaverDisable());
         SmartDashboard.putNumber("Auto Wait Time", 0);
-    //    SmartDashboard.putData(new DriveToBallCommand());
-    //    SmartDashboard.putData(new IndexerSetVelocitySmartDashboardCommand());
+  
 
         if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putNumber("Right Current", Drive.getInstance().getRightCurrent());
@@ -157,7 +167,7 @@ public class Robot extends TimedRobot {
         if(EnabledSubsystems.TURRET_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putData(new SetTurretAngleSmartDashboardCommand());
             SmartDashboard.putData(new DeltaTurretAngleSmartDashboardCommand());
-            SmartDashboard.putData(new TurretLimelightCommand());
+            SmartDashboard.putData(new SetTurretLimelightCommand());
         }
  
         if(EnabledSubsystems.SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED){
@@ -192,6 +202,11 @@ public class Robot extends TimedRobot {
             //RIP TransferCommand2. You made your country proud
             SmartDashboard.putData(new TransferCommand(Transfer.TRANSFER_TIME));
         }
+
+        //SmartDashboard.putNumber("F TESTER", 0);
+        //SmartDashboard.putNumber("P TESTER", 0);
+        //SmartDashboard.putNumber("MOTOR PERCENT", 0);
+        //SmartDashboard.putNumber("TESTER SENSOR POSITION", 0);
     }
         
     
@@ -242,10 +257,16 @@ public class Robot extends TimedRobot {
                 dtTot = 0;
                 count = 0;
             }
+
+            //tester.config_kF(0, SmartDashboard.getNumber("F TESTER", 0));
+            //tester.config_kP(0, SmartDashboard.getNumber("P TESTER", 0));
             
+            //tester.set(ControlMode.PercentOutput, SmartDashboard.getNumber("MOTOR PERCENT", 0));
+
+            //SmartDashboard.putNumber("TESTER SENSOR POSITION", tester.getSensorCollection().getIntegratedSensorPosition());
         }
 
-       /* public void CameraInit() {
+       /*public void CameraInit() {
             new Thread(() -> {
                 UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
                 camera.setResolution(720, 1080);
@@ -273,7 +294,7 @@ public class Robot extends TimedRobot {
         }
     
         public Command getAutoCommand() {
-           return  new DoNothingCommand();
+           return new DoNothingCommand();
         }
  
         public double getPeriod() {

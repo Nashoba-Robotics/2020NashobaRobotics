@@ -23,8 +23,8 @@ import edu.nr.robotics.subsystems.turret.SetTurretLimelightCommand;
 
 public class OI implements SmartDashboardSource {
 
-    public static final double DRIVE_JOYSTICK_DEAD_ZONE = 0.1;
-    public static final double JOYSTICK_DEAD_ZONE = 0.25;
+    public static final double DRIVE_JOYSTICK_DEAD_ZONE = 0.15;
+    public static final double JOYSTICK_DEAD_ZONE = 0.3;
 
     public static final double SPEED_MULTIPLIER = 1.0;
 
@@ -89,7 +89,6 @@ public class OI implements SmartDashboardSource {
        initOperatorRight();
 
        SmartDashboardSource.sources.add(this);
-
     }
 
     public void initDriveLeft() {

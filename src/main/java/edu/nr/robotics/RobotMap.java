@@ -4,17 +4,17 @@ public class RobotMap {
 
     public static final int ARM_TALON = 15;
 
-    public static final int RIGHT_DRIVE = 0;  //define these, should be going to 12
-    public static final int LEFT_DRIVE = 5;  // should be 0
-    public static final int RIGHT_DRIVE_FOLLOW_1 = 1;  //define these
-    public static final int RIGHT_DRIVE_FOLLOW_2 = 3;  
-    public static final int LEFT_DRIVE_FOLLOW_1 = 4; // was 1
-    public static final int LEFT_DRIVE_FOLLOW_2 = 2;
+    public static final int RIGHT_DRIVE = 5;  //define these, should be going to 12
+    public static final int LEFT_DRIVE = 6;  // should be 0
+    public static final int RIGHT_DRIVE_FOLLOW_1 = 2;  //define these
+    public static final int RIGHT_DRIVE_FOLLOW_2 = 4;  
+    public static final int LEFT_DRIVE_FOLLOW_1 = 3; // was 1
+    public static final int LEFT_DRIVE_FOLLOW_2 = 1;
     //public static final int RIGHT_DRIVE_FOLLOW_1_CURRENT = 2;
     //public static final int RIGHT_DRIVE_FOLLOW_2_CURRENT = 0;
     //public static final int LEFT_DRIVE_FOLLOW_1_CURRENT = 15;
     // public static final int LEFT_DRIVE_FOLLOW_2_CURRENT = 14;
-    public static final int TURRET_SPARK = 1500;
+    public static final int TURRET_TALON = 10;
     public static final int TRANSFER_TALON = 1;
     public static final int HOOD_TALON = 5;
     public static final int SHOOTER_TALON1 = 2; // falcon 500 motor on 2019 bot at pdp six is slot 0
@@ -35,13 +35,15 @@ public class RobotMap {
     public static final int INDEXER_SPACING_CLOSE = 1;
     public static final int INDEXER_SPACING_FAR = 2;
     public static final int INDEXER_READY_SHOT = 3;
+    public static final int INDEXER_TALON = 7;
     
     public static final int TRANSFER_SENSOR = 4;
+    public static final int TRANSFER_SPARK = 1000;
+    public static final int TRANSFER_VICTOR = 1000;
 
     //Change to thing
-    public static final int INTAKE_SPARKMAX = 0;
+    public static final int INTAKE_TALON = 0;
     public static final int INTAKE_SOLENOID_PCM_PORT = 0;
-    public static final int INDEXER_TALON = 0;
     
     public static final int CLIMB_DEPLOY_TALON = 4;
     
