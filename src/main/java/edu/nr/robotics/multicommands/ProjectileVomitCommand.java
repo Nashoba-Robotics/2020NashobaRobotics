@@ -42,6 +42,8 @@ public class ProjectileVomitCommand extends NRCommand {
    protected boolean isFinishedNR(){
        return true;
    }
-
 }
+ 
+ 
+ 
  

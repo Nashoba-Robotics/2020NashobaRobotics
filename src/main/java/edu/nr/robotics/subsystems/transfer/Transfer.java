@@ -35,7 +35,7 @@ public class Transfer extends NRSubsystem{
    public static final int VOLTAGE_COMPENSATION_LEVEL = 12;
    public static final double MIN_MOVE_VOLTAGE = 0.0;
    public static final int DEFAULT_TIMEOUT = 0;
-   public static final double PUKE_PERCENT = -0.4;
+   public static final double PUKE_PERCENT = -1;
    public static final double TRANSFER_PERCENT = 0.4; // more for real
    public static final Time PUKE_TIME = new Time(1, Time.Unit.SECOND);
 
@@ -83,7 +83,7 @@ public class Transfer extends NRSubsystem{
    
    public static final int TRANSFER_THRESHOLD = 0;
    //need sensors for have a ball, tune transfer percent and time for transfer command
-  
+
    private Transfer(){
        if(EnabledSubsystems.TRANSFER_ENABLED){
            //transferTalon = CTRECreator.createMasterTalon(RobotMap.TRANSFER_TALON);

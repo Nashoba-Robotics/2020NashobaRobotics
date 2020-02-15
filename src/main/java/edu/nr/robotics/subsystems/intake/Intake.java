@@ -30,6 +30,8 @@ public class Intake extends NRSubsystem
 
     public static final double INTAKE_PERCENT = 0.8;
 
+    public static final double PUKE_PERCENT = -1;
+
     private Intake()
     {
         super();

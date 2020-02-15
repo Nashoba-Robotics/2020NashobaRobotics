@@ -47,6 +47,9 @@ public class Shooter extends NRSubsystem
   public static final int PID_TYPE = 0;
   public static final int VEL_SLOT = 0;
   public static final int POS_SLOT = 1;
+
+  public static final double PUKE_PERCENT = -0.6;
+
   private Shooter()
   {
       if(EnabledSubsystems.SHOOTER_ENABLED) {

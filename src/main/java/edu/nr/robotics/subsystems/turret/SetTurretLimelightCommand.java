@@ -22,7 +22,6 @@ public class SetTurretLimelightCommand extends NRCommand
     {
         this.limeLightAngle = LimelightNetworkTable.getInstance().getHorizOffset();
         Turret.getInstance().setAngle(limeLightAngle.add(Turret.getInstance().getAngle()));
-        System.out.println("limeLightAngle: " + limeLightAngle.get(Angle.Unit.DEGREE));
     }
 
     @Override

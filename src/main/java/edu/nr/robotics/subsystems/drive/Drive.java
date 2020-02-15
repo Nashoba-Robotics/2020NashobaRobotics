@@ -51,15 +51,15 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
     // these may change because of new talons
 
     // TODO: fix all of these
-    public static final double REAL_ENC_TICK_PER_INCH_DRIVE = 8192 / (6 * Math.PI);
+    public static final double REAL_ENC_TICK_PER_INCH_DRIVE = 898;
  
     public static final double EFFECTIVE_ENC_TICK_PER_INCH_DRIVE = REAL_ENC_TICK_PER_INCH_DRIVE * 1.01; // * 1.02;
  
-    public static final Distance WHEEL_DIAMETER = new Distance(6, Distance.Unit.INCH);
-    public static final Distance WHEEL_DIAMETER_EFFECTIVE = new Distance(6, Distance.Unit.INCH);
+    public static final Distance WHEEL_DIAMETER = new Distance(6.25, Distance.Unit.INCH);
+    public static final Distance WHEEL_DIAMETER_EFFECTIVE = new Distance(6.25, Distance.Unit.INCH);
  
     public static double wheelBaseMultiplier = 1.3;
-    public static final Distance WHEEL_BASE = new Distance(24, Distance.Unit.INCH);
+    public static final Distance WHEEL_BASE = new Distance(23.5, Distance.Unit.INCH);
  
     public static final Speed MAX_SPEED_DRIVE = new Speed(18, Distance.Unit.FOOT, Time.Unit.SECOND);
  

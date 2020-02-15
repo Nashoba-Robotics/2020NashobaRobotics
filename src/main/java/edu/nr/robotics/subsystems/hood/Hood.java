@@ -139,7 +139,7 @@
             return Angle.ZERO;
         }
 
-        public static void setAngle(Angle target)
+        public void setAngle(Angle target)
         {
             setAngleHood = target;
 
