@@ -6,6 +6,7 @@ import edu.nr.lib.units.Acceleration;
 import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
+import edu.nr.lib.units.Distance.Unit;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.AnalogSensor;
@@ -70,7 +71,7 @@ public class Indexer extends NRSubsystem {
  
     public static final int MOTION_MAGIC_SLOT = 2;
 
-    public static final double PUKE_PERCENT = -0.6;
+    public static final double PUKE_PERCENT = -1;
     public static final Time PUKE_TIME = new Time(1, Time.Unit.SECOND);
  
     public static Speed speedSetPoint = Speed.ZERO;
@@ -255,6 +256,16 @@ public class Indexer extends NRSubsystem {
             indexerTalon.selectProfileSlot(POS_SLOT, DEFAULT_TIMEOUT);
             System.out.println("setpos indexer" + distanceSetPoint.get(Distance.Unit.INCH));
             indexerTalon.set(ControlMode.Position, distanceSetPoint.get(Distance.Unit.MAGNETIC_ENCODER_TICK_INDEXER));
+        }
+    }
+
+    public void deltaPosition(Distance position)
+    {
+        distanceSetPoint = getPosition().add(position);
+        if(indexerTalon != null)
+        {
+            indexerTalon.selectProfileSlot(POS_SLOT, DEFAULT_TIMEOUT);
+            indexerTalon.set(ControlMode.Position, distanceSetPoint.get(Unit.MAGNETIC_ENCODER_TICK_INDEXER));
         }
     }
  

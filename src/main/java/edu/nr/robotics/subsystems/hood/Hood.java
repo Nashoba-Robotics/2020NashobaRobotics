@@ -184,7 +184,7 @@
             return Angle.ZERO;
         }
 
-        public static void setAngle(Angle target)
+        public void setAngle(Angle target)
         {
             setAngleHood = target;
 
@@ -250,6 +250,7 @@
             if(hoodTalon != null){
                 hoodTalon.set(ControlMode.PercentOutput, 0);
             }
+
             if(hoodSpark != null){
                 hoodSpark.set(0);
             }

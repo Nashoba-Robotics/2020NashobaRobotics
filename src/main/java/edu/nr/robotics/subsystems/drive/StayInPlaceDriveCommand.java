@@ -31,6 +31,6 @@ public class StayInPlaceDriveCommand extends NRCommand
     @Override
     public boolean isFinishedNR()
     {
-        return OI.getInstance().isStayInPlaceModeEnabled();
+        return false;
     }
 }

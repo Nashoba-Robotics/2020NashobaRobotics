@@ -6,6 +6,10 @@ import edu.nr.lib.interfaces.SmartDashboardSource;
 import edu.nr.lib.network.LimelightNetworkTable.Pipeline;
 import edu.nr.lib.units.Angle;
 import edu.nr.lib.units.Distance;
+import edu.nr.robotics.multicommands.AcquireTargetCommand;
+import edu.nr.robotics.multicommands.EmergencyBallStopCommand;
+import edu.nr.robotics.multicommands.ProjectileVomitCommand;
+import edu.nr.robotics.subsystems.bashbar.ToggleDeployBashBarCommand;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.DriveToBallCommand;
 import edu.nr.robotics.subsystems.drive.DriveToSomethingJoystickCommand;
@@ -14,9 +18,16 @@ import edu.nr.robotics.subsystems.drive.DumbDriveToggleCommand;
 import edu.nr.robotics.subsystems.drive.EnableSniperForwardMode;
 import edu.nr.robotics.subsystems.drive.EnableSniperTurnMode;
 import edu.nr.robotics.subsystems.drive.TurnCommand;
+import edu.nr.robotics.subsystems.indexer.FireCommand;
+import edu.nr.robotics.subsystems.intake.IntakePukeCommand;
+import edu.nr.robotics.subsystems.intake.IntakeToggleDeployCommand;
+import edu.nr.robotics.subsystems.intake.IntakeSubroutineCommand;
+import edu.nr.robotics.subsystems.intake.ToggleRunIntakeCommand;
+import edu.nr.robotics.subsystems.shooter.ShooterToggleCommand;
 import edu.nr.robotics.subsystems.drive.StayInPlaceDriveCommand;
 import edu.nr.lib.commandbased.DoNothingCommand;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.nr.robotics.subsystems.turret.SetTurretLimelightCommand;
 
@@ -45,7 +56,7 @@ public class OI implements SmartDashboardSource {
     private static final int DUMB_DRIVE_NUMBER = 14;
     private static final int TOGGLE_KID_MODE_NUMBER = 5;
     */
-    
+
     private static final int EMERGENCY_MANUAL_SWITCH = 100;
     private static final int ACQUIRE_TARGET_NUMBER = 100;
     private static final int TOGGLE_SHOOTER_NUMBER = 100;
@@ -135,8 +146,8 @@ public class OI implements SmartDashboardSource {
 
     public void initDriveLeft() {
         //buttons go here
-        stayInPlaceModeButton = new JoystickButton(driveLeft, );
-        stayInPlaceModeButton.whenPressed(new StayInPlaceDriveCommand());
+        stayInPlaceModeButton = new JoystickButton(driveLeft, STAY_IN_PLACE_MODE_NUMBER);
+        stayInPlaceModeButton.whileActiveOnce(new StayInPlaceDriveCommand());
 
         //new SetTurretLimelightCommand();
         //end PID loop cancel into velocity PID
@@ -148,10 +159,31 @@ public class OI implements SmartDashboardSource {
     public void initDriveRight() {
     }
 
-    public void initOperatorLeft() {
-        
+    public void initOperatorLeft() 
+    {    
+        emergencyDisableSwitch = new JoystickButton(operatorLeft, EMERGENCY_SUBSYSTEM_DISABLE_NUMBER);
+        emergencyDisableSwitch.whileActiveOnce(new EmergencyBallStopCommand(), false);
 
-    }
+        acquireTargetButton = new JoystickButton(operatorLeft, ACQUIRE_TARGET_NUMBER);
+        acquireTargetButton.whileActiveOnce(new AcquireTargetCommand(), true);
+
+        shooterToggleButton = new JoystickButton(operatorLeft, TOGGLE_SHOOTER_NUMBER);
+        shooterToggleButton.whileActiveOnce(new ShooterToggleCommand(), true);
+
+        new JoystickButton(operatorLeft, FIRE_NUMBER).whileActiveOnce(new FireCommand(), true);
+
+        new JoystickButton(operatorLeft, BASH_BAR_NUMBER).whenPressed(new ToggleDeployBashBarCommand());
+
+        new JoystickButton(operatorLeft, TOGGLE_INTAKE_DEPLOYED_NUMBER).whenPressed(new IntakeToggleDeployCommand());
+
+        new JoystickButton(operatorLeft, TOGGLE_INTAKE_MOTORS_NUMBER).whenPressed(new ToggleRunIntakeCommand());
+
+        new JoystickButton(operatorLeft, TOGGLE_INTAKE_ROUTINE_NUMBER).whenPressed(new IntakeSubroutineCommand());
+
+        new JoystickButton(operatorLeft, PUKE_INTAKE_NUMBER).whileActiveOnce(new IntakePukeCommand(), true);
+
+        new JoystickButton(operatorLeft, PUKE_ALL_NUMBER).whileActiveOnce(new ProjectileVomitCommand());
+        }
 
     public void initOperatorRight() {
        
@@ -275,10 +307,16 @@ public class OI implements SmartDashboardSource {
         //do later if needed
         return false; //kidModeSwitch.get();
     }
-    public boolean isStayInPlaceModeEnabled()
+    public boolean getManualMode()
     {
-        //Might Need To Be Changed
-        return !stayInPlaceModeButton.get(); // !?
-        //return false;
+        return emergencyManualSwitch.get();
+    }
+    public boolean getAcquireTargetHeld()
+    {
+        return acquireTargetButton.get();
+    }
+    public boolean getShooterToggleHeld()
+    {
+        return shooterToggleButton.get();
     }
 }

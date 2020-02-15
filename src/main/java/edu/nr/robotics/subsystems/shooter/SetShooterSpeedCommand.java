@@ -13,11 +13,12 @@ public class SetShooterSpeedCommand extends NRCommand{
         super(Shooter.getInstance());
         targetSpeed = target;
     }
-
+    @Override
     protected void onStart(){
         //Shooter.getInstance().setMotorSpeed(targetSpeed);
     }
 
+    @Override
     protected boolean isFinishedNR(){
         return true;
     }
