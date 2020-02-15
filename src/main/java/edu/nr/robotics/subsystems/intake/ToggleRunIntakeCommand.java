@@ -13,7 +13,7 @@ public class ToggleRunIntakeCommand extends NRCommand
     {
         if(Intake.getInstance().isIntakeDeployed())
         {
-            if(Intake.getInstance().getIdealMotorSpeed() != 0)
+            if(Intake.getInstance().getIdealMotorSpeed() == 0)
                 Intake.getInstance().setMotorSpeedRaw(Intake.INTAKE_PERCENT);
             else
                 Intake.getInstance().setMotorSpeedRaw(0);
