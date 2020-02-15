@@ -10,10 +10,17 @@ public class IntakePukeCommand extends NRCommand
     }
 
     @Override
+    protected void onStart() 
+    {
+        Intake.getInstance().deployIntake();
+    }
+
+    @Override
     protected void onExecute()
     {
+
         if(Intake.getInstance().isIntakeDeployed())
-            Intake.getInstance().setMotorSpeedRaw(Intake.PUKE_PERCENT); 
+            Intake.getInstance().setMotorSpeedRaw(Intake.PUKE_PERCENT);
             //change to time based ?
     }
 
