@@ -9,14 +9,22 @@ public class IntakePukeCommand extends NRCommand
         super(Intake.getInstance());
     }
 
-    public void onStart()
+    @Override
+    protected void onExecute()
     {
-        if(Intake.getInstance().isIntakeDeployed() == true)
+        if(Intake.getInstance().isIntakeDeployed())
             Intake.getInstance().setMotorSpeedRaw(Intake.PUKE_PERCENT); 
             //change to time based ?
     }
 
-    public boolean isFinishedNR()
+    @Override
+    protected void onEnd()
+    {
+        Intake.getInstance().setMotorSpeedRaw(0);
+    }
+
+    @Override
+    protected boolean isFinishedNR()
     {
         return true;
     }
