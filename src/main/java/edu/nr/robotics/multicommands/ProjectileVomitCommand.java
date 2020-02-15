@@ -17,16 +17,20 @@ public class ProjectileVomitCommand extends NRCommand {
        super(new NRSubsystem [] {Intake.getInstance(), Transfer.getInstance(), Indexer.getInstance(), Shooter.getInstance()});
    }
  
-   @Override
-   protected void onStart() { // make sure these run simultaneously
-    if(!Intake.getInstance().isIntakeDeployed()){
-        Intake.getInstance().deployIntake();
+    @Override
+    protected void onStart() 
+    {
+        if(!Intake.getInstance().isIntakeDeployed()){
+            Intake.getInstance().deployIntake();
     }
 
-       Intake.getInstance().setMotorSpeedRaw(-1);
-       Transfer.getInstance().setMotorSpeedInPercent(-1);
-       Indexer.getInstance().setMotorSpeedInPercent(-1);
-       Shooter.getInstance().setMotorSpeedInPercent(-.6);
+   }
+   @Override
+   protected void onExecute() { // make sure these run simultaneously
+       Transfer.getInstance().setMotorSpeedInPercent(Transfer.PUKE_PERCENT);
+       Indexer.getInstance().setMotorSpeedInPercent(Indexer.PUKE_PERCENT);
+       Shooter.getInstance().setMotorSpeedInPercent(Shooter.PUKE_PERCENT);
+       Intake.getInstance().setMotorSpeedRaw(Intake.PUKE_PERCENT);
     
    }
 
