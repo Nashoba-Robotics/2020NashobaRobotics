@@ -14,6 +14,14 @@ public class EnabledSensors {
     public static AnalogSensor IndexerSpacingFar = new AnalogSensor(RobotMap.INDEXER_SPACING_FAR, Indexer.INDEXER_SPACING_FAR_THRESHOLD);
     public static AnalogSensor IndexerReadyShot = new AnalogSensor(RobotMap.INDEXER_READY_SHOT, Indexer.INDEXER_READY_SHOT_THRESHOLD);
     public static AnalogSensor TransferSensor = new AnalogSensor(RobotMap.TRANSFER_SENSOR, Transfer.TRANSFER_THRESHOLD);
+    
+    public static DigitalSensor LimTurretLeft = new DigitalSensor(RobotMap.LIM_TURRET_LEFT);
+    public static DigitalSensor LimTurretRight = new DigitalSensor(RobotMap.LIM_TURRET_RIGHT);
+
+    public static DigitalSensor LimHoodLower = new DigitalSensor(RobotMap.LIM_HOOD_LOWER);
+
+
+
     //more sensors, way more sensors
 
     //public static DigitalInput cargoIntakeSensorOne = new DigitalInput(RobotMap.CARGO_INTAKE_SENSOR_PORT_1);

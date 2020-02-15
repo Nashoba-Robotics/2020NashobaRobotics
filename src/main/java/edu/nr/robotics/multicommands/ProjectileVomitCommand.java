@@ -19,15 +19,29 @@ public class ProjectileVomitCommand extends NRCommand {
  
    @Override
    protected void onStart() { // make sure these run simultaneously
-       new IntakePukeCommand();
-       new TransferPukeCommand();
-       new IndexerPukeCommand();
-       new ShooterPukeCommand();
+    if(!Intake.getInstance().isIntakeDeployed()){
+        Intake.getInstance().deployIntake();
+    }
+
+       Intake.getInstance().setMotorSpeedRaw(-1);
+       Transfer.getInstance().setMotorSpeedInPercent(-1);
+       Indexer.getInstance().setMotorSpeedInPercent(-1);
+       Shooter.getInstance().setMotorSpeedInPercent(-.6);
+    
+   }
+
+   @Override
+   protected void onEnd() {
+    Intake.getInstance().setMotorSpeedRaw(0);
+    Transfer.getInstance().setMotorSpeedInPercent(0);
+    Indexer.getInstance().setMotorSpeedInPercent(0);
+    Shooter.getInstance().setMotorSpeedInPercent(0);
    }
  
    @Override
    protected boolean isFinishedNR(){
        return true;
    }
+
 }
  

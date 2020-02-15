@@ -1,5 +1,5 @@
 package edu.nr.robotics.subsystems.indexer;
- 
+
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.motorcontrollers.CTRECreator;
 import edu.nr.lib.units.Acceleration;
@@ -7,6 +7,7 @@ import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
 import edu.nr.robotics.RobotMap;
+import edu.nr.robotics.multicommands.CanWeIndexCommand;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.AnalogSensor;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
@@ -135,6 +136,7 @@ public class Indexer extends NRSubsystem {
     public synchronized static void init(){
         if(singleton == null){
             singleton = new Indexer();
+            singleton.setDefaultCommand(new CanWeIndexCommand()); //this might be garbage
         }
     }
  
@@ -264,7 +266,7 @@ public class Indexer extends NRSubsystem {
         if(indexerTalon != null){
             indexerTalon.selectProfileSlot(VEL_SLOT, DEFAULT_TIMEOUT);
             //System.out.println(target.get(Distance.Unit.INCH, Time.Unit.SECOND) + "setSpeeed working");
-            System.out.println(target.get(Distance.Unit.MAGNETIC_ENCODER_TICK_INDEXER,Time.Unit.SECOND)+ "target unitys"); // always 400?
+          //  System.out.println(target.get(Distance.Unit.MAGNETIC_ENCODER_TICK_INDEXER,Time.Unit.SECOND)+ "target unitys"); // always 400?
             indexerTalon.set(ControlMode.Velocity, target.get(Distance.Unit.MAGNETIC_ENCODER_TICK_INDEXER, Time.Unit.HUNDRED_MILLISECOND));
         }
     }

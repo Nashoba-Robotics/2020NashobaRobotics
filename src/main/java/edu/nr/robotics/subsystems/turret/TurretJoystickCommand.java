@@ -16,8 +16,6 @@ public class TurretJoystickCommand extends JoystickCommand {
     super(Turret.getInstance());
   }
 
-
-
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void onExecute() {

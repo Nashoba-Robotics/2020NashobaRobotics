@@ -19,13 +19,13 @@
     import edu.nr.robotics.RobotMap;
     import edu.nr.robotics.subsystems.EnabledSubsystems;
     import edu.nr.robotics.subsystems.sensors.DigitalSensor;
+    import edu.nr.robotics.subsystems.sensors.EnabledSensors;
     import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
     public class Hood extends NRSubsystem{
 
         private static Hood Singleton;
 
-        private static TalonSRX hoodTalon;
         private static CANSparkMax hoodSpark;
 
         public static final double ENCODER_TICKS_PER_DEGREE_HOOD = 2048 / 360; // unknown for sparkmax
@@ -111,50 +111,6 @@
             hoodSpark.getPIDController().setOutputRange(-1, 1, VEL_SLOT);
             hoodSpark.getPIDController().setOutputRange(-1, 1, POS_SLOT);
 
-            hoodTalon = CTRECreator.createMasterTalon(RobotMap.HOOD_TALON);
-
-            hoodTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
-
-
-            hoodTalon.config_kF(VEL_SLOT, 0, DEFAULT_TIMEOUT);
-            hoodTalon.config_kP(VEL_SLOT, P_VEL_HOOD, DEFAULT_TIMEOUT);
-            hoodTalon.config_kI(VEL_SLOT, I_VEL_HOOD, DEFAULT_TIMEOUT);
-            hoodTalon.config_kD(VEL_SLOT, D_VEL_HOOD, DEFAULT_TIMEOUT);
-
-            hoodTalon.config_kF(MOTION_MAGIC_SLOT, F_POS_HOOD, DEFAULT_TIMEOUT);
-            hoodTalon.config_kP(MOTION_MAGIC_SLOT, P_POS_HOOD, DEFAULT_TIMEOUT);
-            hoodTalon.config_kI(MOTION_MAGIC_SLOT, I_POS_HOOD, DEFAULT_TIMEOUT);
-            hoodTalon.config_kD(MOTION_MAGIC_SLOT, D_POS_HOOD, DEFAULT_TIMEOUT);
-
-            hoodTalon.config_kF(POS_SLOT, F_POS_HOOD, DEFAULT_TIMEOUT);
-            hoodTalon.config_kP(POS_SLOT, P_POS_HOOD, DEFAULT_TIMEOUT);
-            hoodTalon.config_kI(POS_SLOT, I_POS_HOOD, DEFAULT_TIMEOUT);
-            hoodTalon.config_kD(POS_SLOT, D_POS_HOOD, DEFAULT_TIMEOUT);
-
-            hoodTalon.setNeutralMode(NEUTRAL_MODE_HOOD);
-
-            hoodTalon.setInverted(false);
-            //Change to Talon Version
-            hoodTalon.setSensorPhase(false);
-
-            hoodTalon.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT_HOOD);
-
-            hoodTalon.enableVoltageCompensation(true);
-            hoodTalon.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL, DEFAULT_TIMEOUT);
-            
-            hoodTalon.enableCurrentLimit(true);
-            hoodTalon.configPeakCurrentLimit(PEAK_CURRENT_HOOD, DEFAULT_TIMEOUT);
-            hoodTalon.configPeakCurrentDuration(CONTINUOUS_CURRENT_LIMIT_HOOD, DEFAULT_TIMEOUT);
-
-            hoodTalon.configClosedloopRamp(VOLTAGE_RAMP_RATE_HOOD.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
-            hoodTalon.configOpenloopRamp(VOLTAGE_RAMP_RATE_HOOD.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
-
-            //Change Magnetic_encoder_tick_aux_drive to angle stuff, angular acc and velocity
-            hoodTalon.configMotionCruiseVelocity((int) MAX_SPEED.mul(PROFILE_VEL_PERCENT_HOOD).get(Angle.Unit.HOOD_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
-            hoodTalon.configMotionAcceleration((int) MAX_ACCEL.mul(PROFILE_ACCEL_PERCENT_HOOD).get(Angle.Unit.HOOD_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
-
-            hoodTalon.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
-
             }
             smartDashboardInit();
         }
@@ -176,10 +132,9 @@
 
         public static Angle getAngle()
         {
-            if(hoodTalon != null)
+            if(hoodSpark != null)
             {
-                return new Angle(hoodTalon.getSelectedSensorPosition() / ENCODER_TICKS_PER_DEGREE_HOOD, Angle.Unit.DEGREE);
-            //    return new Angle(hoodSpark.getEncoder().getPosition() / ENCODER_TICKS_PER_DEGREE_HOOD, Angle.Unit.DEGREE); for sparkmax
+                return new Angle(hoodSpark.getEncoder().getPosition(), Angle.Unit.ROTATION);
             } 
             return Angle.ZERO;
         }
@@ -189,46 +144,16 @@
             setAngleHood = target;
 
             if(hoodSpark != null){
-                hoodSpark.getPIDController().setReference(setAngleHood.get(Angle.Unit.HOOD_ENCODER_TICK), ControlType.kPosition, POS_SLOT);
+                hoodSpark.getPIDController().setReference(setAngleHood.get(Angle.Unit.ROTATION), ControlType.kPosition, POS_SLOT);
             }
-            //Motion Magic
-            /*
-            hoodTalon.selectProfileSlot(MOTION_MAGIC_SLOT, DEFAULT_TIMEOUT);
 
-            hoodTalon.configMotionCruiseVelocity(MOTION_MAGIC_MULTIPLIER * (int) MAX_SPEED_HOOD.mul(MOTION_MAGIC_PERCENT).get(Angle.Unit.DEGREE, Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
-            hoodTalon.configMotionAcceleration(MOTION_MAGIC_MULTIPLIER * (int) MAX_ACCELERATION_HOOD.mul(MOTION_MAGIC_PERCENT).get(Angle.Unit.DEGREE, Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
-
-            hoodTalon.set(ControlMode.MotionMagic, setAngleHood.get(Angle.Unit.HOOD_ENCODER_TICK));*/
-
-            /*hoodTalon.selectProfileSlot(MOTION_MAGIC_SLOT, DEFAULT_TIMEOUT);
             
-            hoodTalon.configMotionCruiseVelocity(MOTION_MAGIC_MULTIPLIER*(int) MAX_SPEED.mul(MOTION_MAGIC_PERCENT).get(
-                    Angle.Unit.HOOD_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND),
-                            DEFAULT_TIMEOUT);
-            System.out.println("Motion cruise velocity: " + MOTION_MAGIC_MULTIPLIER*(int) MAX_SPEED.mul(MOTION_MAGIC_PERCENT).get(
-                Angle.Unit.HOOD_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND));
-
-            hoodTalon.configMotionAcceleration(MOTION_MAGIC_MULTIPLIER*(int) MAX_ACCEL.mul(MOTION_MAGIC_PERCENT).get(
-                    Angle.Unit.HOOD_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND),
-                    DEFAULT_TIMEOUT);
-                System.out.println("Motion magic acceleration" + MOTION_MAGIC_MULTIPLIER*(int) MAX_ACCEL.mul(MOTION_MAGIC_PERCENT).get(
-                    Angle.Unit.HOOD_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND));
-            
-            hoodTalon.set(ControlMode.MotionMagic, setAngleHood.get(Angle.Unit.HOOD_ENCODER_TICK));*/
-
-            if(hoodTalon != null){
-                hoodTalon.selectProfileSlot(POS_SLOT, DEFAULT_TIMEOUT);
-                hoodTalon.set(ControlMode.Position, setAngleHood.get(Angle.Unit.HOOD_ENCODER_TICK));
-            }
         }
 
         public void smartDashboardInit(){
             if(EnabledSubsystems.HOOD_SMARTDASHBOARD_BASIC_ENABLED){
-            //SmartDashboard.putNumber("Spark Encoder Position Hood", hoodSpark.getEncoder().getPosition()); for spark
-            //SmartDashboard.putNumber("Spark Hood Current", hoodSpark.getOutputCurrent());for spark
-            
-            SmartDashboard.putNumber("Testing encoder position", hoodTalon.getSelectedSensorPosition());
-            SmartDashboard.putNumber("Hood Current", hoodTalon.getStatorCurrent());
+            SmartDashboard.putNumber("Spark Encoder Position Hood", hoodSpark.getEncoder().getPosition()); 
+            SmartDashboard.putNumber("Spark Hood Current", hoodSpark.getOutputCurrent());
 
             SmartDashboard.putNumber("F_POS_HOOD", F_POS_HOOD);
             SmartDashboard.putNumber("P_POS_HOOD", P_POS_HOOD);
@@ -247,18 +172,12 @@
 
         public void disable()
         {
-            if(hoodTalon != null){
-                hoodTalon.set(ControlMode.PercentOutput, 0);
-            }
             if(hoodSpark != null){
                 hoodSpark.set(0);
             }
         }
 
         public AngularSpeed getSpeed(){
-            if(hoodTalon != null){
-                return new AngularSpeed(hoodTalon.getSelectedSensorVelocity(), Angle.Unit.HOOD_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND);
-            }
 
             if(hoodSpark != null){
                 return new AngularSpeed(hoodSpark.getEncoder().getVelocity(), Angle.Unit.ROTATION, Time.Unit.MINUTE);
@@ -267,9 +186,7 @@
         }
 
         public void setMotorSpeedRaw(double percent){
-            if(hoodTalon != null){
-                hoodTalon.set(ControlMode.PercentOutput, percent);
-            }
+           
             if(hoodSpark != null){
                 hoodSpark.set(percent);
             }
@@ -301,50 +218,12 @@
                 goalAngleHood = new Angle(SmartDashboard.getNumber("Hood Goal Angle", goalAngleHood.get(Angle.Unit.DEGREE)), Angle.Unit.DEGREE);
 
             }
-
-            if(hoodTalon != null){
-
-                if(EnabledSubsystems.HOOD_SMARTDASHBOARD_BASIC_ENABLED){
-                    SmartDashboard.putNumber("Testing encoder position", hoodTalon.getSelectedSensorPosition());
-                    //setMotorSpeedRaw(.7);
-                    SmartDashboard.putNumber("Hood Angular Speed", getSpeed().get(Angle.Unit.DEGREE,Time.Unit.SECOND));
-                    SmartDashboard.putNumber("Hood Current", hoodTalon.getStatorCurrent());
-                    SmartDashboard.putString("Hood Angle", getAngle().get(Angle.Unit.DEGREE) + " : " + setAngleHood.get(Angle.Unit.DEGREE));	
-
-                    F_POS_HOOD = SmartDashboard.getNumber("F_POS_HOOD", 0);
-                    P_POS_HOOD = SmartDashboard.getNumber("P_POS_HOOD", 0);
-                    I_POS_HOOD = SmartDashboard.getNumber("I_POS_HOOD", 0);
-                    D_POS_HOOD = SmartDashboard.getNumber("D_POS_HOOD", 0);
-
-                    F_VEL_HOOD = SmartDashboard.getNumber("F_VEL_HOOD", 0);
-                    P_VEL_HOOD = SmartDashboard.getNumber("P_VEL_HOOD", 0);
-                    I_VEL_HOOD = SmartDashboard.getNumber("I_VEL_HOOD", 0);
-                    D_VEL_HOOD = SmartDashboard.getNumber("D_VEL_HOOD", 0);
-
-                    hoodTalon.config_kF(POS_SLOT, F_POS_HOOD, DEFAULT_TIMEOUT);
-                    hoodTalon.config_kP(POS_SLOT, P_POS_HOOD, DEFAULT_TIMEOUT);
-                    hoodTalon.config_kI(POS_SLOT, I_POS_HOOD, DEFAULT_TIMEOUT);
-                    hoodTalon.config_kD(POS_SLOT, D_POS_HOOD, DEFAULT_TIMEOUT);
-
-                    hoodTalon.config_kF(VEL_SLOT, F_VEL_HOOD, DEFAULT_TIMEOUT);
-                    hoodTalon.config_kP(VEL_SLOT, P_VEL_HOOD, DEFAULT_TIMEOUT);
-                    hoodTalon.config_kI(VEL_SLOT, I_VEL_HOOD, DEFAULT_TIMEOUT);
-                    hoodTalon.config_kD(VEL_SLOT, D_VEL_HOOD, DEFAULT_TIMEOUT);
-                }
-                if(EnabledSubsystems.HOOD_SMARTDASHBOARD_DEBUG_ENABLED){
-                    SmartDashboard.putString("Hood Control Mode", hoodTalon.getControlMode().toString());
-                    SmartDashboard.putNumber("Hood Voltage", hoodTalon.getMotorOutputVoltage());
-                    SmartDashboard.putNumber("Hood Raw Position Ticks", hoodTalon.getSelectedSensorPosition());
-                }
-                goalAngleHood = new Angle(SmartDashboard.getNumber("Hood Goal Angle", goalAngleHood.get(Angle.Unit.DEGREE)), Angle.Unit.DEGREE);
-            }
         //    System.out.println("Hood angle" + goalAngleHood.get(Angle.Unit.DEGREE));
         }
 
         public double getCurrent()
         {
-            if(hoodTalon != null)  
-                return hoodTalon.getStatorCurrent();
+            
             if(hoodSpark != null){
                 return hoodSpark.getOutputCurrent();
             }
@@ -354,6 +233,16 @@
         public void periodic()
         {
             //check if limits are triggered, set to max / min hood spot if applicable
+            if(EnabledSensors.LimHoodLower.get()){
+                hoodSpark.getEncoder().setPosition(0); // should reset position
+                
+                if(getSpeed().get(Angle.Unit.ROTATION, Time.Unit.MINUTE) < 0){ // might be backwards...
+                    setMotorSpeedRaw(0);
+                }
+            }
 
+            if(setAngleHood.get(Angle.Unit.DEGREE) > 70){
+                setAngle(new Angle(70, Angle.Unit.DEGREE));
+            }
         }
 }

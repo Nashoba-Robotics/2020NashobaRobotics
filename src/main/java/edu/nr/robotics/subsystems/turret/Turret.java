@@ -11,6 +11,7 @@ import edu.nr.lib.units.AngularSpeed;
 import edu.nr.lib.units.Time;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Turret extends NRSubsystem
 {
@@ -29,6 +30,11 @@ public class Turret extends NRSubsystem
    private static Angle setAngle = Angle.ZERO;
    public static Angle goalAngle = Angle.ZERO;
    public static Angle deltaAngle = Angle.ZERO;
+
+   public static Angle LEFT_LIMIT = new Angle(- 118,Angle.Unit.DEGREE);
+   public static Angle RIGHT_LIMIT = new Angle( 118,Angle.Unit.DEGREE);
+
+
    public static final NeutralMode NEUTRAL_MODE = NeutralMode.Brake;
    //Type of PID. 0 = primary. 1 = cascade
    public static final int PID_TYPE = 0;
@@ -153,8 +159,22 @@ public class Turret extends NRSubsystem
 
    public void periodic()
    {
-      System.out.println(setAngle.get(Angle.Unit.DEGREE));
+      //System.out.println(setAngle.get(Angle.Unit.DEGREE));
+      if(EnabledSensors.LimTurretLeft.get()){
+        if(getActualSpeed().get(Angle.Unit.DEGREE, Time.Unit.SECOND) < 0){
+            setMotorSpeedInPercent(0); // might not need this
+            setAngle(LEFT_LIMIT);
+        }
+      }
+
+      if(EnabledSensors.LimTurretRight.get()){
+        if(getActualSpeed().get(Angle.Unit.DEGREE, Time.Unit.SECOND) > 0){
+            setMotorSpeedInPercent(0); // might not need this
+            setAngle(RIGHT_LIMIT);
+        }
+      }
    }
+
    public double getCurrent(){
        if(turretTalon != null)
        {

@@ -28,7 +28,7 @@ public class Intake extends NRSubsystem
 
     public static double currentIntakePercent = 0.0;
 
-    public static final double INTAKE_PERCENT = 0;
+    public static final double INTAKE_PERCENT = 0.8;
 
     private Intake()
     {
@@ -112,13 +112,14 @@ public class Intake extends NRSubsystem
     }
 
     public void setMotorSpeedRaw(double percent) {
-        if (IntakeTalon != null)
+        if (IntakeTalon != null){
             if(percent > MAX_PERCENT_INTAKE)
                 percent = MAX_PERCENT_INTAKE;
             else if(percent < MIN_PERCENT_INTAKE)
                 percent = MIN_PERCENT_INTAKE;
             IntakeTalon.set(ControlMode.PercentOutput, percent);
             currentIntakePercent = percent;
+        }
     }
 
     public double getIdealMotorSpeed()

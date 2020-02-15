@@ -13,20 +13,18 @@ public class ShooterPukeCommand extends NRCommand{
     }
  
     public void onStart(){
-        start = Timer.getFPGATimestamp();
+        
         Shooter.getInstance().setMotorSpeedInPercent( - 1 * Shooter.RUN_PERCENT);
     }
  
     public void onExecute(){
-        currentTime = Timer.getFPGATimestamp();
     }
  
     public boolean isFinishedNR(){
-        return (currentTime - start) > Shooter.PUKE_TIME.get(Time.Unit.SECOND);
+        return true;
     }
  
     protected void onEnd(){
-        Shooter.getInstance().setMotorSpeedInPercent(0);
     }
 }
  

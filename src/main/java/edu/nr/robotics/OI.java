@@ -135,9 +135,7 @@ public class OI implements SmartDashboardSource {
 
     public void initDriveLeft() {
         //buttons go here
-        stayInPlaceModeButton = new JoystickButton(driveLeft, );
-        stayInPlaceModeButton.whenPressed(new StayInPlaceDriveCommand());
-
+     
         //new SetTurretLimelightCommand();
         //end PID loop cancel into velocity PID
 

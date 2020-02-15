@@ -99,6 +99,7 @@ public class ClimbDeploy extends NRSubsystem{
    public synchronized static void init(){
        if(singleton == null){
            singleton = new ClimbDeploy();
+           singleton.setDefaultCommand(new ClimbDeployJoystickCommand());
        }
    }
  

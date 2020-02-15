@@ -12,7 +12,7 @@ public class DeployAndRunIntakeCommand extends NRCommand
 
     public void onStart()
     {
-        if(Intake.getInstance().isIntakeDeployed() == false)
+        if(!Intake.getInstance().isIntakeDeployed())
             Intake.getInstance().deployIntake();
         if(Intake.getInstance().isIntakeDeployed())
             Intake.getInstance().setMotorSpeedRaw(Intake.getInstance().INTAKE_PERCENT);
