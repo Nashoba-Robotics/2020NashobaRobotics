@@ -13,6 +13,7 @@ public class IntakeRetractCommand extends NRCommand
     public void onStart()
     {
         if(Intake.getInstance().isIntakeDeployed() == true)
+            Intake.getInstance().setMotorSpeedRaw(0);
             Intake.getInstance().deployIntake();
     }
 

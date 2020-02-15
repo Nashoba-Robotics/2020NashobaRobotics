@@ -11,10 +11,13 @@ public class ToggleRunIntakeCommand extends NRCommand
 
     public void onStart()
     {
-        if(Intake.getInstance().getIdealMotorSpeed() != 0)
-            Intake.getInstance().setMotorSpeedRaw(Intake.INTAKE_PERCENT);
-        else
-            Intake.getInstance().setMotorSpeedRaw(0);
+        if(Intake.getInstance().isIntakeDeployed())
+        {
+            if(Intake.getInstance().getIdealMotorSpeed() != 0)
+                Intake.getInstance().setMotorSpeedRaw(Intake.INTAKE_PERCENT);
+            else
+                Intake.getInstance().setMotorSpeedRaw(0);
+        }
     }
 
     public boolean isFinishedNR()

@@ -32,7 +32,7 @@ public class OI implements SmartDashboardSource {
     private static final int CANCEL_ALL_BUTTON_NUMBER = 11; //find all of these and make them too
     //private static final int KID_MODE_SWITCH = 1;
     
-    
+    /*
     private static final int DRIVE_TO_TARGET_AUTO_NUMBER = 7;
     private static final int DRIVE_TO_TARGET_HYBRID_NUMBER = 2;
     private static final int TURN_90_LEFT_NUMBER = 3;
@@ -44,6 +44,41 @@ public class OI implements SmartDashboardSource {
     private static final int SNIPER_MODE_TURN = 1;
     private static final int DUMB_DRIVE_NUMBER = 14;
     private static final int TOGGLE_KID_MODE_NUMBER = 5;
+    */
+    
+    private static final int EMERGENCY_MANUAL_SWITCH = 100;
+    private static final int ACQUIRE_TARGET_NUMBER = 100;
+    private static final int TOGGLE_SHOOTER_NUMBER = 100;
+    private static final int FIRE_NUMBER = 100;
+
+    private static final int BASH_BAR_NUMBER = 100;
+
+    private static final int EMERGENCY_SUBSYSTEM_DISABLE_NUMBER = 100;
+
+    private static final int INCREMENT_HOOD_UP_NUMBER = 100;
+    private static final int INCREMENT_HOOD_DOWN_NUMBER = 100;
+    private static final int ZERO_HOOD_NUMBER = 100;
+
+    private static final int TURRET_LEFT_POSITION_NUMBER = 100;
+    private static final int TURRET_CENTER_POSITION_NUMBER = 100;
+    private static final int TURRET_RIGHT_POSITION_NUMBER = 100;
+
+    private static final int DEPLOY_CLIMB_LOW = 100;
+    private static final int DEPLOY_CLIMB_MID = 100;
+    private static final int DEPLOY_CLIMB_HIGH = 100;
+    private static final int CLIMB_NUMBER = 100;
+
+    private static final int COLOR_WHEEL_SPIN_NUMBER = 100;
+    private static final int COLOR_WHEEL_FIND_COLOR_NUMBER = 100;
+
+    private static final int PUKE_INTAKE_NUMBER = 100;
+    private static final int TOGGLE_INTAKE_MOTORS_NUMBER = 100;
+    private static final int TOGGLE_INTAKE_DEPLOYED_NUMBER = 100;
+    private static final int TOGGLE_INTAKE_ROUTINE_NUMBER = 100;
+
+    private static final int STAY_IN_PLACE_MODE_NUMBER = 100;
+
+    private static final int PUKE_ALL_NUMBER = 100;
 
     private double driveSpeedMultiplier = 1;
 
@@ -68,6 +103,13 @@ public class OI implements SmartDashboardSource {
     private static final int STICK_OPERATOR_RIGHT = 3;
 
     private JoystickButton stayInPlaceModeButton;
+    private JoystickButton acquireTargetButton;
+    private JoystickButton shooterToggleButton;
+    private JoystickButton fireButton;
+
+    private JoystickButton emergencyDisableSwitch;
+
+    private JoystickButton emergencyManualSwitch;
 
     public static final Drive.DriveMode driveMode = Drive.DriveMode.cheesyDrive; // set default type of drive here
 
@@ -93,7 +135,7 @@ public class OI implements SmartDashboardSource {
 
     public void initDriveLeft() {
         //buttons go here
-        stayInPlaceModeButton = new JoystickButton(driveLeft, 1);
+        stayInPlaceModeButton = new JoystickButton(driveLeft, );
         stayInPlaceModeButton.whenPressed(new StayInPlaceDriveCommand());
 
         //new SetTurretLimelightCommand();

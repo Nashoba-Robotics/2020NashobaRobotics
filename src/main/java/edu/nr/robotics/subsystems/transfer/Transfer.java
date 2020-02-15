@@ -25,8 +25,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Transfer extends NRSubsystem{
    private static Transfer singleton;
-   private TalonSRX transferTalon;
-   private CANSparkMax transferSpark;
+   
+   //private TalonSRX transferTalon;
+   //private CANSparkMax transferSpark;
 
    private VictorSPX transferVictor;
 
@@ -84,9 +85,9 @@ public class Transfer extends NRSubsystem{
   
    private Transfer(){
        if(EnabledSubsystems.TRANSFER_ENABLED){
-           transferTalon = CTRECreator.createMasterTalon(RobotMap.TRANSFER_TALON);
+           //transferTalon = CTRECreator.createMasterTalon(RobotMap.TRANSFER_TALON);
  
-           transferSpark = SparkMax.createSpark(RobotMap.TRANSFER_SPARK, MotorType.kBrushless);
+           //transferSpark = SparkMax.createSpark(RobotMap.TRANSFER_SPARK, MotorType.kBrushless);
 
            transferVictor = new VictorSPX(RobotMap.TRANSFER_VICTOR);
            /*
@@ -134,15 +135,19 @@ public class Transfer extends NRSubsystem{
            transferTalon.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
            */
 
+
+            transferVictor.setNeutralMode(NeutralMode.Brake);
             transferVictor.setInverted(false);
-            
+
 
            if(EnabledSubsystems.TRANSFER_DUMB_ENABLED){
-               transferTalon.set(ControlMode.PercentOutput, 0);
-               transferSpark.set(0);
+               //transferTalon.set(ControlMode.PercentOutput, 0);
+               //transferSpark.set(0);
+               transferVictor.set(ControlMode.PercentOutput, 0);
            }else{
-               transferTalon.set(ControlMode.Velocity, 0);
-               transferSpark.set(0);
+               //transferTalon.set(ControlMode.Velocity, 0);
+               //transferSpark.set(0);
+               transferVictor.set(ControlMode.PercentOutput, 0);
            }
        }
        smartDashboardInit();
@@ -159,12 +164,18 @@ public class Transfer extends NRSubsystem{
        }
    }
    public void disable(){
-       if(transferTalon != null){
+        /*
+        if(transferTalon != null){
            transferTalon.set(ControlMode.PercentOutput, 0);
            //set position to current position
        }
        if(transferSpark != null){
            transferSpark.set(0);
+       }
+       */
+       if(transferVictor != null)
+       {
+           transferVictor.set(ControlMode.PercentOutput, 0);
        }
  
  
@@ -181,6 +192,7 @@ public class Transfer extends NRSubsystem{
                SmartDashboard.putNumber("P_VEL_TRANSFER: ", P_VEL_TRANSFER);
                SmartDashboard.putNumber("I_VEL_TRANSFER: ", I_VEL_TRANSFER);
                SmartDashboard.putNumber("D_VEL_TRANSFER: ", D_VEL_TRANSFER);
+            /*
            if(transferTalon != null){
                SmartDashboard.putNumber("Transfer Encoder Position", transferTalon.getSelectedSensorPosition());
            }
@@ -189,7 +201,12 @@ public class Transfer extends NRSubsystem{
                SmartDashboard.putNumber("Transfer Spark Encoder", transferSpark.getEncoder().getPosition());
                SmartDashboard.putNumber("Transfer Spark Speed (RPM)", transferSpark.getEncoder().getVelocity());
            }
- 
+           */
+           if(transferVictor != null)
+           {
+               SmartDashboard.putNumber("Transfer Bus Voltage: ", transferVictor.getBusVoltage());
+               SmartDashboard.putNumber("Transfer Victor Output Percent: ", transferVictor.getMotorOutputPercent());
+           }
            SmartDashboard.putNumber("Transfer Set Position", distanceSetPoint.get(Distance.Unit.INCH));
            SmartDashboard.putNumber("Transfer Delta Position", deltaDistance.get(Distance.Unit.INCH));
            SmartDashboard.putNumber("Transfer Goal Speed", goalSpeed);
@@ -208,7 +225,7 @@ public class Transfer extends NRSubsystem{
            P_VEL_TRANSFER = SmartDashboard.getNumber("P_VEL_TRANSFER: ", P_VEL_TRANSFER);
            I_VEL_TRANSFER = SmartDashboard.getNumber("I_VEL_TRANSFER: ", I_VEL_TRANSFER);
            D_VEL_TRANSFER = SmartDashboard.getNumber("D_VEL_TRANSFER: ", D_VEL_TRANSFER);
- 
+            /*
            if(transferTalon != null)
            {
                SmartDashboard.putNumber("Transfer Current", transferTalon.getStatorCurrent());
@@ -218,6 +235,12 @@ public class Transfer extends NRSubsystem{
            {
                SmartDashboard.putNumber("Transfer Spark Position", transferSpark.getEncoder().getPosition());
            }
+           */
+          if(transferVictor != null)
+          {
+            SmartDashboard.putNumber("Transfer Bus Voltage: ", transferVictor.getBusVoltage());
+            SmartDashboard.putNumber("Transfer Victor Output Percent: ", transferVictor.getMotorOutputPercent());
+          }
  
            goalSpeed = SmartDashboard.getNumber("Transfer Goal Speed", goalSpeed);
            distanceSetPoint = new Distance (SmartDashboard.getNumber("Transfer Set Position", distanceSetPoint.get(Distance.Unit.INCH)), Distance.Unit.INCH);
@@ -226,6 +249,7 @@ public class Transfer extends NRSubsystem{
    }
    public double getEncoderPosition()
    {
+       /*
        if(transferTalon != null){
            return transferTalon.getSelectedSensorPosition();
        }
@@ -233,10 +257,17 @@ public class Transfer extends NRSubsystem{
        if(transferSpark != null){
            return transferSpark.getEncoder().getPosition();
        }
+       */
+       if(transferVictor != null)
+       {
+           return transferVictor.getSelectedSensorPosition();
+       }
+
        return 0;
    }
    public void setMotorSpeedInPercent(double percent)
    {
+       /*
        if(transferTalon != null){
            transferTalon.set(ControlMode.PercentOutput, percent);
            speedSetPoint = MAX_SPEED_TRANSFER.mul(percent);
@@ -246,9 +277,15 @@ public class Transfer extends NRSubsystem{
            transferSpark.set(percent);
            speedSetPoint = MAX_SPEED_TRANSFER.mul(percent);
        }
+       */
+      if(transferVictor != null)
+      {
+          transferVictor.set(ControlMode.PercentOutput, percent);
+      }
    }
    public AngularSpeed getSpeed()
    {
+        /*
        if(transferTalon != null)
        {
            return new AngularSpeed(transferTalon.getSelectedSensorVelocity(), Angle.Unit.TRANSFER_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND);
@@ -258,8 +295,16 @@ public class Transfer extends NRSubsystem{
        {
            return new AngularSpeed(transferSpark.getEncoder().getVelocity(), Angle.Unit.ROTATION, Time.Unit.MINUTE);
        }
+       */
+
+       if(transferVictor != null)
+       {
+           return new AngularSpeed(transferVictor.getSelectedSensorVelocity(), Angle.Unit.TRANSFER_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND);
+       }
+
        return AngularSpeed.ZERO;
    }
+   /*
    public void setSpeed(AngularSpeed targetSpeed)
    {
        if(transferTalon != null)
@@ -274,6 +319,7 @@ public class Transfer extends NRSubsystem{
            transferSpark.set(targetSpeed.div(MAX_SPEED_TRANSFER));
        }
    }
+   */
    public void periodic(){
        //check sensors and see if we can kick a ball into the indexer
    }

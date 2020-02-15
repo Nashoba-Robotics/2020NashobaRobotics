@@ -104,6 +104,7 @@ public class Turret extends NRSubsystem
        {
            if(EnabledSubsystems.TURRET_SMARTDASHBOARD_DEBUG_ENABLED)
            {
+               setMotorSpeedInPercent(0.10);
                P_POS_TURRET = SmartDashboard.getNumber("P_POS_TURRET", 0);
                I_POS_TURRET = SmartDashboard.getNumber("I_POS_TURRET", 0);
                D_POS_TURRET = SmartDashboard.getNumber("D_POS_TURRET", 0);
