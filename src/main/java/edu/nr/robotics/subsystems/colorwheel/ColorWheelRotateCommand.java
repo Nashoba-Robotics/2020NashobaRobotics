@@ -26,8 +26,9 @@ public class ColorWheelRotateCommand extends NRCommand{
 
         ColorWheel.getInstance().setMotorSpeedInPercent(1);
 
-        if(oldColor != currentColor){
+        if(oldColor != currentColor && currentColor != SensorColor.LemonChiffon){
             colorCount ++;
+            //System.out.println("color count rotatey bois: " + colorCount);
         }
     }
 

@@ -50,10 +50,10 @@ public class ISquaredCSensor implements Sensor {
         double green = sensor.getColor().green;
         double blue = sensor.getColor().blue;
  
-        if(red > 0.35 && green < 0.45 && blue < 0.25) {
+        if(red > 0.4 && green < 0.45 && blue < 0.25) {
             return SensorColor.Red;
         }
-        else if(red < 0.2 && blue > 0.35 && green > 0.4) {
+        else if(red < 0.2 && blue > 0.35 && green > 0.39) {
             return SensorColor.Blue;
         }
         else if(red < 0.25 && green > 0.5 && blue < 0.3) {
@@ -67,6 +67,10 @@ public class ISquaredCSensor implements Sensor {
  
     public Color getRawColor() {
         return sensor.getColor();
+    }
+
+    public double [] sensorColors(){
+        return new double []{sensor.getColor().red, sensor.getColor().green, sensor.getColor().blue};
     }
  
     public int getIRColor(){

@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 
 public class GameData{
 
-    public static SensorColor targetColor;
+    public static SensorColor targetColor = SensorColor.LemonChiffon;
 
     private static GameData walter;// walter CAD-ed our entire robot in 2020. A legend. Use this class to remember his name.
 
@@ -29,8 +29,12 @@ public class GameData{
     }
 
     public void getGameData(){
-        char data = DriverStation.getInstance().getGameSpecificMessage().charAt(0);
-        System.out.println("GAME DATA" + data);
+        char data = 'r'; // make u for real code, changed for testing
+      if(DriverStation.getInstance().getGameSpecificMessage().length() > 0){
+        data = DriverStation.getInstance().getGameSpecificMessage().charAt(0);
+      }
+
+        System.out.println("GAME DATA: " + data);
 
         targetColor = SensorColor.LemonChiffon;
         

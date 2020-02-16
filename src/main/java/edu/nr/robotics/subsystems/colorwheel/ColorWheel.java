@@ -13,6 +13,7 @@ import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import jdk.jfr.Enabled;
 
 public class ColorWheel extends NRSubsystem{
 
@@ -48,10 +49,8 @@ public class ColorWheel extends NRSubsystem{
 
             colorWheelVictor.set(ControlMode.PercentOutput, 0);
 
-
         }
         SmartDashboardInit();
-
     }
 
     public synchronized static void init(){
@@ -68,7 +67,9 @@ public class ColorWheel extends NRSubsystem{
     }
 
     public void disable(){
-        colorWheelVictor.set(ControlMode.PercentOutput, 0);
+        if(colorWheelVictor != null){
+            colorWheelVictor.set(ControlMode.PercentOutput, 0);
+        }
     }
 
     public void SmartDashboardInit(){
@@ -77,6 +78,12 @@ public class ColorWheel extends NRSubsystem{
         
         SmartDashboard.putString("Sensor Target Color", GameData.targetColor.name());
         SmartDashboard.putString("Sensor Color", EnabledSensors.colorSensor.getColor().name());
+
+        SmartDashboard.putString("sensor red ", "" + EnabledSensors.colorSensor.sensorColors()[0]);
+        SmartDashboard.putString("sensor green ", "" + EnabledSensors.colorSensor.sensorColors()[1]);
+        SmartDashboard.putString("sensor blue ", "" + EnabledSensors.colorSensor.sensorColors()[2]);
+
+        
         //sensor information, game information??
         }
     }
@@ -84,12 +91,19 @@ public class ColorWheel extends NRSubsystem{
     public void smartDashboardInfo() {
     SmartDashboard.putString("Sensor Color", EnabledSensors.colorSensor.getColor().name());
 
+    SmartDashboard.putString("sensor red ", "" + EnabledSensors.colorSensor.sensorColors()[0]);
+    SmartDashboard.putString("sensor green ", "" + EnabledSensors.colorSensor.sensorColors()[1]);
+    SmartDashboard.putString("sensor blue ", "" + EnabledSensors.colorSensor.sensorColors()[2]);
       //update sensor information, sensor value
 
     }
 
     public void setMotorSpeedInPercent(double percent){
-        colorWheelVictor.set(ControlMode.PercentOutput, percent);
+        System.out.println("colorwheel percent: " + percent);
+
+        if(colorWheelVictor != null){
+            colorWheelVictor.set(ControlMode.PercentOutput, percent);
+        }
     }
 
 }
