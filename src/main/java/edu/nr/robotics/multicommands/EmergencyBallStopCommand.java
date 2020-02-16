@@ -26,7 +26,6 @@ public class EmergencyBallStopCommand extends NRCommand
         Shooter.getInstance().disable();
         Transfer.getInstance().disable();
         Turret.getInstance().disable();
-        Hood.getInstance().disable();
     }
 
     @Override

@@ -28,6 +28,9 @@ import edu.nr.lib.units.Time.Unit;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.climbdeploy.ClimbDeploy;
 import edu.nr.robotics.subsystems.climbdeploy.ClimbDeploySmartDashboardCommand;
+import edu.nr.robotics.subsystems.colorwheel.ColorWheel;
+import edu.nr.robotics.subsystems.colorwheel.ColorWheelRotateCommand;
+import edu.nr.robotics.subsystems.colorwheel.TargetColorCommand;
 import edu.nr.robotics.subsystems.drive.CSVSaverDisable;
 import edu.nr.robotics.subsystems.drive.CSVSaverEnable;
 import edu.nr.robotics.subsystems.drive.Drive;
@@ -45,6 +48,7 @@ import edu.nr.robotics.subsystems.indexer.IndexerDeltaPositionSmartDashboardComm
 import edu.nr.robotics.subsystems.indexer.IndexerSetVelocityCommand;
 import edu.nr.robotics.subsystems.indexer.IndexerSetVelocitySmartDashboardCommand;
 import edu.nr.robotics.subsystems.intake.Intake;
+import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.nr.robotics.subsystems.sensors.ISquaredCSensor;
 import edu.nr.robotics.subsystems.shooter.SetShooterSpeedSmartDashboardCommand;
 import edu.nr.robotics.subsystems.shooter.Shooter;
@@ -113,7 +117,9 @@ public class Robot extends TimedRobot {
         m_period = period; // period that the code runs at
  
         smartDashboardInit();
-        autoChooserInit();
+        //autoChooserInit();
+        GameData.init();
+        ColorWheel.init();
         //OI.init();
         //Winch.init();
         //ClimbDeploy.init();
@@ -199,8 +205,14 @@ public class Robot extends TimedRobot {
         if(EnabledSubsystems.TRANSFER_SMARTDASHBOARD_DEBUG_ENABLED)
         {
             //SmartDashboard.putData(new TransferCommand2(Transfer.TRANSFER_TIME));
+
             //RIP TransferCommand2. You made your country proud
             SmartDashboard.putData(new TransferCommand(Transfer.TRANSFER_TIME));
+        }
+
+        if(EnabledSubsystems.COLOR_WHEEL_SMARTDASHBOARD_ENABLED){
+            SmartDashboard.putData(new ColorWheelRotateCommand());
+            SmartDashboard.putData(new TargetColorCommand());
         }
 
         //SmartDashboard.putNumber("F TESTER", 0);

@@ -1,24 +1,30 @@
 package edu.nr.robotics.subsystems.sensors;
 
+import com.revrobotics.ColorSensorV3;
+
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.indexer.Indexer;
 import edu.nr.robotics.subsystems.transfer.Transfer;
+import edu.wpi.first.wpilibj.I2C;
 
 public class EnabledSensors {
     
     public static boolean limelightEnabled = false;
 
-    public static AnalogSensor IndexerInput = new AnalogSensor(RobotMap.INDEXER_INPUT, Indexer.INDEXER_INPUT_THRESHOLD);
-    public static AnalogSensor IndexerSpacingClose = new AnalogSensor(RobotMap.INDEXER_SPACING_CLOSE, Indexer.INDEXER_SPACING_CLOSE_THRESHOLD);
-    public static AnalogSensor IndexerSpacingFar = new AnalogSensor(RobotMap.INDEXER_SPACING_FAR, Indexer.INDEXER_SPACING_FAR_THRESHOLD);
-    public static AnalogSensor IndexerReadyShot = new AnalogSensor(RobotMap.INDEXER_READY_SHOT, Indexer.INDEXER_READY_SHOT_THRESHOLD);
-    public static AnalogSensor TransferSensor = new AnalogSensor(RobotMap.TRANSFER_SENSOR, Transfer.TRANSFER_THRESHOLD);
+    public static AnalogSensor indexerPukeSensor = new AnalogSensor(RobotMap.INDEXER_PUKE_SENSOR, Indexer.INDEXER_PUKE_SENSOR_THRESHOLD);
+    public static AnalogSensor indexerSetting2 = new AnalogSensor(RobotMap.INDEXER_SETTING2, Indexer.INDEXER_SETTING1_THRESHOLD);
+    public static AnalogSensor indexerSetting1 = new AnalogSensor(RobotMap.INDEXER_SETTING1, Indexer.INDEXER_SETTING2_THRESHOLD);
+    public static AnalogSensor indexerSetting3 = new AnalogSensor(RobotMap.INDEXER_SETTING3, Indexer.INDEXER_SETTING3_THRESHOLD);
+    public static AnalogSensor indexerShooterSensor = new AnalogSensor(RobotMap.INDEXER_SHOOTER_SENSOR, Indexer.INDEXER_SHOOTER_SENSOR_THRESHOLD);
+    public static AnalogSensor transferSensor = new AnalogSensor(RobotMap.TRANSFER_SENSOR, Transfer.TRANSFER_THRESHOLD);
     
     public static DigitalSensor LimTurretLeft = new DigitalSensor(RobotMap.LIM_TURRET_LEFT);
     public static DigitalSensor LimTurretRight = new DigitalSensor(RobotMap.LIM_TURRET_RIGHT);
 
     public static DigitalSensor LimHoodLower = new DigitalSensor(RobotMap.LIM_HOOD_LOWER);
+
+    public static ISquaredCSensor colorSensor = new ISquaredCSensor(new ColorSensorV3(I2C.Port.kOnboard));
 
 
 

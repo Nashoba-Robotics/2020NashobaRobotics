@@ -17,11 +17,16 @@ public class CanWeIndexCommand extends NRCommand {
     }
  
     public void onStart(){
+        /*
         if(Transfer.getInstance().hasBall() && Indexer.getInstance().readyForBall()){
             can = true;
         }
+        */
+
+        //Needs to be changed such that indexer moves until sensors tell us we can transfer
  
         if(can){
+            //Needs to be changed as delta position command is never called
             new TransferCommand(Transfer.TRANSFER_TIME);
             new IndexerDeltaPositionCommand(Indexer.SHOOT_ONE_DISTANCE);
         }

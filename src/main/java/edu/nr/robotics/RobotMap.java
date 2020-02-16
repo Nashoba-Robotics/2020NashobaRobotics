@@ -31,13 +31,14 @@ public class RobotMap {
     public static final int LIM_TURRET_LEFT = 2;
     public static final int LIM_TURRET_RIGHT = 3;
 
-    public static final int INDEXER_INPUT = 0;
-    public static final int INDEXER_SPACING_CLOSE = 1;
-    public static final int INDEXER_SPACING_FAR = 2;
-    public static final int INDEXER_READY_SHOT = 3;
+    public static final int INDEXER_PUKE_SENSOR = 0;
+    public static final int INDEXER_SETTING1 = 1;
+    public static final int INDEXER_SETTING2 = 2;
+    public static final int INDEXER_SETTING3 = 3;
+    public static final int INDEXER_SHOOTER_SENSOR = 4;
     public static final int INDEXER_TALON = 7; //7
     
-    public static final int TRANSFER_SENSOR = 4;
+    public static final int TRANSFER_SENSOR = 5;
     public static final int TRANSFER_SPARK = 1000;
     public static final int TRANSFER_VICTOR = 1000;
 
@@ -50,6 +51,8 @@ public class RobotMap {
     public static final int WINCH_TALON = 3;
 
     public static final int BASH_BAR_SOLENOID = 100;
+
+	public static final int COLOR_WHEEL_VICTOR = 0;
 
 //    public static final int INTAKE_SPARKMAX = 0;
 //    public static final int INTAKE_SOLENOID_PCM_PORT = 0;

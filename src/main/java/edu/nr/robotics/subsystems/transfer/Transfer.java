@@ -162,7 +162,7 @@ public class Transfer extends NRSubsystem{
    public synchronized static void init(){
        if(singleton == null){
            singleton = new Transfer();
-           singleton.setDefaultCommand(new CanWeIndexCommand()); // might be a terrible idea
+        //   singleton.setDefaultCommand(new CanWeIndexCommand()); // might be a terrible idea
        }
    }
    
@@ -327,7 +327,7 @@ public class Transfer extends NRSubsystem{
        //check sensors and see if we can kick a ball into the indexer
    }
    public boolean hasBall(){
-       return EnabledSensors.TransferSensor.get();
+       return EnabledSensors.transferSensor.get();
    }
   
 }

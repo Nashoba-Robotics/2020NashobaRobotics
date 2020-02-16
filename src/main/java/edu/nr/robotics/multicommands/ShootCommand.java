@@ -6,13 +6,18 @@ import edu.nr.lib.network.LimelightNetworkTable;
 import edu.nr.lib.units.Angle;
 import edu.nr.lib.units.AngularSpeed;
 import edu.nr.lib.units.Speed;
+import edu.nr.lib.units.Time;
 import edu.nr.robotics.subsystems.hood.Hood;
 import edu.nr.robotics.subsystems.indexer.Indexer;
+import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.nr.robotics.subsystems.shooter.Shooter;
 import edu.nr.robotics.subsystems.turret.Turret;
+import edu.wpi.first.wpilibj.Timer;
 
 public class ShootCommand extends NRCommand
 {
+    double current = 0;
+    double lastBall = 9999999999999.0;
     public ShootCommand()
     {
         super(new NRSubsystem[] {Hood.getInstance(), Turret.getInstance(), Shooter.getInstance(), Indexer.getInstance()});
@@ -32,14 +37,25 @@ public class ShootCommand extends NRCommand
     @Override
     protected void onExecute()
     {
-        Indexer.getInstance().setSpeed(Indexer.SHOOTING_SPEED);
+        if(Shooter.getInstance().getSpeedShooter1().get(Angle.Unit.DEGREE, Time.Unit.SECOND) >= Shooter.SHOOT_SPEED.mul(0.9).get(Angle.Unit.DEGREE, Time.Unit.SECOND)){
+            Indexer.getInstance().setSpeed(Indexer.SHOOTING_SPEED);
+        }
     }
 
     @Override
     protected boolean isFinishedNR()
     {
+        current = Timer.getFPGATimestamp();
+        
         //Logic needs to be changed
-        return true;
+        if(EnabledSensors.indexerShooterSensor.get()){
+            lastBall = Timer.getFPGATimestamp();
+        }
+        
+        if(current - lastBall > 0.5){ // half a second passes, no ball to shoot, we've run out and should stop making loud shooter noises
+            return true;
+        }
+        return false;
     }
 
     @Override

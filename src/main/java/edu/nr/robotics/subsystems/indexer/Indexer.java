@@ -9,6 +9,7 @@ import edu.nr.lib.units.Time;
 import edu.nr.lib.units.Distance.Unit;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.multicommands.CanWeIndexCommand;
+import edu.nr.robotics.multicommands.IndexingProcedureCommand;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.AnalogSensor;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
@@ -31,11 +32,12 @@ public class Indexer extends NRSubsystem {
  
     private TalonFX indexerTalon;
     
-    public static int INDEXER_INPUT_THRESHOLD = 0; // needs to be final for real code in comp.
-    public static final int INDEXER_SPACING_CLOSE_THRESHOLD = 0;
-    public static final int INDEXER_SPACING_FAR_THRESHOLD = 0;
-    public static final int INDEXER_READY_SHOT_THRESHOLD = 0;
- 
+    public static final int INDEXER_PUKE_SENSOR_THRESHOLD = 0; // needs to be final for real code in comp.
+    public static final int INDEXER_SETTING1_THRESHOLD = 0;
+    public static final int INDEXER_SETTING2_THRESHOLD = 0;
+    public static final int INDEXER_SETTING3_THRESHOLD = 0;
+    public static final int INDEXER_SHOOTER_SENSOR_THRESHOLD = 0;
+    
     public static final double ENCODER_TICKS_PER_DEGREE = 2048 / 360;
     public static final double ENCODER_TICKS_PER_INCH_BALL_MOVED = 400;//not really, will have to change
  
@@ -137,7 +139,8 @@ public class Indexer extends NRSubsystem {
     public synchronized static void init(){
         if(singleton == null){
             singleton = new Indexer();
-            singleton.setDefaultCommand(new CanWeIndexCommand()); //this might be garbage
+        //    singleton.setDefaultCommand(new CanWeIndexCommand()); //this might be garbage
+            singleton.setDefaultCommand(new IndexingProcedureCommand());
         }
     }
  
@@ -211,11 +214,11 @@ public class Indexer extends NRSubsystem {
             DeltaPosition = new Distance (SmartDashboard.getNumber("Indexer Delta Position", DeltaPosition.get(Distance.Unit.INCH)), Distance.Unit.INCH);
             SmartDashboard.putNumber("Indexer Goal Speed", goalSpeed.get(Distance.Unit.INCH, Time.Unit.SECOND));
  
-            EnabledSensors.IndexerInput.setThreshold(INDEXER_INPUT_THRESHOLD);
+            //EnabledSensors.IndexerInput.setThreshold(INDEXER_INPUT_THRESHOLD);
  
-            INDEXER_INPUT_THRESHOLD = (int) SmartDashboard.getNumber("Sensor Threshold", INDEXER_INPUT_THRESHOLD);
-            SmartDashboard.putBoolean("Sensor Triggered", EnabledSensors.IndexerInput.get());
-            SmartDashboard.putNumber("Sensor value", EnabledSensors.IndexerInput.getSensor().getValue());
+            //INDEXER_INPUT_THRESHOLD = (int) SmartDashboard.getNumber("Sensor Threshold", INDEXER_INPUT_THRESHOLD);
+            //SmartDashboard.putBoolean("Sensor Triggered", EnabledSensors.IndexerInput.get());
+            //SmartDashboard.putNumber("Sensor value", EnabledSensors.IndexerInput.getSensor().getValue());
 
             SmartDashboard.putNumber("Indexer Delta Position", DeltaPosition.get(Distance.Unit.INCH));
             SmartDashboard.putNumber("Indexer Position", getPosition().get(Distance.Unit.INCH));
@@ -249,7 +252,7 @@ public class Indexer extends NRSubsystem {
     }
  
     public boolean [] sensors(){
-        return new boolean [] {EnabledSensors.IndexerInput.get(), EnabledSensors.IndexerSpacingClose.get(), EnabledSensors.IndexerSpacingFar.get(), EnabledSensors.IndexerReadyShot.get()}; // change to hold sensor values
+        return new boolean [] {EnabledSensors.indexerPukeSensor.get(), EnabledSensors.indexerSetting1.get(), EnabledSensors.indexerSetting2.get(), EnabledSensors.indexerSetting3.get(), EnabledSensors.indexerShooterSensor.get()}; // change to hold sensor values
     }
  
     public void setPosition(Distance position){
@@ -288,11 +291,12 @@ public class Indexer extends NRSubsystem {
         }
         return 0;
     }
- 
-    public boolean readyForBall(){
-        if(!EnabledSensors.IndexerInput.get() && !EnabledSensors.IndexerSpacingClose.get() && !EnabledSensors.IndexerSpacingFar.get()){
-            return true;
-        }
-        return false;
+
+    public boolean continueMoving(){
+        return (!EnabledSensors.indexerSetting1.get());
+    }
+
+    public boolean readyToShoot(){
+        return(EnabledSensors.indexerShooterSensor.get());
     }
 }

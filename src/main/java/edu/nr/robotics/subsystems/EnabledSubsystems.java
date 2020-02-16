@@ -42,5 +42,9 @@ public class EnabledSubsystems {
     
     public static final boolean WINCH_ENABLED                                    = false;
 	public static final boolean WINCH_DUMB_ENABLED                               = false;
-	public static final boolean WINCH_SMARTDASHBOARD_DEBUG_ENABLED               = false;
+    public static final boolean WINCH_SMARTDASHBOARD_DEBUG_ENABLED               = false;
+    
+    public static final boolean COLOR_WHEEL_ENABLED                              = false;
+    public static final boolean COLOR_WHEEL_SMARTDASHBOARD_ENABLED               = false;
+
 }

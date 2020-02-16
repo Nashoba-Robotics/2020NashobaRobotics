@@ -22,25 +22,27 @@ public class ProjectileVomitCommand extends NRCommand {
     {
         if(!Intake.getInstance().isIntakeDeployed()){
             Intake.getInstance().deployIntake();
+
+        //Might need wait command for 100 ms such that intake is fully deployed before puking
     }
 
-   }
-   @Override
-   protected void onExecute() { // make sure these run simultaneously
-       Transfer.getInstance().setMotorSpeedInPercent(Transfer.PUKE_PERCENT);
-       Indexer.getInstance().setMotorSpeedInPercent(Indexer.PUKE_PERCENT);
-       Shooter.getInstance().setMotorSpeedInPercent(Shooter.PUKE_PERCENT);
-       Intake.getInstance().setMotorSpeedRaw(Intake.PUKE_PERCENT);
+    }
+    @Override
+    protected void onExecute() {
+        Intake.getInstance().setMotorSpeedRaw(Intake.PUKE_PERCENT);
+        Transfer.getInstance().setMotorSpeedInPercent(Transfer.PUKE_PERCENT);
+        Indexer.getInstance().setMotorSpeedInPercent(Indexer.PUKE_PERCENT);
+        Shooter.getInstance().setMotorSpeedInPercent(Shooter.PUKE_PERCENT);
     
-   }
+    }
 
-   @Override
-   protected void onEnd() {
-    Intake.getInstance().setMotorSpeedRaw(0);
-    Transfer.getInstance().setMotorSpeedInPercent(0);
-    Indexer.getInstance().setMotorSpeedInPercent(0);
-    Shooter.getInstance().setMotorSpeedInPercent(0);
-   }
+    @Override
+    protected void onEnd() {
+     Intake.getInstance().setMotorSpeedRaw(0);
+     Transfer.getInstance().setMotorSpeedInPercent(0);
+     Indexer.getInstance().setMotorSpeedInPercent(0);
+     Shooter.getInstance().setMotorSpeedInPercent(0);
+    }
  
    @Override
    protected boolean isFinishedNR(){

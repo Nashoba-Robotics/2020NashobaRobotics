@@ -3,6 +3,7 @@ package edu.nr.robotics.multicommands;
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.network.LimelightNetworkTable;
+import edu.nr.lib.units.Angle;
 import edu.nr.robotics.OI;
 import edu.nr.robotics.subsystems.hood.Hood;
 import edu.nr.robotics.subsystems.shooter.Shooter;
@@ -33,6 +34,8 @@ public class AcquireTargetCommand extends NRCommand
     {
         if(OI.getInstance().getManualMode())
             return true;
-        return false;
+
+        return (Math.abs(Turret.getInstance().getAngle().sub(LimelightNetworkTable.getInstance().getHorizOffset()).get(Angle.Unit.DEGREE)) < 1) && true;
+        //hood error as well
     }
 }

@@ -169,6 +169,8 @@ public class OI implements SmartDashboardSource {
         shooterToggleButton = new JoystickButton(operatorLeft, TOGGLE_SHOOTER_NUMBER);
         shooterToggleButton.whileActiveOnce(new ShooterToggleCommand(), true);
 
+        emergencyManualSwitch = new JoystickButton(operatorLeft, EMERGENCY_MANUAL_SWITCH);
+
         new JoystickButton(operatorLeft, FIRE_NUMBER).whileActiveOnce(new FireCommand(), true);
 
         new JoystickButton(operatorLeft, BASH_BAR_NUMBER).whenPressed(new ToggleDeployBashBarCommand());

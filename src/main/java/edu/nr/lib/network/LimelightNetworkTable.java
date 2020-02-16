@@ -27,9 +27,9 @@ public class LimelightNetworkTable extends TimerTask {
 	private static final Time IMAGE_CAPTURE_LATENCY = new Time(11, Time.Unit.MILLISECOND);
 
 	private static final Distance TARGET_HEIGHT = new Distance(0, Distance.Unit.INCH);
-	private static final Distance LIMELIGHT_HEIGHT = new Distance(34, Distance.Unit.INCH); // may change
+	private static final Distance LIMELIGHT_HEIGHT = new Distance(26, Distance.Unit.INCH); // may change
 
-	private static final Angle LIMELIGHT_MOUNT_ANGLE = new Angle(-7, Angle.Unit.DEGREE);
+	private static final Angle LIMELIGHT_MOUNT_ANGLE = new Angle(-7, Angle.Unit.DEGREE); //may change as well
 	//ethan has small arms
 
 	
