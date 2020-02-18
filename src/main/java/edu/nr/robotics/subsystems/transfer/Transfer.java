@@ -84,6 +84,10 @@ public class Transfer extends NRSubsystem{
    public static final int TRANSFER_THRESHOLD = 0;
    //need sensors for have a ball, tune transfer percent and time for transfer command
 
+   private boolean previousSensorValue = false;
+
+   public int ballCount = 0;
+
    private Transfer(){
        if(EnabledSubsystems.TRANSFER_ENABLED){
            //transferTalon = CTRECreator.createMasterTalon(RobotMap.TRANSFER_TALON);
@@ -324,12 +328,28 @@ public class Transfer extends NRSubsystem{
    }
    */
    public void periodic(){
-       //check sensors and see if we can kick a ball into the indexer
+    if(EnabledSensors.getInstance().transferSensor.get() == false)
+    {
+        if(!(EnabledSensors.getInstance().transferSensor.get() == previousSensorValue))
+        {
+            Transfer.getInstance().incrementBallCount();
+        }
+    }
+    previousSensorValue = EnabledSensors.getInstance().transferSensor.get();
    }
    public boolean hasBall(){
-       return EnabledSensors.transferSensor.get();
+       return EnabledSensors.getInstance().transferSensor.get();
    }
-  
+
+   public int getNumberOfBalls()
+   {
+    return ballCount;
+   }
+
+   public void incrementBallCount()
+   {
+        ballCount++;
+   }
 }
  
  

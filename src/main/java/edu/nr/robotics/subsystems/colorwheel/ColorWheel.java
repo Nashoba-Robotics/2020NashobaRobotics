@@ -74,26 +74,23 @@ public class ColorWheel extends NRSubsystem{
 
     public void SmartDashboardInit(){
         if(EnabledSubsystems.COLOR_WHEEL_SMARTDASHBOARD_ENABLED){
-
         
         SmartDashboard.putString("Sensor Target Color", GameData.targetColor.name());
-        SmartDashboard.putString("Sensor Color", EnabledSensors.colorSensor.getColor().name());
+        SmartDashboard.putString("Sensor Color", EnabledSensors.getInstance().colorSensor.getColor().name());
 
-        SmartDashboard.putString("sensor red ", "" + EnabledSensors.colorSensor.sensorColors()[0]);
-        SmartDashboard.putString("sensor green ", "" + EnabledSensors.colorSensor.sensorColors()[1]);
-        SmartDashboard.putString("sensor blue ", "" + EnabledSensors.colorSensor.sensorColors()[2]);
-
-        
+        SmartDashboard.putString("sensor red ", "" + EnabledSensors.getInstance().colorSensor.sensorColors()[0]);
+        SmartDashboard.putString("sensor green ", "" + EnabledSensors.getInstance().colorSensor.sensorColors()[1]);
+        SmartDashboard.putString("sensor blue ", "" + EnabledSensors.getInstance().colorSensor.sensorColors()[2]);
         //sensor information, game information??
         }
     }
     
     public void smartDashboardInfo() {
-    SmartDashboard.putString("Sensor Color", EnabledSensors.colorSensor.getColor().name());
+    SmartDashboard.putString("Sensor Color", EnabledSensors.getInstance().colorSensor.getColor().name());
 
-    SmartDashboard.putString("sensor red ", "" + EnabledSensors.colorSensor.sensorColors()[0]);
-    SmartDashboard.putString("sensor green ", "" + EnabledSensors.colorSensor.sensorColors()[1]);
-    SmartDashboard.putString("sensor blue ", "" + EnabledSensors.colorSensor.sensorColors()[2]);
+    SmartDashboard.putString("sensor red ", "" + EnabledSensors.getInstance().colorSensor.sensorColors()[0]);
+    SmartDashboard.putString("sensor green ", "" + EnabledSensors.getInstance().colorSensor.sensorColors()[1]);
+    SmartDashboard.putString("sensor blue ", "" + EnabledSensors.getInstance().colorSensor.sensorColors()[2]);
       //update sensor information, sensor value
 
     }

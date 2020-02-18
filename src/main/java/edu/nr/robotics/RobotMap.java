@@ -50,7 +50,7 @@ public class RobotMap {
     
     public static final int WINCH_TALON = 3;
 
-    public static final int BASH_BAR_SOLENOID = 100;
+    public static final int BASH_BAR_SOLENOID = 7;//pcm for 2019 bot
 
 	public static final int COLOR_WHEEL_VICTOR = 0;
 

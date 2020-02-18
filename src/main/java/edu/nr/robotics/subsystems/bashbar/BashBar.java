@@ -12,7 +12,7 @@ public class BashBar extends NRSubsystem
 
     public BashBar()
     {
-        BashBarSolenoid = new Solenoid(RobotMap.BASH_BAR_SOLENOID);
+        BashBarSolenoid = new Solenoid(RobotMap.PCM_ID, RobotMap.BASH_BAR_SOLENOID);
     }
 
     public synchronized static void init()

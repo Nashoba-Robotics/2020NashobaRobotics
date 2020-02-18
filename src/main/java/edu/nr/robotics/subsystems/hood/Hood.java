@@ -1,25 +1,25 @@
-    package edu.nr.robotics.subsystems.hood;
+package edu.nr.robotics.subsystems.hood;
 
-
-    import com.ctre.phoenix.motorcontrol.ControlMode;
-    import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-    import com.ctre.phoenix.motorcontrol.NeutralMode;
-    import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-    import com.revrobotics.CANSparkMax;
-    import com.revrobotics.ControlType;
-    import com.revrobotics.CANSparkMax.IdleMode;
-    import com.revrobotics.CANSparkMaxLowLevel.*;
-    import edu.nr.lib.commandbased.NRSubsystem;
-    import edu.nr.lib.motorcontrollers.CTRECreator;
-    import edu.nr.lib.motorcontrollers.SparkMax;
-    import edu.nr.lib.units.Angle;
-    import edu.nr.lib.units.AngularAcceleration;
-    import edu.nr.lib.units.AngularSpeed;
-    import edu.nr.lib.units.Time;
-    import edu.nr.robotics.RobotMap;
-    import edu.nr.robotics.subsystems.EnabledSubsystems;
-    import edu.nr.robotics.subsystems.sensors.DigitalSensor;
-    import edu.nr.robotics.subsystems.sensors.EnabledSensors;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.*;
+import edu.nr.lib.commandbased.NRSubsystem;
+import edu.nr.lib.motorcontrollers.CTRECreator;
+import edu.nr.lib.motorcontrollers.SparkMax;
+import edu.nr.lib.units.Angle;
+import edu.nr.lib.units.AngularAcceleration;
+import edu.nr.lib.units.AngularSpeed;
+import edu.nr.lib.units.Time;
+import edu.nr.robotics.RobotMap;
+import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.nr.robotics.subsystems.sensors.DigitalSensor;
+import edu.nr.robotics.subsystems.sensors.EnabledSensors;
+//import edu.nr.robotics.subsystems.sensors.EnabledSensors;
     import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
     public class Hood extends NRSubsystem{
@@ -233,13 +233,15 @@
         public void periodic()
         {
             //check if limits are triggered, set to max / min hood spot if applicable
-            if(EnabledSensors.LimHoodLower.get()){
+            
+            if(EnabledSensors.getInstance().LimHoodLower.get()){
                 hoodSpark.getEncoder().setPosition(0); // should reset position
                 
                 if(getSpeed().get(Angle.Unit.ROTATION, Time.Unit.MINUTE) < 0){ // might be backwards...
                     setMotorSpeedRaw(0);
                 }
             }
+            
 
             if(setAngleHood.get(Angle.Unit.DEGREE) > 70){
                 setAngle(new Angle(70, Angle.Unit.DEGREE));

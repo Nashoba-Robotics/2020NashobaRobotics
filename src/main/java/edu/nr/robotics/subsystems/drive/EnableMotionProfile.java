@@ -21,10 +21,9 @@ public class EnableMotionProfile extends NRCommand {
 	double maxVelPercent;
 	double maxAccelPercent;
 
-	public EnableMotionProfile(Distance dist, Distance distH, double maxVelPercent, double maxAccelPercent) {
+	public EnableMotionProfile(Distance dist, double maxVelPercent, double maxAccelPercent) {
 		super(Drive.getInstance());
 		this.dist = dist;
-		this.distH = distH;
 		this.maxVelPercent = maxVelPercent;
 		this.maxAccelPercent = maxAccelPercent;
 	}

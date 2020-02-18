@@ -19,7 +19,7 @@ public class EnableLimelightCommand extends NRCommand {
 	}
 
 	protected void onStart() {
-		EnabledSensors.limelightEnabled = boo;
+		//EnabledSensors.limelightEnabled = boo;
 
 		if (boo) {
 			LimelightNetworkTable.getInstance().lightLED(true);

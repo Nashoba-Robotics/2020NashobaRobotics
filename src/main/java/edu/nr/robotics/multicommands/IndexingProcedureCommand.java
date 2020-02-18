@@ -2,6 +2,7 @@ package edu.nr.robotics.multicommands;
 
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
+import edu.nr.robotics.multicommands.States.State;
 import edu.nr.robotics.subsystems.indexer.Indexer;
 import edu.nr.robotics.subsystems.transfer.Transfer;
 
@@ -18,6 +19,7 @@ public class IndexingProcedureCommand extends NRCommand{
     public void onExecute(){
 
         ///maybe setmotor speeds for vPID, ensure consistent performance
+        /*
         if(Indexer.getInstance().continueMoving()){
             Indexer.getInstance().setMotorSpeedInPercent(0.7);
         }
@@ -28,6 +30,38 @@ public class IndexingProcedureCommand extends NRCommand{
             //count balls indexed? how count when shot?
         }
         if(Indexer.getInstance().readyToShoot()){
+            Indexer.getInstance().setMotorSpeedInPercent(0);
+            Transfer.getInstance().setMotorSpeedInPercent(0);
+        }
+        */
+        if(!Indexer.getInstance().readyToShoot())
+        {
+            if(States.getState() == States.State.IndexerStillIndexing)
+            {
+                Indexer.getInstance().setMotorSpeedInPercent(0.8);
+                Transfer.getInstance().setMotorSpeedInPercent(0);
+            }
+
+            else if(States.getState() == States.State.IndexerAndTransferEmpty)
+            {
+                Indexer.getInstance().setMotorSpeedInPercent(0);
+                Transfer.getInstance().setMotorSpeedInPercent(0);
+            }
+
+            else if(States.getState() == States.State.IndexerReadyForBall)
+            {
+                Transfer.getInstance().setMotorSpeedInPercent(0.7);
+                Indexer.getInstance().setMotorSpeedInPercent(0.8);
+            }
+
+            else if(States.getState() == States.State.ReadyToTransfer)
+            {
+                Indexer.getInstance().setMotorSpeedInPercent(0.8);
+                Transfer.getInstance().setMotorSpeedInPercent(0.7);
+            }
+        }
+        else
+        {
             Indexer.getInstance().setMotorSpeedInPercent(0);
             Transfer.getInstance().setMotorSpeedInPercent(0);
         }

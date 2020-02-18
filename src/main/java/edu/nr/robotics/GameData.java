@@ -2,7 +2,6 @@ package edu.nr.robotics;
 
 import edu.nr.robotics.subsystems.sensors.ISquaredCSensor.SensorColor;
 import edu.wpi.first.wpilibj.DriverStation;
-    //Ethan has THE SMALLEST arms
 
 public class GameData{
 

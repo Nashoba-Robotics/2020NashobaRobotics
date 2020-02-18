@@ -2,7 +2,7 @@ package edu.nr.robotics.subsystems.colorwheel;
 
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.robotics.GameData;
-import edu.nr.robotics.subsystems.sensors.EnabledSensors;
+//import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.nr.robotics.subsystems.sensors.ISquaredCSensor.SensorColor;
 
 
@@ -15,7 +15,7 @@ public class TargetColorCommand extends NRCommand{
     }
 
     public void onStart(){
-        EnabledSensors.colorSensor.setTargetColor(GameData.targetColor);
+        //EnabledSensors.colorSensor.setTargetColor(GameData.targetColor);
     }
 
     @Override
@@ -30,7 +30,8 @@ public class TargetColorCommand extends NRCommand{
 
     @Override
     public boolean isFinishedNR(){
-        return EnabledSensors.colorSensor.get();
+        //return EnabledSensors.colorSensor.get();
+        return false;
     }
 
 } 

@@ -48,9 +48,11 @@ public class ShootCommand extends NRCommand
         current = Timer.getFPGATimestamp();
         
         //Logic needs to be changed
-        if(EnabledSensors.indexerShooterSensor.get()){
+        
+        if(EnabledSensors.getInstance().indexerShooterSensor.get()){
             lastBall = Timer.getFPGATimestamp();
         }
+        
         
         if(current - lastBall > 0.5){ // half a second passes, no ball to shoot, we've run out and should stop making loud shooter noises
             return true;

@@ -12,7 +12,7 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import org.ietf.jgss.Oid;
+import org.ietf.jgss.Oid; // what is this thing??? why? 
 
 import edu.nr.lib.commandbased.DoNothingCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
@@ -26,6 +26,7 @@ import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Time;
 import edu.nr.lib.units.Time.Unit;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.nr.robotics.subsystems.bashbar.ToggleDeployBashBarCommand;
 import edu.nr.robotics.subsystems.climbdeploy.ClimbDeploy;
 import edu.nr.robotics.subsystems.climbdeploy.ClimbDeploySmartDashboardCommand;
 import edu.nr.robotics.subsystems.colorwheel.ColorWheel;
@@ -48,7 +49,7 @@ import edu.nr.robotics.subsystems.indexer.IndexerDeltaPositionSmartDashboardComm
 import edu.nr.robotics.subsystems.indexer.IndexerSetVelocityCommand;
 import edu.nr.robotics.subsystems.indexer.IndexerSetVelocitySmartDashboardCommand;
 import edu.nr.robotics.subsystems.intake.Intake;
-import edu.nr.robotics.subsystems.sensors.EnabledSensors;
+//import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.nr.robotics.subsystems.sensors.ISquaredCSensor;
 import edu.nr.robotics.subsystems.shooter.SetShooterSpeedSmartDashboardCommand;
 import edu.nr.robotics.subsystems.shooter.Shooter;
@@ -65,8 +66,6 @@ import edu.nr.robotics.subsystems.indexer.IndexerDeltaPositionSmartDashboardComm
 import edu.nr.robotics.subsystems.indexer.IndexerSetVelocityCommand;
 import edu.nr.robotics.subsystems.indexer.IndexerSetVelocitySmartDashboardCommand;
 
-
-
 /*import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;*/
 import edu.wpi.first.wpilibj.Compressor;
@@ -81,31 +80,16 @@ public class Robot extends TimedRobot {
 
     private static double period = 0.02;
 
-    //TalonFX tester;
-
-    //private CANSparkMax protoShooter1;
-    //private CANSparkMax //protoShooter2;
-
-    /*public static double F_VEL_SHOOTER = 0;
-    public static double P_VEL_SHOOTER = 0;
-    public static double I_VEL_SHOOTER = 0;
-    public static double D_VEL_SHOOTER = 0;
-
-    public static AngularSpeed shooterSetSpeed;*/
-
     double dt;
     double dtTot = 0;
     int count = 0;
  
     private double prevTime = 0;
 
-    //private CANSparkMax protoSparkMax1;
-    //private CANSparkMax protoSparkMax2;
-
     private Command autonomousCommand;
    
     public double autoWaitTime;
-    //public Compressor robotCompressor;
+    public Compressor robotCompressor;
  
     public synchronized static Robot getInstance() {
         return singleton;
@@ -118,20 +102,22 @@ public class Robot extends TimedRobot {
  
         smartDashboardInit();
         //autoChooserInit();
-        GameData.init();
-        ColorWheel.init();
-        //OI.init();
+        //GameData.init();
+        //ColorWheel.init();
+        
+        OI.init();
         //Winch.init();
         //ClimbDeploy.init();
         //Drive.init();
         //Turret.init();
-        //Shooter.init();
+        Shooter.init();
         //Hood.init();
         //Intake.init();
-        //robotCompressor = new Compressor(RobotMap.PCM_ID);
-        //robotCompressor.start();
         //Indexer.init();
         //Transfer.init();
+        //robotCompressor = new Compressor(RobotMap.PCM_ID);
+        //robotCompressor.start();
+       
  
         //CameraInit();
  
@@ -156,6 +142,8 @@ public class Robot extends TimedRobot {
         SmartDashboard.putData(new CSVSaverEnable());
         SmartDashboard.putData(new CSVSaverDisable());
         SmartDashboard.putNumber("Auto Wait Time", 0);
+
+    //    SmartDashboard.putData(new ToggleDeployBashBarCommand());
   
 
         if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {

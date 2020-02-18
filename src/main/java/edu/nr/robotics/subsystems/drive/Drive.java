@@ -34,61 +34,61 @@ import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jaci.pathfinder.Waypoint;
- 
- 
+
+
 public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSource {
- 
- 
+
+
 //RIP TestCommandZebra
- 
+
     private static Drive singleton;
- 
+
     private TalonFX leftDrive, rightDrive;
-    
+   
     private TalonFX leftDriveFollow1, leftDriveFollow2, rightDriveFollow1, rightDriveFollow2;
-    
+   
     private PowerDistributionPanel pdp;
     // these may change because of new talons
 
     // TODO: fix all of these
     public static final double REAL_ENC_TICK_PER_INCH_DRIVE = 898;
- 
+
     public static final double EFFECTIVE_ENC_TICK_PER_INCH_DRIVE = REAL_ENC_TICK_PER_INCH_DRIVE * 1.01; // * 1.02;
- 
+
     public static final Distance WHEEL_DIAMETER = new Distance(6.25, Distance.Unit.INCH);
     public static final Distance WHEEL_DIAMETER_EFFECTIVE = new Distance(6.25, Distance.Unit.INCH);
- 
+
     public static double wheelBaseMultiplier = 1.3;
     public static final Distance WHEEL_BASE = new Distance(23.5, Distance.Unit.INCH);
- 
+
     public static final Speed MAX_SPEED_DRIVE = new Speed(18, Distance.Unit.FOOT, Time.Unit.SECOND);
- 
+
     public static final Acceleration MAX_ACCEL_DRIVE = new Acceleration(25, Distance.Unit.FOOT, Time.Unit.SECOND,
             Time.Unit.SECOND);
- 
+
     public static final Jerk MAX_JERK_DRIVE = new Jerk(100, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND,
             Time.Unit.SECOND);
- 
+
     public static final double MIN_MOVE_VOLTAGE_PERCENT_LEFT = 0.077;//0.065
     public static final double MIN_MOVE_VOLTAGE_PERCENT_RIGHT = 0.077; // .095
- 
+
     //public static final double MIN_MOVE_VOLTAGE_PERCENT_H = 0;
- 
+
     public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_LEFT = 0.037; // .065
     public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_RIGHT = 0.037; // .0645
- 
+
     //public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_H = 0;
- 
+
 	public static Time DRIVE_RAMP_RATE = new Time(0.0, Time.Unit.SECOND);
-	 
+ 
     public static double P_LEFT = 0.03;
     public static double I_LEFT = 0;
     public static double D_LEFT = 0.3;
- 
+
     public static double P_RIGHT = 0.03;
     public static double I_RIGHT = 0;
     public static double D_RIGHT = 0.3;
- 
+
     public static double kVOneD = 1
             / MAX_SPEED_DRIVE.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND);
     public static double kAOneD = 0.0;
@@ -96,8 +96,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
     public static double kIOneD = 0;
     public static double kDOneD = 0.0000000002;
     public static double kP_thetaOneD = 0;
- 
- 
+
+
     public static double kVTwoD = 1
             / MAX_SPEED_DRIVE.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND);
     public static double kATwoD = 0.0002;
@@ -377,10 +377,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
     }
 
     public void stayInPlaceOnEnd()
-    {
-        leftDrive.neutralOutput();
-        rightDrive.neutralOutput();
-        
+    {        
         leftDrive.set(ControlMode.PercentOutput, 0);
         rightDrive.set(ControlMode.PercentOutput, 0);
     }

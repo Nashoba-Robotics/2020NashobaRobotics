@@ -62,7 +62,7 @@ public class OI implements SmartDashboardSource {
     private static final int TOGGLE_SHOOTER_NUMBER = 100;
     private static final int FIRE_NUMBER = 100;
 
-    private static final int BASH_BAR_NUMBER = 100;
+    private static final int BASH_BAR_NUMBER = 7;
 
     private static final int EMERGENCY_SUBSYSTEM_DISABLE_NUMBER = 100;
 

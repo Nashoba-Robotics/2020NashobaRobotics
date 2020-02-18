@@ -5,7 +5,7 @@ import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.units.Time;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
-import edu.nr.robotics.subsystems.sensors.EnabledSensors;
+//import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 

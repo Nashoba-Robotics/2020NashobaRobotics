@@ -250,9 +250,9 @@ public class Indexer extends NRSubsystem {
         }
         return Speed.ZERO;
     }
- 
+    
     public boolean [] sensors(){
-        return new boolean [] {EnabledSensors.indexerPukeSensor.get(), EnabledSensors.indexerSetting1.get(), EnabledSensors.indexerSetting2.get(), EnabledSensors.indexerSetting3.get(), EnabledSensors.indexerShooterSensor.get()}; // change to hold sensor values
+        return new boolean [] {EnabledSensors.getInstance().indexerPukeSensor.get(), EnabledSensors.getInstance().indexerSetting1.get(), EnabledSensors.getInstance().indexerSetting2.get(), EnabledSensors.getInstance().indexerSetting3.get(), EnabledSensors.getInstance().indexerShooterSensor.get()}; 
     }
  
     public void setPosition(Distance position){
@@ -292,11 +292,35 @@ public class Indexer extends NRSubsystem {
         return 0;
     }
 
-    public boolean continueMoving(){
-        return (!EnabledSensors.indexerSetting1.get());
+    public boolean continueMoving(int numSensor){
+        if(numSensor == 0)
+        {
+            return false;
+        }
+
+        else if(numSensor == 1)
+        {
+            return !EnabledSensors.getInstance().indexerSetting1.get();
+        }
+
+        else if(numSensor == 2)
+        {
+            return !EnabledSensors.getInstance().indexerSetting2.get();
+        }
+
+        else if(numSensor == 3)
+        {
+            return !EnabledSensors.getInstance().indexerSetting3.get();
+        }
+
+        else if(numSensor == 4)
+        {
+            return !EnabledSensors.getInstance().indexerShooterSensor.get();
+        }
+            return false;
     }
 
     public boolean readyToShoot(){
-        return(EnabledSensors.indexerShooterSensor.get());
+        return(EnabledSensors.getInstance().indexerShooterSensor.get());
     }
 }

@@ -1,7 +1,7 @@
 package edu.nr.robotics.subsystems.colorwheel;
 
 import edu.nr.lib.commandbased.NRCommand;
-import edu.nr.robotics.subsystems.sensors.EnabledSensors;
+//import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.nr.robotics.subsystems.sensors.ISquaredCSensor.SensorColor;
 
 public class ColorWheelRotateCommand extends NRCommand{
@@ -16,13 +16,13 @@ public class ColorWheelRotateCommand extends NRCommand{
     }
 
     public void onStart(){
-        oldColor = EnabledSensors.colorSensor.getColor();
-        currentColor = EnabledSensors.colorSensor.getColor();
+        //oldColor = EnabledSensors.colorSensor.getColor();
+        //currentColor = EnabledSensors.colorSensor.getColor();
     }
 
     public void onExecute(){
         oldColor = currentColor;
-        currentColor = EnabledSensors.colorSensor.getColor();
+        //currentColor = EnabledSensors.colorSensor.getColor();
 
         ColorWheel.getInstance().setMotorSpeedInPercent(1);
 
