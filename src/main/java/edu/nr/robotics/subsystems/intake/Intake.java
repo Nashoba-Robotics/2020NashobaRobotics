@@ -42,7 +42,7 @@ public class Intake extends NRSubsystem
         SmartDashboardInit();
     }
 
-    public static void init()
+    public synchronized static void init()
     {
         if(singleton == null)
         {
@@ -61,7 +61,10 @@ public class Intake extends NRSubsystem
 
     public void disable() 
     {
-        setMotorSpeedRaw(0);
+        if(IntakeSolenoid != null)
+            retractIntake();
+        if(IntakeTalon != null)
+            setMotorSpeedRaw(0);
     }
 
     public enum State {

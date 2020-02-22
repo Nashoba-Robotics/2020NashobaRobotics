@@ -32,6 +32,7 @@ import edu.nr.robotics.subsystems.climbdeploy.ClimbDeploySmartDashboardCommand;
 import edu.nr.robotics.subsystems.colorwheel.ColorWheel;
 import edu.nr.robotics.subsystems.colorwheel.ColorWheelRotateCommand;
 import edu.nr.robotics.subsystems.colorwheel.TargetColorCommand;
+import edu.nr.robotics.subsystems.colorwheel.ToggleColorWheelSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.CSVSaverDisable;
 import edu.nr.robotics.subsystems.drive.CSVSaverEnable;
 import edu.nr.robotics.subsystems.drive.Drive;
@@ -201,6 +202,7 @@ public class Robot extends TimedRobot {
         if(EnabledSubsystems.COLOR_WHEEL_SMARTDASHBOARD_ENABLED){
             SmartDashboard.putData(new ColorWheelRotateCommand());
             SmartDashboard.putData(new TargetColorCommand());
+            SmartDashboard.putData(new ToggleColorWheelSmartDashboardCommand());
         }
 
         //SmartDashboard.putNumber("F TESTER", 0);

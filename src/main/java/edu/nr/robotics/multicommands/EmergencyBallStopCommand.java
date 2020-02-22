@@ -3,6 +3,7 @@ package edu.nr.robotics.multicommands;
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.units.Angle;
+import edu.nr.robotics.subsystems.colorwheel.ColorWheel;
 import edu.nr.robotics.subsystems.hood.Hood;
 import edu.nr.robotics.subsystems.indexer.Indexer;
 import edu.nr.robotics.subsystems.intake.Intake;
@@ -20,7 +21,7 @@ public class EmergencyBallStopCommand extends NRCommand
     @Override
     protected void onExecute()
     {
-        Hood.getInstance().setAngle(Angle.ZERO);
+        Hood.getInstance().disable();
         Intake.getInstance().disable();
         Indexer.getInstance().disable();
         Shooter.getInstance().disable();

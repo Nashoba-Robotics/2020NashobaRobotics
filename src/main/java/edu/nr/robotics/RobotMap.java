@@ -46,13 +46,15 @@ public class RobotMap {
     public static final int INTAKE_TALON = 0;
     public static final int INTAKE_SOLENOID_PCM_PORT = 0;
     
-    public static final int CLIMB_DEPLOY_TALON = 4;
+    public static final int CLIMB_DEPLOY_VICTOR = 4;
+    public static final int CLIMB_DEPLOY_CHANNEL = 100;
     
     public static final int WINCH_TALON = 3;
 
     public static final int BASH_BAR_SOLENOID = 7;//pcm for 2019 bot
 
-	public static final int COLOR_WHEEL_VICTOR = 0;
+    public static final int COLOR_WHEEL_VICTOR = 0;
+    public static final int COLOR_WHEEL_SOLENOID = 0;
 
 //    public static final int INTAKE_SPARKMAX = 0;
 //    public static final int INTAKE_SOLENOID_PCM_PORT = 0;

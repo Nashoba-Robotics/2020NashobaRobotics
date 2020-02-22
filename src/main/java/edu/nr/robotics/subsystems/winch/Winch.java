@@ -7,24 +7,32 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.motorcontrollers.CTRECreator;
 import edu.nr.lib.units.Distance;
+import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
 import edu.nr.lib.units.Distance.Unit;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.wpi.first.wpilibj.Relay.Direction;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Winch extends NRSubsystem
 {
     private static Winch singleton;
 
-    private TalonSRX WinchTalon;
+    private TalonSRX winchTalon;
 
     private double F_POS_WINCH = 0;
     private double P_POS_WINCH = 0;
     private double I_POS_WINCH = 0;
     private double D_POS_WINCH = 0;
 
+    private double kFVelWinch = 0;
+    private double kPVelWinch = 0;
+    private double kIVelWinch = 0;
+    private double kDVelWinch = 0;
+
     private static final int POS_SLOT = 0;
+    private static final int VEL_SLOT = 1;
 
     private static Distance setPositionClimb;
     public static Distance goalPositionClimb;
@@ -45,29 +53,34 @@ public class Winch extends NRSubsystem
 
     public Winch()
     {
-        WinchTalon = CTRECreator.createMasterTalon(RobotMap.WINCH_TALON);
-        WinchTalon.config_kF(POS_SLOT, F_POS_WINCH);
-        WinchTalon.config_kP(POS_SLOT, P_POS_WINCH);
-        WinchTalon.config_kI(POS_SLOT, I_POS_WINCH);
-        WinchTalon.config_kD(POS_SLOT, D_POS_WINCH);
+        winchTalon = CTRECreator.createMasterTalon(RobotMap.WINCH_TALON);
+        winchTalon.config_kF(POS_SLOT, F_POS_WINCH);
+        winchTalon.config_kP(POS_SLOT, P_POS_WINCH);
+        winchTalon.config_kI(POS_SLOT, I_POS_WINCH);
+        winchTalon.config_kD(POS_SLOT, D_POS_WINCH);
 
-        WinchTalon.enableCurrentLimit(true);
-        WinchTalon.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT_WINCH);
-        WinchTalon.configPeakCurrentLimit(PEAK_CURRENT_WINCH);
+        winchTalon.config_kF(VEL_SLOT, kFVelWinch);
+        winchTalon.config_kP(VEL_SLOT, kPVelWinch);
+        winchTalon.config_kI(VEL_SLOT, kIVelWinch);
+        winchTalon.config_kD(VEL_SLOT, kDVelWinch);
 
-        WinchTalon.setNeutralMode(NeutralMode.Brake);
+        winchTalon.enableCurrentLimit(true);
+        winchTalon.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT_WINCH);
+        winchTalon.configPeakCurrentLimit(PEAK_CURRENT_WINCH);
 
-        WinchTalon.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
+        winchTalon.setNeutralMode(NeutralMode.Brake);
+
+        winchTalon.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
 
         if(EnabledSubsystems.WINCH_DUMB_ENABLED){
-            WinchTalon.set(ControlMode.PercentOutput, 0);
+            winchTalon.set(ControlMode.PercentOutput, 0);
         }else{
-            WinchTalon.set(ControlMode.Velocity, 0);
+            winchTalon.set(ControlMode.Velocity, 0);
         }
 
     }
 
-    public static void init()
+    public synchronized static void init()
     {
         if(singleton == null)
         {
@@ -86,17 +99,17 @@ public class Winch extends NRSubsystem
 
     public Distance getPosition()
     {
-        if(WinchTalon != null)
-            return new Distance(WinchTalon.getSelectedSensorPosition(), Distance.Unit.MAGNETIC_ENCODER_TICK_CLIMB_DEPLOY);
+        if(winchTalon != null)
+            return new Distance(winchTalon.getSelectedSensorPosition(), Distance.Unit.MAGNETIC_ENCODER_TICK_CLIMB_DEPLOY);
         return Distance.ZERO;
     }
 
     public void setPosition(Distance distance)
     {
-        if(WinchTalon != null)
+        if(winchTalon != null)
         {
-            WinchTalon.selectProfileSlot(POS_SLOT, DEFAULT_TIMEOUT);
-            WinchTalon.set(ControlMode.Position, distance.get(Distance.Unit.INCH));
+            winchTalon.selectProfileSlot(POS_SLOT, DEFAULT_TIMEOUT);
+            winchTalon.set(ControlMode.Position, distance.get(Distance.Unit.INCH));
         }
     }
 
@@ -110,6 +123,11 @@ public class Winch extends NRSubsystem
             SmartDashboard.putNumber("P_POS_WINCH", P_POS_WINCH);
             SmartDashboard.putNumber("I_POS_WINCH", I_POS_WINCH);
             SmartDashboard.putNumber("D_POS_WINCH", D_POS_WINCH);
+
+            SmartDashboard.putNumber("F Vel Winch", kFVelWinch);
+            SmartDashboard.putNumber("P Vel Winch", kPVelWinch);
+            SmartDashboard.putNumber("I Vel Winch", kIVelWinch);
+            SmartDashboard.putNumber("D Vel Winch", kDVelWinch);
 
             SmartDashboard.putNumber("Current Winch Position", getPosition().get(Unit.MAGNETIC_ENCODER_TICK_WINCH));
 
@@ -128,19 +146,41 @@ public class Winch extends NRSubsystem
             P_POS_WINCH = SmartDashboard.getNumber("P_POS_WINCH", P_POS_WINCH);
             I_POS_WINCH = SmartDashboard.getNumber("I_POS_WINCH", I_POS_WINCH);
             D_POS_WINCH = SmartDashboard.getNumber("D_POS_WINCH", D_POS_WINCH);
+
+            kFVelWinch = SmartDashboard.getNumber("F Vel Winch", kFVelWinch);
+            kPVelWinch = SmartDashboard.getNumber("P Vel Winch", kPVelWinch);
+            kIVelWinch = SmartDashboard.getNumber("I Vel Winch", kIVelWinch);
+            kDVelWinch = SmartDashboard.getNumber("D Vel Winch", kDVelWinch);
+
+            winchTalon.config_kF(POS_SLOT, F_POS_WINCH);
+            winchTalon.config_kP(POS_SLOT, P_POS_WINCH);
+            winchTalon.config_kI(POS_SLOT, I_POS_WINCH);
+            winchTalon.config_kD(POS_SLOT, D_POS_WINCH);
+
+            winchTalon.config_kF(VEL_SLOT, kFVelWinch);
+            winchTalon.config_kP(VEL_SLOT, kPVelWinch);
+            winchTalon.config_kI(VEL_SLOT, kIVelWinch);
+            winchTalon.config_kD(VEL_SLOT, kDVelWinch);
         }
     }
 
     public void setMotorSpeedRaw(double percent)
     {
-        if(WinchTalon != null)
+        if(winchTalon != null)
         {
-            WinchTalon.set(ControlMode.PercentOutput, percent);
+            winchTalon.set(ControlMode.PercentOutput, percent);
         }
+    }
+
+    public void setMotorSpeed(Speed speed)
+    {
+        if(winchTalon != null)
+            winchTalon.set(ControlMode.Velocity, speed.get(Distance.Unit.MAGNETIC_ENCODER_TICK_WINCH, Time.Unit.HUNDRED_MILLISECOND));
     }
 
     public void disable()
     {
-
+        if(winchTalon != null)
+            setMotorSpeedRaw(0);
     }
 }

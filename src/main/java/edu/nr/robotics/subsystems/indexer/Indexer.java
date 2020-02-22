@@ -92,10 +92,10 @@ public class Indexer extends NRSubsystem {
  
             indexerTalon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, PID_TYPE, DEFAULT_TIMEOUT);
 
-            indexerTalon.config_kF(MOTION_MAGIC_SLOT, F_POS_INDEXER, DEFAULT_TIMEOUT);
-            indexerTalon.config_kP(MOTION_MAGIC_SLOT, P_POS_INDEXER, DEFAULT_TIMEOUT);
-            indexerTalon.config_kI(MOTION_MAGIC_SLOT, I_POS_INDEXER, DEFAULT_TIMEOUT);
-            indexerTalon.config_kD(MOTION_MAGIC_SLOT, D_POS_INDEXER, DEFAULT_TIMEOUT);
+            indexerTalon.config_kF(VEL_SLOT, F_VEL_INDEXER, DEFAULT_TIMEOUT);
+            indexerTalon.config_kP(VEL_SLOT, P_VEL_INDEXER, DEFAULT_TIMEOUT);
+            indexerTalon.config_kI(VEL_SLOT, I_VEL_INDEXER, DEFAULT_TIMEOUT);
+            indexerTalon.config_kD(VEL_SLOT, D_VEL_INDEXER, DEFAULT_TIMEOUT);
  
             indexerTalon.config_kF(POS_SLOT, F_POS_INDEXER, DEFAULT_TIMEOUT);
             indexerTalon.config_kP(POS_SLOT, P_POS_INDEXER, DEFAULT_TIMEOUT);
@@ -153,7 +153,7 @@ public class Indexer extends NRSubsystem {
  
     public void disable(){
         if(indexerTalon != null)
-        indexerTalon.set(ControlMode.PercentOutput,0);
+            indexerTalon.set(ControlMode.PercentOutput,0);
         //setposition to current position
     }
  
@@ -199,15 +199,15 @@ public class Indexer extends NRSubsystem {
             I_VEL_INDEXER = SmartDashboard.getNumber("I_VEL_INDEXER", I_VEL_INDEXER);
             D_VEL_INDEXER = SmartDashboard.getNumber("D_VEL_INDEXER", D_VEL_INDEXER);
 
-            indexerTalon.config_kF(VEL_SLOT, F_VEL_INDEXER);
-            indexerTalon.config_kP(VEL_SLOT, P_VEL_INDEXER);
-            indexerTalon.config_kI(VEL_SLOT, I_VEL_INDEXER);
-            indexerTalon.config_kD(VEL_SLOT, D_VEL_INDEXER);
-
             indexerTalon.config_kF(POS_SLOT, F_POS_INDEXER);
             indexerTalon.config_kP(POS_SLOT, P_POS_INDEXER);
             indexerTalon.config_kI(POS_SLOT, I_POS_INDEXER);
             indexerTalon.config_kD(POS_SLOT, D_POS_INDEXER);
+
+            indexerTalon.config_kF(VEL_SLOT, F_VEL_INDEXER);
+            indexerTalon.config_kP(VEL_SLOT, P_VEL_INDEXER);
+            indexerTalon.config_kI(VEL_SLOT, I_VEL_INDEXER);
+            indexerTalon.config_kD(VEL_SLOT, D_VEL_INDEXER);
 
             SmartDashboard.putNumber("Indexer Encoder Position", indexerTalon.getSelectedSensorPosition());
 

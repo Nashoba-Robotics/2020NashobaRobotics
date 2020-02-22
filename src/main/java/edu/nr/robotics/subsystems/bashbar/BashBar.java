@@ -3,6 +3,7 @@ package edu.nr.robotics.subsystems.bashbar;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.robotics.RobotMap;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class BashBar extends NRSubsystem
 {
@@ -10,7 +11,7 @@ public class BashBar extends NRSubsystem
 
     private Solenoid BashBarSolenoid;
 
-    public BashBar()
+    private BashBar()
     {
         BashBarSolenoid = new Solenoid(RobotMap.PCM_ID, RobotMap.BASH_BAR_SOLENOID);
     }
@@ -32,17 +33,17 @@ public class BashBar extends NRSubsystem
 
     public void disable()
     {
-
+        retractBashBar();
     }
 
     public void SmartDashboardInit()
     {
-        
+        SmartDashboard.putBoolean("Bash Bar Deployed", isBashBarDeployed());
     }
 
     public void smartDashboardInfo()
     {
-
+        SmartDashboard.putBoolean("Bash Bar Deployed", isBashBarDeployed());
     }
 
     public enum State {

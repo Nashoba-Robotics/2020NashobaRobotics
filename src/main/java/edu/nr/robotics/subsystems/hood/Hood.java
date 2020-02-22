@@ -24,7 +24,7 @@ import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 
     public class Hood extends NRSubsystem{
 
-        private static Hood Singleton;
+        private static Hood singleton;
 
         private static CANSparkMax hoodSpark;
 
@@ -117,17 +117,17 @@ import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 
         public synchronized static void init()
         {
-            if(Singleton == null)
-                Singleton = new Hood();
+            if(singleton == null)
+                singleton = new Hood();
         }
 
         public static Hood getInstance()
         {
-            if(Singleton == null)
+            if(singleton == null)
             {
                 init();
             }
-            return Singleton;
+            return singleton;
         }
 
         public static Angle getAngle()
@@ -173,7 +173,7 @@ import edu.nr.robotics.subsystems.sensors.EnabledSensors;
         public void disable()
         {
             if(hoodSpark != null){
-                hoodSpark.set(0);
+                setAngle(Angle.ZERO);
             }
         }
 

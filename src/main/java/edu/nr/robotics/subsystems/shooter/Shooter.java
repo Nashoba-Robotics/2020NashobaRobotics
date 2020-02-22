@@ -119,8 +119,6 @@ public class Shooter extends NRSubsystem
   {
       if(shooterTalon1 != null)
           shooterTalon1.set(ControlMode.PercentOutput, 0.0);
-      if(shooterTalon2 != null)
-          shooterTalon2.set(ControlMode.PercentOutput, 0.0);
   }
   public void smartDashboardInit(){
       //SmartDashboard.putNumber("TEST SHOOTER PERCENT", 0);

@@ -219,7 +219,8 @@ public class TwoDimensionalMotionProfilerPathfinder extends TimerTask  {
 			} catch (IOException e) {
 				System.out.println("error reading from binary file");
 			}
-        } else {
+		} 
+		else {
         	this.points = points;
     		this.trajectory = Pathfinder.generate(points, trajectoryConfig);
         }

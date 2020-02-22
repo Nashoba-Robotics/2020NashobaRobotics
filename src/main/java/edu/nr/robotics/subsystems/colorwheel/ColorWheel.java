@@ -10,8 +10,10 @@ import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.units.Time;
 import edu.nr.robotics.GameData;
 import edu.nr.robotics.RobotMap;
+import edu.nr.robotics.multicommands.States.State;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jdk.jfr.Enabled;
 
@@ -20,6 +22,8 @@ public class ColorWheel extends NRSubsystem{
     private static ColorWheel singleton; 
 
     private VictorSPX colorWheelVictor;
+    
+    private Solenoid colorWheelSolenoid;
 
     public static int DEFAULT_TIMEOUT = 0;
 
@@ -49,8 +53,49 @@ public class ColorWheel extends NRSubsystem{
 
             colorWheelVictor.set(ControlMode.PercentOutput, 0);
 
+            colorWheelSolenoid = new Solenoid(RobotMap.COLOR_WHEEL_SOLENOID);
+
         }
         SmartDashboardInit();
+    }
+
+    public enum State
+    {
+        DEPLOYED, RETRACTED;
+
+        private static boolean deployedValue = true;
+        private static boolean retractedValue = false;
+
+        private static State getDeployState(boolean val)
+        {
+            if(val == State.deployedValue)
+                return State.DEPLOYED;
+            return State.RETRACTED;
+        }
+    }
+
+    public boolean isColorWheelDeployed()
+    {
+        return currentDeployState() == State.DEPLOYED;
+    }
+
+    public State currentDeployState()
+    {
+        if(colorWheelSolenoid != null)
+            return State.getDeployState(colorWheelSolenoid.get());
+        return State.RETRACTED;
+    }
+
+    public void deployColorWheel()
+    {
+        if(colorWheelSolenoid != null)
+            colorWheelSolenoid.set(State.deployedValue);
+    }
+
+    public void retractColorWheel()
+    {
+        if(colorWheelSolenoid != null)
+            colorWheelSolenoid.set(State.retractedValue);
     }
 
     public synchronized static void init(){
@@ -69,6 +114,7 @@ public class ColorWheel extends NRSubsystem{
     public void disable(){
         if(colorWheelVictor != null){
             colorWheelVictor.set(ControlMode.PercentOutput, 0);
+            retractColorWheel();
         }
     }
 
