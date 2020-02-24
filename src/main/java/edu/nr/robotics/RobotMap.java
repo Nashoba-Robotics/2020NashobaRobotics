@@ -4,12 +4,12 @@ public class RobotMap {
 
     public static final int ARM_TALON = 15;
 
-    public static final int RIGHT_DRIVE = 5;  //define these, should be going to 12
-    public static final int LEFT_DRIVE = 6;  // should be 0 //6
-    public static final int RIGHT_DRIVE_FOLLOW_1 = 2;  //define these
-    public static final int RIGHT_DRIVE_FOLLOW_2 = 4;  
-    public static final int LEFT_DRIVE_FOLLOW_1 = 3; // was 1
-    public static final int LEFT_DRIVE_FOLLOW_2 = 1;
+    public static final int RIGHT_DRIVE = 12;  //define these, should be going to 12, SHOULD BE 5 2020 BOT
+    public static final int LEFT_DRIVE = 0;  // should be 0 // SHOULD BE 6 2020 BOT
+    public static final int RIGHT_DRIVE_FOLLOW_1 = 13;  //define these  SHOULD BE 2 2020 BOT
+    public static final int RIGHT_DRIVE_FOLLOW_2 = 14;   // SHOULD BE 4 2020 BOT
+    public static final int LEFT_DRIVE_FOLLOW_1 = 2; // SHOULD BE 3 2020 BOT
+    public static final int LEFT_DRIVE_FOLLOW_2 = 1; // SHOULD BE 1 2020 BOT
     //public static final int RIGHT_DRIVE_FOLLOW_1_CURRENT = 2;
     //public static final int RIGHT_DRIVE_FOLLOW_2_CURRENT = 0;
     //public static final int LEFT_DRIVE_FOLLOW_1_CURRENT = 15;

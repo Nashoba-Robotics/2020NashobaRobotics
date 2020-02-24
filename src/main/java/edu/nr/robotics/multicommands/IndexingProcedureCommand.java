@@ -34,33 +34,26 @@ public class IndexingProcedureCommand extends NRCommand{
             Transfer.getInstance().setMotorSpeedInPercent(0);
         }
         */
-        if(!Indexer.getInstance().readyToShoot())
+        if(!(States.getState() == States.State.IndexerReadyToShoot))
         {
             if(States.getState() == States.State.IndexerStillIndexing)
             {
-                //Change to PID
-                Indexer.getInstance().setMotorSpeedInPercent(0.8);
+                
+                Indexer.getInstance().setSpeed(Indexer.INDEXING_SPEED);
                 Transfer.getInstance().setMotorSpeedInPercent(0);
-            }
-
-            else if(States.getState() == States.State.IndexerAndTransferEmpty)
-            {
-                Indexer.getInstance().setMotorSpeedInPercent(0);
-                Transfer.getInstance().setMotorSpeedInPercent(0);
-            }
-
-            else if(States.getState() == States.State.IndexerReadyForBall)
-            {
-                //Change to PID
-                Transfer.getInstance().setMotorSpeedInPercent(0.7);
-                Indexer.getInstance().setMotorSpeedInPercent(0.8);
             }
 
             else if(States.getState() == States.State.ReadyToTransfer)
             {
-                //Change to PID
-                Indexer.getInstance().setMotorSpeedInPercent(0.8);
-                Transfer.getInstance().setMotorSpeedInPercent(0.7);
+                
+                Indexer.getInstance().setSpeed(Indexer.INDEXING_SPEED);
+                Transfer.getInstance().setMotorSpeedInPercent(0);
+            }
+
+            else if(States.getState() == States.State.PreparingToTransfer)
+            {
+                Transfer.getInstance().setMotorSpeedInPercent(0.6);
+                Indexer.getInstance().setMotorSpeedInPercent(0);
             }
         }
         else

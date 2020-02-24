@@ -2,6 +2,7 @@ package edu.nr.robotics.subsystems.bashbar;
 
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.robotics.RobotMap;
+import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -13,7 +14,9 @@ public class BashBar extends NRSubsystem
 
     private BashBar()
     {
-        BashBarSolenoid = new Solenoid(RobotMap.PCM_ID, RobotMap.BASH_BAR_SOLENOID);
+        if(EnabledSubsystems.BASH_BAR_ENABLED){
+            BashBarSolenoid = new Solenoid(RobotMap.PCM_ID, RobotMap.BASH_BAR_SOLENOID);
+        }
     }
 
     public synchronized static void init()

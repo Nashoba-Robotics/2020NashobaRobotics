@@ -20,6 +20,7 @@ import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.multicommands.CanWeIndexCommand;
+import edu.nr.robotics.multicommands.IndexingProcedureCommand;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -166,7 +167,7 @@ public class Transfer extends NRSubsystem{
    public synchronized static void init(){
        if(singleton == null){
            singleton = new Transfer();
-        //   singleton.setDefaultCommand(new CanWeIndexCommand()); // might be a terrible idea
+           //singleton.setDefaultCommand(new IndexingProcedureCommand());
        }
    }
    
@@ -327,16 +328,19 @@ public class Transfer extends NRSubsystem{
        }
    }
    */
-   public void periodic(){
-    if(EnabledSensors.getInstance().transferSensor.get() == false)
-    {
-        if(!(EnabledSensors.getInstance().transferSensor.get() == previousSensorValue))
-        {
-            Transfer.getInstance().incrementBallCount();
+    public void periodic(){
+        if(EnabledSubsystems.TRANSFER_ENABLED){
+            if(EnabledSensors.getInstance().transferSensor.get())
+            {
+                if(!(EnabledSensors.getInstance().transferSensor.get() == previousSensorValue))
+                {
+                    Transfer.getInstance().incrementBallCount();
+                }
+            }
+                previousSensorValue = EnabledSensors.getInstance().transferSensor.get();
         }
     }
-    previousSensorValue = EnabledSensors.getInstance().transferSensor.get();
-   }
+    
    public boolean hasBall(){
        return EnabledSensors.getInstance().transferSensor.get();
    }
@@ -349,6 +353,10 @@ public class Transfer extends NRSubsystem{
    public void incrementBallCount()
    {
         ballCount++;
+   }
+
+   public void decrementBallCount(){
+       ballCount--;
    }
 }
  

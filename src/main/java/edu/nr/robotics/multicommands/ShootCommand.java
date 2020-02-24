@@ -27,10 +27,10 @@ public class ShootCommand extends NRCommand
     protected void onStart()
     {
         Shooter.getInstance().setMotorSpeed(Shooter.SHOOT_SPEED);
-
+        /*
         Angle limeLightAngle = LimelightNetworkTable.getInstance().getHorizOffset();
         Turret.getInstance().setAngle(limeLightAngle.add(Turret.getInstance().getAngle()));
-
+        */
         //Add hood stuff once HoodLimelightCommand is finished
     }
 

@@ -7,7 +7,9 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
- 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
 import edu.nr.lib.NRMath;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.driving.DriveTypeCalculations;
@@ -43,14 +45,15 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
     private static Drive singleton;
 
-    private TalonFX leftDrive, rightDrive;
+    private TalonSRX leftDrive, rightDrive;
    
-    private TalonFX leftDriveFollow1, leftDriveFollow2, rightDriveFollow1, rightDriveFollow2;
+    private VictorSPX leftDriveFollow1, leftDriveFollow2, rightDriveFollow1, rightDriveFollow2;
    
     private PowerDistributionPanel pdp;
     // these may change because of new talons
 
     // TODO: fix all of these
+    /*
     public static final double REAL_ENC_TICK_PER_INCH_DRIVE = 898;
 
     public static final double EFFECTIVE_ENC_TICK_PER_INCH_DRIVE = REAL_ENC_TICK_PER_INCH_DRIVE * 1.01; // * 1.02;
@@ -60,6 +63,19 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
     public static double wheelBaseMultiplier = 1.3;
     public static final Distance WHEEL_BASE = new Distance(23.5, Distance.Unit.INCH);
+    */
+
+    public static final double REAL_ENC_TICK_PER_INCH_DRIVE = 8192 / (6 * Math.PI);
+	public static final double REAL_ENC_REV_PER_INCH_H_DRIVE = 10.2 * 1 / (4 * Math.PI);
+
+	public static final double EFFECTIVE_ENC_TICK_PER_INCH_DRIVE = REAL_ENC_TICK_PER_INCH_DRIVE * 1.01; // * 1.02;
+	public static final double EFFECTIVE_ENC_REV_PER_INCH_H_DRIVE = REAL_ENC_REV_PER_INCH_H_DRIVE;
+
+	public static final Distance WHEEL_DIAMETER = new Distance(6, Distance.Unit.INCH);
+	public static final Distance WHEEL_DIAMETER_EFFECTIVE = new Distance(6, Distance.Unit.INCH);
+
+	public static double wheelBaseMultiplier = 1.3;
+	public static final Distance WHEEL_BASE = new Distance(24, Distance.Unit.INCH);
 
     public static final Speed MAX_SPEED_DRIVE = new Speed(18, Distance.Unit.FOOT, Time.Unit.SECOND);
 
@@ -81,12 +97,12 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 	public static Time DRIVE_RAMP_RATE = new Time(0.0, Time.Unit.SECOND);
  
-    public static double P_LEFT = 0.03;
-    public static double I_LEFT = 0;
+    public static double P_LEFT = 0.02;
+    public static double I_LEFT = 0.0001;
     public static double D_LEFT = 0.3;
 
-    public static double P_RIGHT = 0.03;
-    public static double I_RIGHT = 0;
+    public static double P_RIGHT = 0.02;
+    public static double I_RIGHT = 0.0001;
     public static double D_RIGHT = 0.3;
 
     public static double kVOneD = 1
@@ -183,19 +199,19 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     private Drive() {
         if (EnabledSubsystems.DRIVE_ENABLED) {
-            leftDrive = new TalonFX(RobotMap.LEFT_DRIVE);
-            rightDrive = new TalonFX(RobotMap.RIGHT_DRIVE);
+            leftDrive = new TalonSRX(RobotMap.LEFT_DRIVE);
+            rightDrive = new TalonSRX(RobotMap.RIGHT_DRIVE);
 
             pdp = new PowerDistributionPanel(RobotMap.PDP_ID);
  
-            leftDriveFollow1 = new TalonFX(RobotMap.LEFT_DRIVE_FOLLOW_1);
+            leftDriveFollow1 = new VictorSPX(RobotMap.LEFT_DRIVE_FOLLOW_1);
             leftDriveFollow1.follow(leftDrive);
-            leftDriveFollow2 = new TalonFX(RobotMap.LEFT_DRIVE_FOLLOW_2);
+            leftDriveFollow2 = new VictorSPX(RobotMap.LEFT_DRIVE_FOLLOW_2);
             leftDriveFollow2.follow(leftDrive);
  
-            rightDriveFollow1 = new TalonFX(RobotMap.RIGHT_DRIVE_FOLLOW_1);
+            rightDriveFollow1 = new VictorSPX(RobotMap.RIGHT_DRIVE_FOLLOW_1);
             rightDriveFollow1.follow(rightDrive);
-            rightDriveFollow2 = new TalonFX(RobotMap.RIGHT_DRIVE_FOLLOW_2);
+            rightDriveFollow2 = new VictorSPX(RobotMap.RIGHT_DRIVE_FOLLOW_2);
             rightDriveFollow2.follow(rightDrive);
  
             if (EnabledSubsystems.DRIVE_DUMB_ENABLED) {
@@ -206,8 +222,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
                 rightDrive.set(ControlMode.Velocity, 0);
             }
  
-            leftDrive.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, PID_TYPE, DEFAULT_TIMEOUT);
-            rightDrive.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, PID_TYPE, DEFAULT_TIMEOUT);
+            leftDrive.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
+            rightDrive.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
             
             leftDrive.config_kF(VEL_SLOT, 0, DEFAULT_TIMEOUT);
             leftDrive.config_kP(VEL_SLOT, P_LEFT, DEFAULT_TIMEOUT);
@@ -331,14 +347,18 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
     }
  
     public double getRightFollow1Current() {
-        if (rightDriveFollow1 != null)
-            return rightDriveFollow1.getStatorCurrent();
+        if (rightDriveFollow1 != null){
+
+        }
+            //return rightDriveFollow1.getStatorCurrent();
         return 0;
     }
  
     public double getRightFollow2Current() {
-        if (rightDriveFollow2 != null)
-            return rightDriveFollow2.getStatorCurrent();
+        if (rightDriveFollow2 != null){
+
+        }
+            //return rightDriveFollow2.getStatorCurrent();
         return 0;
     }
  
@@ -350,21 +370,25 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
     }
  
     public double getLeftFollow1Current() {
-        if (leftDriveFollow1 != null)
-            return leftDriveFollow1.getStatorCurrent();
+        if (leftDriveFollow1 != null){
+
+        }
+            //return leftDriveFollow1.getStatorCurrent();
         return 0;
     }
  
     public double getLeftFollow2Current() {
-        if (leftDriveFollow2 != null)
-            return leftDriveFollow2.getStatorCurrent();
+        if (leftDriveFollow2 != null){
+
+        }
+            //return leftDriveFollow2.getStatorCurrent();
         return 0;
     }
  
     public void stayInPlaceOnStart()
     {
-        leftDrive.getSensorCollection().setIntegratedSensorPosition(0, DEFAULT_TIMEOUT);
-        rightDrive.getSensorCollection().setIntegratedSensorPosition(0, DEFAULT_TIMEOUT);
+        leftDrive.setSelectedSensorPosition(0);
+        rightDrive.setSelectedSensorPosition(0);
     }
 
     public void stayInPlaceOnExecute()
