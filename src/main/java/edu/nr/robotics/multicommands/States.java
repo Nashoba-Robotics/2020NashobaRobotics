@@ -12,36 +12,29 @@ public class States
 
     public static enum State
     {
-        IndexerReadyForBall, IndexerStillIndexing, IndexerReadyToShoot, IndexerAndTransferEmpty, ReadyToTransfer, UhOhNoClue
+        IndexerReadyForBall, IndexerStillIndexing, IndexerReadyToShoot, IndexerAndTransferEmpty, ReadyToTransfer, UhOhNoClue, PreparingToTransfer
     }
 
     public static State getState()
     {
-        if(Indexer.getInstance().continueMoving(Transfer.getInstance().getNumberOfBalls()))
-        {
+        if(Indexer.getInstance().continueMoving(Transfer.getInstance().getNumberOfBalls())){
             return State.IndexerStillIndexing;
         }
-
+        
         else if(!Indexer.getInstance().continueMoving(Transfer.getInstance().getNumberOfBalls()) && Transfer.getInstance().hasBall())
         {
-           return State.ReadyToTransfer; 
+            return State.ReadyToTransfer;
         }
 
-        else if(!Indexer.getInstance().continueMoving(Transfer.getInstance().getNumberOfBalls()) && !Transfer.getInstance().hasBall())
-        {
-            return State.IndexerReadyForBall;
-        }
-
-        else if(Indexer.getInstance().readyToShoot())
-        {
+        else if(Indexer.getInstance().readyToShoot()){
             return State.IndexerReadyToShoot;
         }
 
-        else if(Transfer.getInstance().getNumberOfBalls() == 0 && !Transfer.getInstance().hasBall())
-        {
-            return State.IndexerAndTransferEmpty;
+        else if(!Transfer.getInstance().hasBall() && !Indexer.getInstance().continueMoving(Transfer.getInstance().getNumberOfBalls())){
+            return State.PreparingToTransfer;
         }
-
+        
         return State.UhOhNoClue;
     }
+
 }

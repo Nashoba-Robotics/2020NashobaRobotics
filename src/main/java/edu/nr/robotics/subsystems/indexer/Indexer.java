@@ -13,6 +13,7 @@ import edu.nr.robotics.multicommands.IndexingProcedureCommand;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.AnalogSensor;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
+import edu.nr.robotics.subsystems.transfer.Transfer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jdk.jfr.Threshold;
 //import jdk.jfr.internal.settings.ThresholdSetting;
@@ -85,6 +86,9 @@ public class Indexer extends NRSubsystem {
     public static final Distance SHOOT_ONE_DISTANCE = new Distance(0, Distance.Unit.INCH); // change for real robot, might just set velocity to shoot for real
  
     public static final Speed SHOOTING_SPEED = new Speed(0, Distance.Unit.FOOT, Time.Unit.SECOND);
+    public static final Speed INDEXING_SPEED = new Speed(10, Distance.Unit.FOOT, Time.Unit.SECOND);
+
+    public static boolean previousSensorValue = false;
 
     private Indexer(){
         if(EnabledSubsystems.INDEXER_ENABLED){
@@ -325,5 +329,19 @@ public class Indexer extends NRSubsystem {
 
     public boolean readyToShoot(){
         return(EnabledSensors.getInstance().indexerShooterSensor.get());
+    }
+
+    public void periodic(){
+        if(EnabledSubsystems.INDEXER_ENABLED){
+
+            if(!EnabledSensors.getInstance().indexerShooterSensor.get()){
+                if(EnabledSensors.getInstance().indexerShooterSensor.get() != previousSensorValue){
+                    Transfer.getInstance().decrementBallCount();
+                }
+            }
+
+            previousSensorValue = EnabledSensors.getInstance().indexerShooterSensor.get();
+
+        }
     }
 }
