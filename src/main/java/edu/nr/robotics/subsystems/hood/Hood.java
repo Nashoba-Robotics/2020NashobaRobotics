@@ -234,7 +234,7 @@ import edu.nr.robotics.subsystems.sensors.EnabledSensors;
         {
             //check if limits are triggered, set to max / min hood spot if applicable
             
-            if(EnabledSensors.getInstance().LimHoodLower.get()){
+            /*if(EnabledSensors.getInstance().LimHoodLower.get()){
                 hoodSpark.getEncoder().setPosition(0); // should reset position
                 
                 if(getSpeed().get(Angle.Unit.ROTATION, Time.Unit.MINUTE) < 0){ // might be backwards...
@@ -245,6 +245,6 @@ import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 
             if(setAngleHood.get(Angle.Unit.DEGREE) > 70){
                 setAngle(new Angle(70, Angle.Unit.DEGREE));
-            }
+            }*/
         }
 }

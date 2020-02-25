@@ -17,8 +17,8 @@ public class RobotMap {
     public static final int TURRET_TALON = 0;
     public static final int TRANSFER_TALON = 1;
     public static final int HOOD_TALON = 5;
-    public static final int SHOOTER_TALON1 = 2; // falcon 500 motor on 2019 bot at pdp six is slot 0
 
+    public static final int SHOOTER_TALON1 = 9; // falcon 500 motor on 2019 bot at pdp six is slot 0
     public static final int SHOOTER_TALON2 = 1;
     public static final int PIGEON_ID = 10;
 
@@ -31,16 +31,16 @@ public class RobotMap {
     public static final int LIM_TURRET_LEFT = 2;
     public static final int LIM_TURRET_RIGHT = 3;
 
-    public static final int INDEXER_PUKE_SENSOR = 0;
+    public static final int INDEXER_PUKE_SENSOR = 4;
     public static final int INDEXER_SETTING1 = 1;
     public static final int INDEXER_SETTING2 = 2;
     public static final int INDEXER_SETTING3 = 3;
-    public static final int INDEXER_SHOOTER_SENSOR = 4;
-    public static final int INDEXER_TALON = 7; //7
+    public static final int INDEXER_SHOOTER_SENSOR = 0; // real for robot
+    public static final int INDEXER_TALON = 20; //7
     
     public static final int TRANSFER_SENSOR = 5;
     public static final int TRANSFER_SPARK = 1000;
-    public static final int TRANSFER_VICTOR = 1000;
+    public static final int TRANSFER_VICTOR = 14;
 
     //Change to thing
     public static final int INTAKE_TALON = 0;

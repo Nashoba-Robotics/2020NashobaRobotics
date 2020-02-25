@@ -52,15 +52,15 @@ public class IndexingProcedureCommand extends NRCommand{
             else if(States.getState() == States.State.IndexerReadyForBall)
             {
                 //Change to PID
-                Transfer.getInstance().setMotorSpeedInPercent(0.7);
-                Indexer.getInstance().setMotorSpeedInPercent(0.8);
+                Transfer.getInstance().setMotorSpeedInPercent(0.4);
+                Indexer.getInstance().setMotorSpeedInPercent(0.4);
             }
 
             else if(States.getState() == States.State.ReadyToTransfer)
             {
                 //Change to PID
-                Indexer.getInstance().setMotorSpeedInPercent(0.8);
-                Transfer.getInstance().setMotorSpeedInPercent(0.7);
+                Indexer.getInstance().setMotorSpeedInPercent(0.4);
+                Transfer.getInstance().setMotorSpeedInPercent(0.4);
             }
         }
         else

@@ -163,6 +163,8 @@ public class Indexer extends NRSubsystem {
  
             SmartDashboard.putNumber("Sensor Threshold", 0);
 
+            SmartDashboard.putNumber("Indexer Percent", 0);
+
             SmartDashboard.putNumber("Indexer Speed" , getSpeed().get(Distance.Unit.INCH, Time.Unit.SECOND));
 
             SmartDashboard.putNumber("Indexer Goal Speed", goalSpeed.get(Distance.Unit.INCH, Time.Unit.SECOND));
@@ -186,6 +188,7 @@ public class Indexer extends NRSubsystem {
  
     public void smartDashboardInfo(){
         if(EnabledSubsystems.INDEXER_SMARTDASHBOARD_DEBUG_ENABLED){
+            setMotorSpeedInPercent(SmartDashboard.getNumber("Indexer Percent", 0));
 
             SmartDashboard.putNumber("Indexer Speed" , getSpeed().get(Distance.Unit.INCH, Time.Unit.SECOND));
 

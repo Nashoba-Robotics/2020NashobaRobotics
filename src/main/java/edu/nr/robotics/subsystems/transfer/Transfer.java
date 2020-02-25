@@ -190,6 +190,8 @@ public class Transfer extends NRSubsystem{
    public void smartDashboardInit(){
        if(EnabledSubsystems.TRANSFER_SMARTDASHBOARD_DEBUG_ENABLED)
        {
+            //   SmartDashboard.putNumber("Transfer Percent", 0);
+
                SmartDashboard.putNumber("F_POS_TRANSFER: ", F_POS_TRANSFER);
                SmartDashboard.putNumber("P_POS_TRANSFER: ", P_POS_TRANSFER);
                SmartDashboard.putNumber("I_POS_TRANSFER: ", I_POS_TRANSFER);
@@ -222,6 +224,7 @@ public class Transfer extends NRSubsystem{
    public void smartDashboardInfo()
    {
        if(EnabledSubsystems.TRANSFER_SMARTDASHBOARD_DEBUG_ENABLED){
+        //   setMotorSpeedInPercent(SmartDashboard.getNumber("Transfer Percent", 0));
  
            F_POS_TRANSFER = SmartDashboard.getNumber("F_POS_TRANSFER: ", F_POS_TRANSFER);
            P_POS_TRANSFER = SmartDashboard.getNumber("P_POS_TRANSFER: ", P_POS_TRANSFER);
@@ -328,14 +331,14 @@ public class Transfer extends NRSubsystem{
    }
    */
    public void periodic(){
-    if(EnabledSensors.getInstance().transferSensor.get() == false)
+    /*if(EnabledSensors.getInstance().transferSensor.get() == false)
     {
         if(!(EnabledSensors.getInstance().transferSensor.get() == previousSensorValue))
         {
             Transfer.getInstance().incrementBallCount();
         }
     }
-    previousSensorValue = EnabledSensors.getInstance().transferSensor.get();
+    previousSensorValue = EnabledSensors.getInstance().transferSensor.get();*/
    }
    public boolean hasBall(){
        return EnabledSensors.getInstance().transferSensor.get();

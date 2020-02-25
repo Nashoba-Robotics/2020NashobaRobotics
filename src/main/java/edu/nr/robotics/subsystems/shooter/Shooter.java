@@ -125,7 +125,7 @@ public class Shooter extends NRSubsystem
       if(EnabledSubsystems.SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED){
       SmartDashboard.putNumber("Shooter Goal Speed", goalSpeed.get(Angle.Unit.ROTATION, Time.Unit.MINUTE));
 
-      SmartDashboard.putNumber("Shooter Motor Percent", 0);
+    //  SmartDashboard.putNumber("Shooter Motor Percent", 0);
     
       SmartDashboard.putNumber("F_VEL_SHOOTER", F_VEL_SHOOTER);
       SmartDashboard.putNumber("P_VEL_SHOOTER", P_VEL_SHOOTER);
@@ -144,7 +144,7 @@ public class Shooter extends NRSubsystem
               SmartDashboard.putNumber("Shooter1 Current", shooterTalon1.getStatorCurrent());
               //SmartDashboard.putNumber("Shooter2 Speed", getSpeedShooter2().get(Angle.Unit.DEGREE, Time.Unit.SECOND));
               SmartDashboard.putNumber("Shooter2 Current", shooterTalon2.getStatorCurrent());
-              setMotorSpeedInPercent(SmartDashboard.getNumber("Shooter Motor Percent", 0));
+            //  setMotorSpeedInPercent(SmartDashboard.getNumber("Shooter Motor Percent", 0));
               F_VEL_SHOOTER = SmartDashboard.getNumber("F_VEL_SHOOTER", 0);
               P_VEL_SHOOTER = SmartDashboard.getNumber("P_VEL_SHOOTER", 0);
               I_VEL_SHOOTER = SmartDashboard.getNumber("I_VEL_SHOOTER", 0);
@@ -166,7 +166,6 @@ public class Shooter extends NRSubsystem
                SmartDashboard.putNumber("Shooter2 Voltage", shooterTalon2.getMotorOutputVoltage());
               SmartDashboard.putNumber("Shooter2 Raw Position Ticks", shooterTalon2.getSelectedSensorPosition());
           }
-          //shooterTalon1.set(ControlMode.PercentOutput, SmartDashboard.getNumber("Shooter Goal Speed", 0));
           goalSpeed = new AngularSpeed(SmartDashboard.getNumber("Shooter Goal Speed", goalSpeed.get(Angle.Unit.ROTATION, Time.Unit.MINUTE)), Angle.Unit.ROTATION, Time.Unit.MINUTE);
        //   setMotorSpeed(goalSpeed);
       }
