@@ -15,6 +15,4 @@ public class ClimbDeployJoystickCommand extends NRCommand
     {
         ClimbDeploy.getInstance().setMotorSpeedRaw(OI.getInstance().getClimbTurn());
     }
-
-    
 }

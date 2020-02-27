@@ -20,7 +20,6 @@ import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.multicommands.CanWeIndexCommand;
-import edu.nr.robotics.multicommands.IndexingProcedureCommand;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -140,8 +139,6 @@ public class Transfer extends NRSubsystem{
            transferTalon.configOpenloopRamp(VOLTAGE_RAMP_RATE_TRANSFER.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
            transferTalon.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
            */
-
-
             transferVictor.setNeutralMode(NeutralMode.Brake);
             transferVictor.setInverted(false);
 
@@ -167,7 +164,7 @@ public class Transfer extends NRSubsystem{
    public synchronized static void init(){
        if(singleton == null){
            singleton = new Transfer();
-           //singleton.setDefaultCommand(new IndexingProcedureCommand());
+           //singleton.setDefaultCommand(new TransferProcedureCommand());
        }
    }
    

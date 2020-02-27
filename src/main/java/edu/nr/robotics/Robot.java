@@ -56,10 +56,14 @@ import edu.nr.robotics.subsystems.hood.Hood;
 import edu.nr.robotics.subsystems.hood.SetHoodAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.transfer.Transfer;
 import edu.nr.robotics.subsystems.transfer.TransferCommand;
+import edu.nr.robotics.subsystems.transfer.TransferProcedureCommand;
 import edu.nr.robotics.subsystems.indexer.IndexerDeltaPositionSmartDashboardCommand;
 import edu.nr.robotics.subsystems.indexer.IndexerSetVelocityCommand;
 import edu.nr.robotics.subsystems.indexer.IndexerSetVelocitySmartDashboardCommand;
+import edu.nr.robotics.subsystems.indexer.IndexingProcedureCommand;
 import edu.nr.robotics.subsystems.intake.Intake;
+import edu.nr.robotics.subsystems.sensors.DigitalSensor;
+import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 //import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.nr.robotics.subsystems.sensors.ISquaredCSensor;
 import edu.nr.robotics.subsystems.shooter.SetShooterSpeedSmartDashboardCommand;
@@ -80,6 +84,7 @@ import edu.nr.robotics.subsystems.indexer.IndexerSetVelocitySmartDashboardComman
 /*import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;*/
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -105,6 +110,9 @@ public class Robot extends TimedRobot {
     public double autoWaitTime;
     public Compressor robotCompressor;
 
+    public DigitalSensor limHoodUpper = new DigitalSensor(0, true);
+    public DigitalSensor limHoodLower = new DigitalSensor(1, true);
+
     public synchronized static Robot getInstance() {
         return singleton;
     }
@@ -119,38 +127,50 @@ public class Robot extends TimedRobot {
         // GameData.init();
         // ColorWheel.init();
 
-        OI.init();
+        //OI.init();
         // Winch.init();
         // ClimbDeploy.init();
-        Drive.init();
+        //Drive.init();
         // Turret.init();
         // Shooter.init();
-        // Hood.init();
+        //Hood.init();
         // Intake.init();
-        // Indexer.init();
-        // Transfer.init();
+        //Indexer.init();
+        //Transfer.init();
         // robotCompressor = new Compressor(RobotMap.PCM_ID);
         // robotCompressor.start();
 
         // CameraInit();
 
-        LimelightNetworkTable.getInstance().lightLED(true);
-        LimelightNetworkTable.getInstance().setPipeline(Pipeline.Target);
+        //LimelightNetworkTable.getInstance().lightLED(true);
+        //LimelightNetworkTable.getInstance().setPipeline(Pipeline.Target);
 
         // tester = new TalonFX(20);
 
         // tester.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
         // tester.config_kF(0, 1);
         // tester.config_kP(0, 0.01);
-
-        // System.out.println("end of robot init");
+        
+        if(EnabledSubsystems.INDEXER_ENABLED)
+        {
+            CommandScheduler.getInstance().setDefaultCommand(Indexer.getInstance(), new IndexingProcedureCommand());
+            System.out.println("The Indexer default command line has been passed");
+        }
+        if(EnabledSubsystems.TRANSFER_ENABLED)
+        {
+            CommandScheduler.getInstance().setDefaultCommand(Transfer.getInstance(), new TransferProcedureCommand());
+            System.out.println("The Transfer default command line has been passed");
+        }
+        
+        System.out.println("end of robot init");
     }
 
     public void autoChooserInit() {
         AutoChoosers.startPosChooser.setDefaultOption("Target", startPos.directlyInFrontOfGoal);
         AutoChoosers.startPosChooser.addOption("Trench", startPos.directlyInFrontOfTrench);
         AutoChoosers.startPosChooser.addOption("Middle Of Nowhere", startPos.middleOfNowhere);
-        AutoChoosers.startPosChooser.addOption("Middle", startPos.middle);
+        AutoChoosers.startPosChooser.addOption("Two Pos", startPos.twoPos);
+        AutoChoosers.startPosChooser.addOption("Three Pos", startPos.threePosition);
 
         AutoChoosers.ballLocationChooser.setDefaultOption("None", ballLocation.none);
         AutoChoosers.ballLocationChooser.addOption("Trench", ballLocation.trench);
@@ -194,6 +214,7 @@ public class Robot extends TimedRobot {
         if (EnabledSubsystems.INDEXER_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putData(new IndexerDeltaPositionSmartDashboardCommand());
             SmartDashboard.putData(new IndexerSetVelocitySmartDashboardCommand());
+            SmartDashboard.putData(new IndexingProcedureCommand());
         }
 
         if (EnabledSubsystems.SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED) {
@@ -214,7 +235,7 @@ public class Robot extends TimedRobot {
 
         if (EnabledSubsystems.TRANSFER_SMARTDASHBOARD_DEBUG_ENABLED) {
             // SmartDashboard.putData(new TransferCommand2(Transfer.TRANSFER_TIME));
-
+            SmartDashboard.putData(new TransferProcedureCommand());
             // RIP TransferCommand2. You made your country proud
             SmartDashboard.putData(new TransferCommand(Transfer.TRANSFER_TIME));
         }
@@ -225,7 +246,10 @@ public class Robot extends TimedRobot {
             SmartDashboard.putData(new ToggleColorWheelSmartDashboardCommand());
         }
 
-        SmartDashboard.putData("Turn to Angle", new TurnSmartDashboardCommand());
+        SmartDashboard.putBoolean("Lim Hood Lower", limHoodLower.get());
+        SmartDashboard.putBoolean("Lim Hood Upper", limHoodUpper.get());
+
+        //SmartDashboard.putData("Turn to Angle", new TurnSmartDashboardCommand());
 
         // SmartDashboard.putNumber("F TESTER", 0);
         // SmartDashboard.putNumber("P TESTER", 0);
@@ -285,6 +309,9 @@ public class Robot extends TimedRobot {
             count = 0;
         }
 
+        SmartDashboard.putBoolean("Lim Hood Lower", limHoodLower.get());
+        SmartDashboard.putBoolean("Lim Hood Upper", limHoodUpper.get());
+
         // tester.config_kF(0, SmartDashboard.getNumber("F TESTER", 0));
         // tester.config_kP(0, SmartDashboard.getNumber("P TESTER", 0));
 
@@ -307,7 +334,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testPeriodic() {
-
     }
 
     @Override
@@ -327,22 +353,18 @@ public class Robot extends TimedRobot {
         if (selectedStartPos == startPos.middleOfNowhere)
             //It's a five for five
             return new MiddleOfNowhereCommand();
-        else if(selectedStartPos == startPos.directlyInFrontOfGoal && selectedBallLocation == ballLocation.none)
+        else if(selectedStartPos == startPos.directlyInFrontOfGoal)
             return new JustShootCommand();
         else if(selectedStartPos == startPos.threePosition && selectedBallLocation == ballLocation.none)
             return new SimpleMiddleAutoCommand();
         else if (selectedStartPos == startPos.threePosition && selectedBallLocation == ballLocation.threeRendezvous)
             return new MiddleToThreeRendezvousAutoCommand();
+        else if(selectedStartPos == startPos.twoPos && selectedBallLocation == ballLocation.none)
+            return new SimpleMiddleAutoCommand();
         else if (selectedStartPos == startPos.twoPos && selectedBallLocation == ballLocation.twoRendezvous)
             return new MiddleToTwoRendezvousCommand();
         else if (selectedStartPos == startPos.directlyInFrontOfTrench)
             return new DirectlyInFrontOfTrenchCommand();
-        else if (selectedStartPos == startPos.directlyInFrontOfGoal
-                && selectedBallLocation == ballLocation.twoRendezvous)
-            return new DoNothingCommand();
-        else if (selectedStartPos == startPos.directlyInFrontOfGoal
-                && selectedBallLocation == ballLocation.threeRendezvous)
-            return new DoNothingCommand();
         return new DoNothingCommand();
     }
 

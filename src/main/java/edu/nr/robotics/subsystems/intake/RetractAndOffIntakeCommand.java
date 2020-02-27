@@ -12,9 +12,10 @@ public class RetractAndOffIntakeCommand extends NRCommand
     public void onStart()
     {
         if(Intake.getInstance().isIntakeDeployed())
+        {
             Intake.getInstance().setMotorSpeedRaw(0);
             Intake.getInstance().retractIntake();
-
+        }
     }
 
     public boolean isFinishedNR()

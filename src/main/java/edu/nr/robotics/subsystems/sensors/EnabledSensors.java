@@ -15,7 +15,7 @@ public class EnabledSensors {
 
     private static EnabledSensors singleton;
 
-    public AnalogSensor indexerPukeSensor;
+    //public AnalogSensor indexerPukeSensor;
     public AnalogSensor indexerSetting2;
     public AnalogSensor indexerSetting1;
     public AnalogSensor indexerSetting3;
@@ -27,12 +27,13 @@ public class EnabledSensors {
     public DigitalSensor LimTurretRight;
 
     public DigitalSensor LimHoodLower;
+    public DigitalSensor LimHoodUpper;
 
     public ISquaredCSensor colorSensor;
 
     private EnabledSensors(){
         if(EnabledSubsystems.INDEXER_ENABLED){
-            this.indexerPukeSensor = new AnalogSensor(RobotMap.INDEXER_PUKE_SENSOR, Indexer.INDEXER_PUKE_SENSOR_THRESHOLD);
+            //this.indexerPukeSensor = new AnalogSensor(RobotMap.INDEXER_PUKE_SENSOR, Indexer.INDEXER_PUKE_SENSOR_THRESHOLD);
             this.indexerSetting2 = new AnalogSensor(RobotMap.INDEXER_SETTING2, Indexer.INDEXER_SETTING1_THRESHOLD);
             this.indexerSetting1 = new AnalogSensor(RobotMap.INDEXER_SETTING1, Indexer.INDEXER_SETTING2_THRESHOLD);
             this.indexerSetting3 = new AnalogSensor(RobotMap.INDEXER_SETTING3, Indexer.INDEXER_SETTING3_THRESHOLD);
@@ -49,7 +50,8 @@ public class EnabledSensors {
         }
 
         if(EnabledSubsystems.HOOD_ENABLED){
-            LimHoodLower = new DigitalSensor(RobotMap.LIM_HOOD_LOWER);
+            LimHoodLower = new DigitalSensor(RobotMap.LIM_HOOD_LOWER, true);
+            LimHoodUpper = new DigitalSensor(RobotMap.LIM_HOOD_UPPER, true);
         }
 
         if(EnabledSubsystems.COLOR_WHEEL_ENABLED){

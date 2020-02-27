@@ -10,7 +10,6 @@ public class AutoChoosers
     public enum startPos
     {
         directlyInFrontOfGoal, directlyInFrontOfTrench, twoPos, threePosition, middleOfNowhere;
-
     }
 
     public enum ballLocation
