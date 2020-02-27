@@ -1,9 +1,9 @@
 package edu.nr.robotics.subsystems.transfer;
-
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.robotics.multicommands.States;
 import edu.nr.robotics.multicommands.States.State;
+import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.indexer.Indexer;
 import edu.nr.robotics.subsystems.transfer.Transfer;
 
@@ -37,18 +37,17 @@ public class TransferProcedureCommand extends NRCommand{
             Transfer.getInstance().setMotorSpeedInPercent(0);
         }
         */
+        if(EnabledSubsystems.TRANSFER_ENABLED){
         if(!(States.getState() == States.State.IndexerReadyToShoot))
         {
             if(States.getState() == States.State.IndexerStillIndexing)
             {
                 Transfer.getInstance().setMotorSpeedInPercent(0);
             }
-
             else if(States.getState() == States.State.ReadyToTransfer)
             {
                 Transfer.getInstance().setMotorSpeedInPercent(0);
             }
-
             else if(States.getState() == States.State.PreparingToTransfer)
             {
                 Transfer.getInstance().setMotorSpeedInPercent(0.6);
@@ -58,6 +57,7 @@ public class TransferProcedureCommand extends NRCommand{
         {
             Transfer.getInstance().setMotorSpeedInPercent(0);
         }
+    }
     }
     @Override
     protected boolean isFinishedNR()

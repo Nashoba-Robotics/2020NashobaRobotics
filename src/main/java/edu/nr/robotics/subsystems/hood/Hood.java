@@ -65,7 +65,7 @@ public class Hood extends NRSubsystem {
     public static Angle deltaAngleHood = Angle.ZERO;
     public static Angle goalAngleHood = Angle.ZERO;
 
-    public static final double motorRotationsPerHoodDegree = 1.815; //Motor Rev / Deg Hood
+    public static final double motorRotationsPerHoodDegree = 1.815; // Motor Rev / Deg Hood
 
     public static double goalPercent = 0.0;
 
@@ -111,8 +111,8 @@ public class Hood extends NRSubsystem {
     public synchronized static void init() {
         if (singleton == null)
             singleton = new Hood();
-        //if(EnabledSubsystems.HOOD_ENABLED)
-        //    singleton.setDefaultCommand(new HoodJoystickCommand());
+        // if(EnabledSubsystems.HOOD_ENABLED)
+        // singleton.setDefaultCommand(new HoodJoystickCommand());
     }
 
     public static Hood getInstance() {
@@ -131,15 +131,17 @@ public class Hood extends NRSubsystem {
 
     public void setAngle(Angle target) {
         if (hoodSpark != null) {
-            //System.out.println(setAngleHood.get(Angle.Unit.DEGREE) * Hood.HoodDegreePerMotorRotation);
-            if(target.get(Angle.Unit.DEGREE) < 24){
+            // System.out.println(setAngleHood.get(Angle.Unit.DEGREE) *
+            // Hood.HoodDegreePerMotorRotation);
+            if (target.get(Angle.Unit.DEGREE) < 24) {
                 target = new Angle(24, Angle.Unit.DEGREE);
             }
             setAngleHood = target;
             Angle a = new Angle(target.get(Angle.Unit.DEGREE) - 24, Angle.Unit.DEGREE);
             double b = a.get(Angle.Unit.DEGREE) * motorRotationsPerHoodDegree;
             hoodSpark.getPIDController().setReference(b, ControlType.kPosition, POS_SLOT);
-            //hoodSpark.getPIDController().seReference(setAngleHood.get(Angle.Unit.ROTATION), ControlType.kPosition, POS_SLOT);
+            // hoodSpark.getPIDController().seReference(setAngleHood.get(Angle.Unit.ROTATION),
+            // ControlType.kPosition, POS_SLOT);
         }
 
     }
@@ -151,7 +153,7 @@ public class Hood extends NRSubsystem {
             SmartDashboard.putNumber("Spark Hood Current", hoodSpark.getOutputCurrent());
             SmartDashboard.putNumber("Hood Spark Angle", getAngle().get(Angle.Unit.DEGREE));
 
-            //SmartDashboard.putNumber("Hood Percent", 0);
+            // SmartDashboard.putNumber("Hood Percent", 0);
 
             SmartDashboard.putNumber("F_POS_HOOD", F_POS_HOOD);
             SmartDashboard.putNumber("P_POS_HOOD", P_POS_HOOD);
@@ -208,13 +210,17 @@ public class Hood extends NRSubsystem {
                 hoodSpark.getPIDController().setP(P_POS_HOOD, POS_SLOT);
                 hoodSpark.getPIDController().setI(I_POS_HOOD, POS_SLOT);
                 hoodSpark.getPIDController().setD(D_POS_HOOD, POS_SLOT);
-                
+
                 SmartDashboard.putBoolean("Lim Hood Lower", EnabledSensors.getInstance().LimHoodLower.get());
 
-                //goalPercent = SmartDashboard.getNumber("Hood Percent", 0);
+                // goalPercent = SmartDashboard.getNumber("Hood Percent", 0);
 
-                goalAngleHood = new Angle(SmartDashboard.getNumber("Hood Goal Angle", goalAngleHood.get(Angle.Unit.DEGREE)), Angle.Unit.DEGREE);
-                deltaAngleHood = new Angle(SmartDashboard.getNumber("Hood Delta Angle", deltaAngleHood.get(Angle.Unit.DEGREE)), Angle.Unit.DEGREE);
+                goalAngleHood = new Angle(
+                        SmartDashboard.getNumber("Hood Goal Angle", goalAngleHood.get(Angle.Unit.DEGREE)),
+                        Angle.Unit.DEGREE);
+                deltaAngleHood = new Angle(
+                        SmartDashboard.getNumber("Hood Delta Angle", deltaAngleHood.get(Angle.Unit.DEGREE)),
+                        Angle.Unit.DEGREE);
             }
 
         }

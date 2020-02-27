@@ -112,7 +112,7 @@ public class Intake extends NRSubsystem
     {
         if(IntakeVictor != null)
         {
-        return 0;    
+            //return IntakeVictor.getStatorCurrent();
         }
         return 0;
     }

@@ -162,11 +162,10 @@ public class Turret extends NRSubsystem
    {
        if(EnabledSubsystems.TURRET_ENABLED){
       //System.out.println(setAngle.get(Angle.Unit.DEGREE));
-        if(EnabledSensors.getInstance().LimTurretLeft.get()){
-            if(getActualSpeed().get(Angle.Unit.DEGREE, Time.Unit.SECOND) < 0){
-                setMotorSpeedInPercent(0); // might not need this
-                setAngle(LEFT_LIMIT);
-            }
+      /*if(EnabledSensors.getInstance().LimTurretLeft.get()){
+        if(getActualSpeed().get(Angle.Unit.DEGREE, Time.Unit.SECOND) < 0){
+            setMotorSpeedInPercent(0); // might not need this
+            setAngle(LEFT_LIMIT);
         }
 
         if(EnabledSensors.getInstance().LimTurretRight.get()){
@@ -175,7 +174,7 @@ public class Turret extends NRSubsystem
                 setAngle(RIGHT_LIMIT);
             }
         }
-    }
+      }*/}
    }
 
    public double getCurrent(){

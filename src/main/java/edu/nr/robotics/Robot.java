@@ -34,7 +34,9 @@ import edu.nr.robotics.auton.automaps.SimpleMiddleAutoCommand;
 import edu.nr.robotics.auton.autoroutes.AutoChoosers;
 import edu.nr.robotics.auton.autoroutes.AutoChoosers.ballLocation;
 import edu.nr.robotics.auton.autoroutes.AutoChoosers.startPos;
+import edu.nr.robotics.subsystems.indexer.IndexingProcedureCommand;
 import edu.nr.robotics.multicommands.ProjectileVomitCommand;
+import edu.nr.robotics.multicommands.States;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.bashbar.ToggleDeployBashBarCommand;
 import edu.nr.robotics.subsystems.climbdeploy.ClimbDeploy;
@@ -127,9 +129,9 @@ public class Robot extends TimedRobot {
         // GameData.init();
         // ColorWheel.init();
 
-        //OI.init();
-        // Winch.init();
-        // ClimbDeploy.init();
+        OI.init();
+        //Winch.init();
+        //ClimbDeploy.init();
         //Drive.init();
         // Turret.init();
         // Shooter.init();
@@ -145,11 +147,6 @@ public class Robot extends TimedRobot {
         //LimelightNetworkTable.getInstance().lightLED(true);
         //LimelightNetworkTable.getInstance().setPipeline(Pipeline.Target);
 
-        // tester = new TalonFX(20);
-
-        // tester.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
-        // tester.config_kF(0, 1);
-        // tester.config_kP(0, 0.01);
         
         if(EnabledSubsystems.INDEXER_ENABLED)
         {
@@ -187,8 +184,10 @@ public class Robot extends TimedRobot {
         SmartDashboard.putData(new CSVSaverDisable());
         SmartDashboard.putNumber("Auto Wait Time", 0);
 
+        //SmartDashboard.putData(new IndexingProcedureCommand());
+        //SmartDashboard.putData(new TransferProcedureCommand());
 
-        //SmartDashboard.putData(new SimpleMiddleAutoCommand());
+        // SmartDashboard.putData(new SimpleMiddleAutoCommand());
 
         // SmartDashboard.putData(new ToggleDeployBashBarCommand());
 
@@ -354,11 +353,11 @@ public class Robot extends TimedRobot {
 
     public Command getAutoCommand() {
         if (selectedStartPos == startPos.middleOfNowhere)
-            //It's a five for five
+            // It's a five for five
             return new MiddleOfNowhereCommand();
         else if(selectedStartPos == startPos.directlyInFrontOfGoal)
             return new JustShootCommand();
-        else if(selectedStartPos == startPos.threePosition && selectedBallLocation == ballLocation.none)
+        else if (selectedStartPos == startPos.threePosition && selectedBallLocation == ballLocation.none)
             return new SimpleMiddleAutoCommand();
         else if (selectedStartPos == startPos.threePosition && selectedBallLocation == ballLocation.threeRendezvous)
             return new MiddleToThreeRendezvousAutoCommand();
