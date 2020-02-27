@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.units.Angle;
 import edu.nr.lib.units.AngularSpeed;
+import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
@@ -25,8 +26,8 @@ public class Turret extends NRSubsystem
    private static double I_POS_TURRET = 0; 
    private static double D_POS_TURRET = 1;
 
-   public static double turretMinOutput = -1;
    private static double turretMaxOutput = 1;
+   
    private static Angle setAngle = Angle.ZERO;
    public static Angle goalAngle = Angle.ZERO;
    public static Angle deltaAngle = Angle.ZERO;
@@ -188,7 +189,8 @@ public class Turret extends NRSubsystem
    {
        if(turretTalon != null)
        {
-           turretTalon.set(ControlMode.PercentOutput, percent);
+           if(percent < turretMaxOutput)
+            turretTalon.set(ControlMode.PercentOutput, percent);
        }
    }
 }

@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import edu.wpi.first.wpilibj2.command.Command;
  
 import edu.wpi.first.wpilibj2.command.CommandBase;
- 
-import edu.wpi.first.wpilibj2.command.CommandGroupBase;
- 
+
 import edu.wpi.first.wpilibj.Timer;
  
 /**
@@ -189,7 +187,7 @@ public class NRCommand extends CommandBase {
         //Needs editing
         forceCancel = true;
     }
-    
+
     public static void cancelCommand(Command command) {
         
         if(command == null)

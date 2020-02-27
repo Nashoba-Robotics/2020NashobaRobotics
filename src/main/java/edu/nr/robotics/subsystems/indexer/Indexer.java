@@ -1,20 +1,19 @@
 package edu.nr.robotics.subsystems.indexer;
 
 import edu.nr.lib.commandbased.NRSubsystem;
-import edu.nr.lib.motorcontrollers.CTRECreator;
 import edu.nr.lib.units.Acceleration;
 import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
 import edu.nr.lib.units.Distance.Unit;
 import edu.nr.robotics.RobotMap;
-import edu.nr.robotics.multicommands.CanWeIndexCommand;
 import edu.nr.robotics.subsystems.indexer.IndexingProcedureCommand;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.AnalogSensor;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.nr.robotics.subsystems.transfer.Transfer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import jdk.jfr.Threshold;
 //import jdk.jfr.internal.settings.ThresholdSetting;
 
@@ -25,7 +24,6 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
  
 public class Indexer extends NRSubsystem {
  
@@ -46,7 +44,7 @@ public class Indexer extends NRSubsystem {
     public static final Acceleration MAX_ACCELERATION_INDEXER = new Acceleration(10, Distance.Unit.METER, Time.Unit.SECOND, Time.Unit.SECOND);
  
     public static Time VOLTAGE_RAMP_RATE_INDEXER = new Time(0.05, Time.Unit.SECOND);
-    public static final int VOLTAGE_COMPENSATION_LEVEL = 12;//
+    public static final int VOLTAGE_COMPENSATION_LEVEL = 12;
     public static final double MIN_MOVE_VOLTAGE = 0.0;
     public static final int DEFAULT_TIMEOUT = 0;
  
@@ -143,7 +141,7 @@ public class Indexer extends NRSubsystem {
     public synchronized static void init(){
         if(singleton == null){
             singleton = new Indexer();
-            //singleton.setDefaultCommand(new IndexingProcedureCommand()); //this might be garbage
+            //CommandScheduler.getInstance().setDefaultCommand(singleton, new IndexingProcedureCommand());
         }
     }
  
@@ -223,7 +221,7 @@ public class Indexer extends NRSubsystem {
             SmartDashboard.putNumber("Indexer Encoder Position", indexerTalon.getSelectedSensorPosition());
 
             DeltaPosition = new Distance (SmartDashboard.getNumber("Indexer Delta Position", DeltaPosition.get(Distance.Unit.INCH)), Distance.Unit.INCH);
-            SmartDashboard.putNumber("Indexer Goal Speed", goalSpeed.get(Distance.Unit.INCH, Time.Unit.SECOND));
+            //SmartDashboard.putNumber("Indexer Goal Speed", goalSpeed.get(Distance.Unit.INCH, Time.Unit.SECOND));
  
             //EnabledSensors.IndexerInput.setThreshold(INDEXER_INPUT_THRESHOLD);
  
@@ -252,7 +250,7 @@ public class Indexer extends NRSubsystem {
             goalSpeed = new Speed(SmartDashboard.getNumber("Indexer Goal Speed", goalSpeed.get(Distance.Unit.INCH, Time.Unit.SECOND)), Distance.Unit.INCH, Time.Unit.SECOND);
         }
     }
-    
+
     public Distance getPosition(){
         if(indexerTalon != null){
             return new Distance (indexerTalon.getSelectedSensorPosition(), Distance.Unit.MAGNETIC_ENCODER_TICK_INDEXER);

@@ -45,9 +45,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
     private static Drive singleton;
 
-    private TalonSRX leftDrive, rightDrive;
+    private TalonFX leftDrive, rightDrive;
    
-    private VictorSPX leftDriveFollow1, leftDriveFollow2, rightDriveFollow1, rightDriveFollow2;
+    private TalonFX leftDriveFollow1, leftDriveFollow2, rightDriveFollow1, rightDriveFollow2;
    
     private PowerDistributionPanel pdp;
     // these may change because of new talons
@@ -199,19 +199,19 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     private Drive() {
         if (EnabledSubsystems.DRIVE_ENABLED) {
-            leftDrive = new TalonSRX(RobotMap.LEFT_DRIVE);
-            rightDrive = new TalonSRX(RobotMap.RIGHT_DRIVE);
+            leftDrive = new TalonFX(RobotMap.LEFT_DRIVE);
+            rightDrive = new TalonFX(RobotMap.RIGHT_DRIVE);
 
             pdp = new PowerDistributionPanel(RobotMap.PDP_ID);
  
-            leftDriveFollow1 = new VictorSPX(RobotMap.LEFT_DRIVE_FOLLOW_1);
+            leftDriveFollow1 = new TalonFX(RobotMap.LEFT_DRIVE_FOLLOW_1);
             leftDriveFollow1.follow(leftDrive);
-            leftDriveFollow2 = new VictorSPX(RobotMap.LEFT_DRIVE_FOLLOW_2);
+            leftDriveFollow2 = new TalonFX(RobotMap.LEFT_DRIVE_FOLLOW_2);
             leftDriveFollow2.follow(leftDrive);
  
-            rightDriveFollow1 = new VictorSPX(RobotMap.RIGHT_DRIVE_FOLLOW_1);
+            rightDriveFollow1 = new TalonFX(RobotMap.RIGHT_DRIVE_FOLLOW_1);
             rightDriveFollow1.follow(rightDrive);
-            rightDriveFollow2 = new VictorSPX(RobotMap.RIGHT_DRIVE_FOLLOW_2);
+            rightDriveFollow2 = new TalonFX(RobotMap.RIGHT_DRIVE_FOLLOW_2);
             rightDriveFollow2.follow(rightDrive);
  
             if (EnabledSubsystems.DRIVE_DUMB_ENABLED) {
@@ -222,8 +222,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
                 rightDrive.set(ControlMode.Velocity, 0);
             }
  
-            leftDrive.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
-            rightDrive.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
+            leftDrive.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, PID_TYPE, DEFAULT_TIMEOUT);
+            rightDrive.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, PID_TYPE, DEFAULT_TIMEOUT);
             
             leftDrive.config_kF(VEL_SLOT, 0, DEFAULT_TIMEOUT);
             leftDrive.config_kP(VEL_SLOT, P_LEFT, DEFAULT_TIMEOUT);
@@ -311,7 +311,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     public Distance getRightPosition() {
         if (rightDrive != null) {
-            return new Distance(rightDrive.getSelectedSensorPosition(PID_TYPE), Unit.MAGNETIC_ENCODER_TICK_DRIVE);
+            //return new Distance(rightDrive.getSelectedSensorPosition(PID_TYPE), Unit.MAGNETIC_ENCODER_TICK_DRIVE);
+            return new Distance(rightDrive.getSensorCollection().getIntegratedSensorPosition(), Unit.MAGNETIC_ENCODER_TICK_DRIVE);
         } else {
             return Distance.ZERO;
         }
@@ -319,7 +320,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     public Distance getLeftPosition() {
         if (leftDrive != null) {
-            return new Distance(leftDrive.getSelectedSensorPosition(PID_TYPE), Unit.MAGNETIC_ENCODER_TICK_DRIVE);
+            //return new Distance(leftDrive.getSelectedSensorPosition(PID_TYPE), Unit.MAGNETIC_ENCODER_TICK_DRIVE);
+            return new Distance(leftDrive.getSensorCollection().getIntegratedSensorPosition(), Unit.MAGNETIC_ENCODER_TICK_DRIVE);
         } else {
             return Distance.ZERO;
         }
@@ -327,15 +329,15 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     public Speed getLeftVelocity() {
         if (leftDrive != null)
-            return new Speed(leftDrive.getSelectedSensorVelocity(VEL_SLOT), Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE,
-                    Time.Unit.HUNDRED_MILLISECOND);
+            //return new Speed(leftDrive.getSelectedSensorVelocity(VEL_SLOT), Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND);
+            return new Speed(leftDrive.getSensorCollection().getIntegratedSensorVelocity(), Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND);
         return Speed.ZERO;
     }
  
     public Speed getRightVelocity() {
         if (rightDrive != null)
-            return new Speed(rightDrive.getSelectedSensorVelocity(VEL_SLOT), Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE,
-                    Time.Unit.HUNDRED_MILLISECOND);
+            //return new Speed(rightDrive.getSelectedSensorVelocity(VEL_SLOT), Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND);
+            return new Speed(rightDrive.getSensorCollection().getIntegratedSensorVelocity(), Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND);
         return Speed.ZERO;
     }
  
@@ -387,8 +389,10 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
  
     public void stayInPlaceOnStart()
     {
-        leftDrive.setSelectedSensorPosition(0);
-        rightDrive.setSelectedSensorPosition(0);
+        //leftDrive.setSelectedSensorPosition(0);
+        //rightDrive.setSelectedSensorPosition(0);
+        leftDrive.getSensorCollection().setIntegratedSensorPosition(0, DEFAULT_TIMEOUT);
+        rightDrive.getSensorCollection().setIntegratedSensorPosition(0, DEFAULT_TIMEOUT);
     }
 
     public void stayInPlaceOnExecute()

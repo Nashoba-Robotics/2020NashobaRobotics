@@ -14,8 +14,10 @@ public class IntakeToggleDeployCommand extends NRCommand
         if(Intake.getInstance().isIntakeDeployed() == false)
             Intake.getInstance().deployIntake();
         else
+        {
             Intake.getInstance().setMotorSpeedRaw(0);
             Intake.getInstance().retractIntake();
+        }
     }
 
     public boolean isFinishedNR()

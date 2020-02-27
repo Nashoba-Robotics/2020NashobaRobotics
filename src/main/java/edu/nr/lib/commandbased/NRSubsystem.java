@@ -8,6 +8,7 @@ import edu.nr.lib.interfaces.Periodic;
 import edu.nr.lib.interfaces.SmartDashboardSource;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
  
 /**
@@ -27,8 +28,6 @@ public abstract class NRSubsystem extends SubsystemBase implements SmartDashboar
     
     Timer switchToJoystickTimer;
     
- 
- 
     public NRSubsystem() {
         super();
         NRSubsystem.subsystems.add(this);
@@ -52,9 +51,6 @@ public abstract class NRSubsystem extends SubsystemBase implements SmartDashboar
     /**
      * Chooses the default command when the class is initialized
      */
-    protected final void initDefaultCommand() {
-        //setDefaultCommand(joystickCommand);
-    }
     
     private final class JoystickSwitchChecker extends TimerTask {
  
@@ -71,10 +67,15 @@ public abstract class NRSubsystem extends SubsystemBase implements SmartDashboar
         
     }
  
+    /*
+    @Override
+    public final void setDefaultCommand(Command defaultCommand) {
+        CommandScheduler.getInstance().setDefaultCommand(this, defaultCommand);
+    }
+    */
+
     public void periodic()
     {
         
     }
 }
- 
-

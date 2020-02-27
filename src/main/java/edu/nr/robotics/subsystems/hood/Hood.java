@@ -9,7 +9,6 @@ import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.*;
 import edu.nr.lib.commandbased.NRSubsystem;
-import edu.nr.lib.motorcontrollers.CTRECreator;
 import edu.nr.lib.motorcontrollers.SparkMax;
 import edu.nr.lib.units.Angle;
 import edu.nr.lib.units.AngularAcceleration;
@@ -17,7 +16,6 @@ import edu.nr.lib.units.AngularSpeed;
 import edu.nr.lib.units.Time;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
-import edu.nr.robotics.subsystems.sensors.DigitalSensor;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 //import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,7 +26,7 @@ public class Hood extends NRSubsystem {
 
     private static CANSparkMax hoodSpark;
 
-    public static final double ENCODER_TICKS_PER_DEGREE_HOOD = 2048 / 360; // unknown for sparkmax
+    public static final double ENCODER_TICKS_PER_DEGREE_HOOD = 76.22222222; // unknown for sparkmax
 
     public static final int VOLTAGE_COMPENSATION_LEVEL = 12;
     public static final double MIN_MOVE_VOLTAGE = 0.0; // unknown for sparkmax
@@ -158,6 +156,8 @@ public class Hood extends NRSubsystem {
             SmartDashboard.putNumber("D_VEL_HOOD", D_VEL_HOOD);
 
             SmartDashboard.putNumber("Hood Goal Angle", goalAngleHood.get(Angle.Unit.DEGREE));
+
+            SmartDashboard.putBoolean("Lim Hood Lower", EnabledSensors.getInstance().LimHoodLower.get());
         }
 
     }
@@ -203,10 +203,12 @@ public class Hood extends NRSubsystem {
                 P_VEL_HOOD = SmartDashboard.getNumber("P_VEL_HOOD", 0);
                 I_VEL_HOOD = SmartDashboard.getNumber("I_VEL_HOOD", 0);
                 D_VEL_HOOD = SmartDashboard.getNumber("D_VEL_HOOD", 0);
+                
+                SmartDashboard.putBoolean("Lim Hood Lower", EnabledSensors.getInstance().LimHoodLower.get());
 
-            }
-            goalAngleHood = new Angle(SmartDashboard.getNumber("Hood Goal Angle", goalAngleHood.get(Angle.Unit.DEGREE)),
+                goalAngleHood = new Angle(SmartDashboard.getNumber("Hood Goal Angle", goalAngleHood.get(Angle.Unit.DEGREE)),
                     Angle.Unit.DEGREE);
+            }
 
         }
         // System.out.println("Hood angle" + goalAngleHood.get(Angle.Unit.DEGREE));
