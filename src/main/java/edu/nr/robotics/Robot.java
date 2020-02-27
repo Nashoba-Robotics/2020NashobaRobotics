@@ -34,6 +34,7 @@ import edu.nr.robotics.auton.automaps.SimpleMiddleAutoCommand;
 import edu.nr.robotics.auton.autoroutes.AutoChoosers;
 import edu.nr.robotics.auton.autoroutes.AutoChoosers.ballLocation;
 import edu.nr.robotics.auton.autoroutes.AutoChoosers.startPos;
+import edu.nr.robotics.multicommands.ProjectileVomitCommand;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.bashbar.ToggleDeployBashBarCommand;
 import edu.nr.robotics.subsystems.climbdeploy.ClimbDeploy;
@@ -52,7 +53,9 @@ import edu.nr.robotics.subsystems.drive.EnableMotionProfileSmartDashboardCommand
 import edu.nr.robotics.subsystems.drive.EnableReverseTwoDMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.EnableTwoDMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.TurnSmartDashboardCommand;
+import edu.nr.robotics.subsystems.hood.DeltaHoodAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.hood.Hood;
+import edu.nr.robotics.subsystems.hood.HoodPercentCommand;
 import edu.nr.robotics.subsystems.hood.SetHoodAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.transfer.Transfer;
 import edu.nr.robotics.subsystems.transfer.TransferCommand;
@@ -110,9 +113,6 @@ public class Robot extends TimedRobot {
     public double autoWaitTime;
     public Compressor robotCompressor;
 
-    public DigitalSensor limHoodUpper = new DigitalSensor(0, true);
-    public DigitalSensor limHoodLower = new DigitalSensor(1, true);
-
     public synchronized static Robot getInstance() {
         return singleton;
     }
@@ -133,8 +133,8 @@ public class Robot extends TimedRobot {
         //Drive.init();
         // Turret.init();
         // Shooter.init();
-        //Hood.init();
-        // Intake.init();
+        Hood.init();
+        //Intake.init();
         //Indexer.init();
         //Transfer.init();
         // robotCompressor = new Compressor(RobotMap.PCM_ID);
@@ -187,6 +187,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putData(new CSVSaverDisable());
         SmartDashboard.putNumber("Auto Wait Time", 0);
 
+
         //SmartDashboard.putData(new SimpleMiddleAutoCommand());
 
         // SmartDashboard.putData(new ToggleDeployBashBarCommand());
@@ -212,6 +213,7 @@ public class Robot extends TimedRobot {
             SmartDashboard.putData(new SetShooterSpeedSmartDashboardCommand());
         }
         if (EnabledSubsystems.INDEXER_SMARTDASHBOARD_DEBUG_ENABLED) {
+            SmartDashboard.putData(new ProjectileVomitCommand());
             SmartDashboard.putData(new IndexerDeltaPositionSmartDashboardCommand());
             SmartDashboard.putData(new IndexerSetVelocitySmartDashboardCommand());
             SmartDashboard.putData(new IndexingProcedureCommand());
@@ -246,8 +248,12 @@ public class Robot extends TimedRobot {
             SmartDashboard.putData(new ToggleColorWheelSmartDashboardCommand());
         }
 
-        SmartDashboard.putBoolean("Lim Hood Lower", limHoodLower.get());
-        SmartDashboard.putBoolean("Lim Hood Upper", limHoodUpper.get());
+        if(EnabledSubsystems.HOOD_ENABLED)
+        {
+            SmartDashboard.putData(new HoodPercentCommand());
+            SmartDashboard.putData(new SetHoodAngleSmartDashboardCommand());
+            SmartDashboard.putData(new DeltaHoodAngleSmartDashboardCommand());
+        }
 
         //SmartDashboard.putData("Turn to Angle", new TurnSmartDashboardCommand());
 
@@ -308,9 +314,6 @@ public class Robot extends TimedRobot {
             dtTot = 0;
             count = 0;
         }
-
-        SmartDashboard.putBoolean("Lim Hood Lower", limHoodLower.get());
-        SmartDashboard.putBoolean("Lim Hood Upper", limHoodUpper.get());
 
         // tester.config_kF(0, SmartDashboard.getNumber("F TESTER", 0));
         // tester.config_kP(0, SmartDashboard.getNumber("P TESTER", 0));

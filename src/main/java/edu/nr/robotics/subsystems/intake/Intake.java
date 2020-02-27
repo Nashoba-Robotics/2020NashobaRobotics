@@ -11,12 +11,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 public class Intake extends NRSubsystem
 {
     private static Intake singleton;
 
-    private TalonSRX IntakeTalon;
+    private VictorSPX IntakeVictor;
 
     private Solenoid IntakeSolenoid;
 
@@ -37,7 +38,7 @@ public class Intake extends NRSubsystem
         super();
         if(EnabledSubsystems.INTAKE_ENABLED)
         {
-            IntakeTalon = new TalonSRX(RobotMap.INTAKE_TALON);
+            IntakeVictor= new VictorSPX(RobotMap.INTAKE_VICTOR);
         }
         SmartDashboardInit();
     }
@@ -63,7 +64,7 @@ public class Intake extends NRSubsystem
     {
         if(IntakeSolenoid != null)
             retractIntake();
-        if(IntakeTalon != null)
+        if(IntakeVictor != null)
             setMotorSpeedRaw(0);
     }
 
@@ -109,20 +110,20 @@ public class Intake extends NRSubsystem
 
     public double getOutputCurrent()
     {
-        if(IntakeTalon != null)
+        if(IntakeVictor != null)
         {
-            return IntakeTalon.getStatorCurrent();
+        return 0;    
         }
         return 0;
     }
 
     public void setMotorSpeedRaw(double percent) {
-        if (IntakeTalon != null){
+        if (IntakeVictor != null){
             if(percent > MAX_PERCENT_INTAKE)
                 percent = MAX_PERCENT_INTAKE;
             else if(percent < MIN_PERCENT_INTAKE)
                 percent = MIN_PERCENT_INTAKE;
-            IntakeTalon.set(ControlMode.PercentOutput, percent);
+            IntakeVictor.set(ControlMode.PercentOutput, percent);
             currentIntakePercent = percent;
         }
     }
@@ -134,9 +135,9 @@ public class Intake extends NRSubsystem
 
     public double getActualMotorSpeed()
     {
-        if(IntakeTalon != null)
+        if(IntakeVictor != null)
         {
-            return IntakeTalon.getSelectedSensorVelocity();
+            return IntakeVictor.getSelectedSensorVelocity();
         }
         return 0;
     }

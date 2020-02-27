@@ -10,7 +10,7 @@ public class DeltaHoodAngleSmartDashboardCommand extends NRCommand {
     }
 
     public void onStart(){
-        Hood.getInstance().setAngle(Hood.deltaAngleHood.add(Hood.getInstance().getAngle()));
+        Hood.getInstance().setAngle(Hood.deltaAngleHood.add(Hood.getInstance().getAngle())); // cn
     }
 
     public boolean isFinishedNR(){

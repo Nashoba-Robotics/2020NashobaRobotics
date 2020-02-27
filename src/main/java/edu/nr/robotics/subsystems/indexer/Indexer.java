@@ -290,6 +290,8 @@ public class Indexer extends NRSubsystem {
     }
 
     public boolean continueMoving(int numSensor){
+
+        if(EnabledSubsystems.INDEXER_ENABLED && EnabledSubsystems.TRANSFER_ENABLED){
         if(numSensor == 0)
         {
             return false;
@@ -314,6 +316,7 @@ public class Indexer extends NRSubsystem {
         {
             return !EnabledSensors.getInstance().indexerShooterSensor.get();
         }
+    }
             return false;
     }
 

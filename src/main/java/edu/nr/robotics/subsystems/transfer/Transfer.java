@@ -230,6 +230,8 @@ public class Transfer extends NRSubsystem{
            P_VEL_TRANSFER = SmartDashboard.getNumber("P_VEL_TRANSFER: ", P_VEL_TRANSFER);
            I_VEL_TRANSFER = SmartDashboard.getNumber("I_VEL_TRANSFER: ", I_VEL_TRANSFER);
            D_VEL_TRANSFER = SmartDashboard.getNumber("D_VEL_TRANSFER: ", D_VEL_TRANSFER);
+
+           setMotorSpeedInPercent(goalSpeed);
             /*
            if(transferTalon != null)
            {

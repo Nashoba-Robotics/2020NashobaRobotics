@@ -3,7 +3,6 @@ package edu.nr.robotics.subsystems.hood;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -14,6 +13,7 @@ import edu.nr.lib.units.Angle;
 import edu.nr.lib.units.AngularAcceleration;
 import edu.nr.lib.units.AngularSpeed;
 import edu.nr.lib.units.Time;
+import edu.nr.lib.units.Angle.Unit;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
@@ -26,7 +26,7 @@ public class Hood extends NRSubsystem {
 
     private static CANSparkMax hoodSpark;
 
-    public static final double ENCODER_TICKS_PER_DEGREE_HOOD = 76.22222222; // unknown for sparkmax
+    public static final double ENCODER_TICKS_PER_DEGREE_HOOD = 76.222222222;
 
     public static final int VOLTAGE_COMPENSATION_LEVEL = 12;
     public static final double MIN_MOVE_VOLTAGE = 0.0; // unknown for sparkmax
@@ -44,17 +44,12 @@ public class Hood extends NRSubsystem {
     // Change this
 
     public static final Angle upperMost = new Angle(45, Angle.Unit.DEGREE);
-    public static final Angle lowerMost = new Angle(0, Angle.Unit.DEGREE);
+    public static final Angle lowerMost = Angle.ZERO;
 
-    public static double F_POS_HOOD = 0;
-    public static double P_POS_HOOD = 0;
+    public static double F_POS_HOOD = 0.01;
+    public static double P_POS_HOOD = 0.01;
     public static double I_POS_HOOD = 0;
     public static double D_POS_HOOD = 0;
-
-    public static double F_VEL_HOOD = 0;
-    public static double P_VEL_HOOD = 0;
-    public static double I_VEL_HOOD = 0;
-    public static double D_VEL_HOOD = 0;
 
     public static final int PEAK_CURRENT_HOOD = 60;
     public static final int CONTINUOUS_CURRENT_LIMIT_HOOD = 40;
@@ -65,12 +60,14 @@ public class Hood extends NRSubsystem {
 
     private AngularSpeed speedSetPointHood = AngularSpeed.ZERO;
 
+    public static final Angle startAngle = new Angle(10, Angle.Unit.DEGREE);
     public static Angle setAngleHood = Angle.ZERO;
     public static Angle deltaAngleHood = Angle.ZERO;
     public static Angle goalAngleHood = Angle.ZERO;
 
-    public static final int MOTION_MAGIC_SLOT = 2; // n/a for sparkmax
-    public static final int MOTION_MAGIC_MULTIPLIER = 3; // Garrison Calculation Constant # 4
+    public static final double motorRotationsPerHoodDegree = 1.815; //Motor Rev / Deg Hood
+
+    public static double goalPercent = 0.0;
 
     public static final AngularAcceleration MAX_ACCEL = new AngularAcceleration(580, Angle.Unit.DEGREE,
             Time.Unit.SECOND, Time.Unit.SECOND);
@@ -86,10 +83,10 @@ public class Hood extends NRSubsystem {
 
             hoodSpark = SparkMax.createSpark(RobotMap.HOOD_TALON, MotorType.kBrushless);
 
-            hoodSpark.getPIDController().setFF(F_POS_HOOD, 0);
-            hoodSpark.getPIDController().setP(P_POS_HOOD, 0);
-            hoodSpark.getPIDController().setI(I_POS_HOOD, 0);
-            hoodSpark.getPIDController().setD(D_POS_HOOD, 0);
+            hoodSpark.getPIDController().setFF(F_POS_HOOD, POS_SLOT);
+            hoodSpark.getPIDController().setP(P_POS_HOOD, POS_SLOT);
+            hoodSpark.getPIDController().setI(I_POS_HOOD, POS_SLOT);
+            hoodSpark.getPIDController().setD(D_POS_HOOD, POS_SLOT);
 
             hoodSpark.setIdleMode(IDLE_MODE_HOOD);
 
@@ -106,6 +103,7 @@ public class Hood extends NRSubsystem {
             hoodSpark.getPIDController().setOutputRange(-1, 1, VEL_SLOT);
             hoodSpark.getPIDController().setOutputRange(-1, 1, POS_SLOT);
 
+            hoodSpark.getEncoder().setPosition(0);
         }
         smartDashboardInit();
     }
@@ -113,6 +111,8 @@ public class Hood extends NRSubsystem {
     public synchronized static void init() {
         if (singleton == null)
             singleton = new Hood();
+        //if(EnabledSubsystems.HOOD_ENABLED)
+        //    singleton.setDefaultCommand(new HoodJoystickCommand());
     }
 
     public static Hood getInstance() {
@@ -130,11 +130,16 @@ public class Hood extends NRSubsystem {
     }
 
     public void setAngle(Angle target) {
-        setAngleHood = target;
-
         if (hoodSpark != null) {
-            hoodSpark.getPIDController().setReference(setAngleHood.get(Angle.Unit.ROTATION), ControlType.kPosition,
-                    POS_SLOT);
+            //System.out.println(setAngleHood.get(Angle.Unit.DEGREE) * Hood.HoodDegreePerMotorRotation);
+            if(target.get(Angle.Unit.DEGREE) < 24){
+                target = new Angle(24, Angle.Unit.DEGREE);
+            }
+            setAngleHood = target;
+            Angle a = new Angle(target.get(Angle.Unit.DEGREE) - 24, Angle.Unit.DEGREE);
+            double b = a.get(Angle.Unit.DEGREE) * motorRotationsPerHoodDegree;
+            hoodSpark.getPIDController().setReference(b, ControlType.kPosition, POS_SLOT);
+            //hoodSpark.getPIDController().seReference(setAngleHood.get(Angle.Unit.ROTATION), ControlType.kPosition, POS_SLOT);
         }
 
     }
@@ -142,23 +147,22 @@ public class Hood extends NRSubsystem {
     public void smartDashboardInit() {
         if (EnabledSubsystems.HOOD_SMARTDASHBOARD_BASIC_ENABLED) {
             SmartDashboard.putNumber("Spark Encoder Position Hood", hoodSpark.getEncoder().getPosition());
+
             SmartDashboard.putNumber("Spark Hood Current", hoodSpark.getOutputCurrent());
+            SmartDashboard.putNumber("Hood Spark Angle", getAngle().get(Angle.Unit.DEGREE));
+
+            //SmartDashboard.putNumber("Hood Percent", 0);
 
             SmartDashboard.putNumber("F_POS_HOOD", F_POS_HOOD);
             SmartDashboard.putNumber("P_POS_HOOD", P_POS_HOOD);
             SmartDashboard.putNumber("I_POS_HOOD", I_POS_HOOD);
             SmartDashboard.putNumber("D_POS_HOOD", D_POS_HOOD);
 
-            SmartDashboard.putNumber("F_VEL_HOOD", F_VEL_HOOD);
-            SmartDashboard.putNumber("P_VEL_HOOD", P_VEL_HOOD);
-            SmartDashboard.putNumber("I_VEL_HOOD", I_VEL_HOOD);
-            SmartDashboard.putNumber("D_VEL_HOOD", D_VEL_HOOD);
-
             SmartDashboard.putNumber("Hood Goal Angle", goalAngleHood.get(Angle.Unit.DEGREE));
+            SmartDashboard.putNumber("Hood Delta Angle", deltaAngleHood.get(Angle.Unit.DEGREE));
 
             SmartDashboard.putBoolean("Lim Hood Lower", EnabledSensors.getInstance().LimHoodLower.get());
         }
-
     }
 
     public void disable() {
@@ -186,27 +190,31 @@ public class Hood extends NRSubsystem {
         if (hoodSpark != null) {
 
             if (EnabledSubsystems.HOOD_SMARTDASHBOARD_BASIC_ENABLED) {
+
                 SmartDashboard.putNumber("Spark Encoder Position Hood", hoodSpark.getEncoder().getPosition());
+
                 SmartDashboard.putNumber("Spark Hood Current", hoodSpark.getOutputCurrent());
 
                 SmartDashboard.putNumber("Hood Spark Angular Speed", hoodSpark.getEncoder().getVelocity());
                 SmartDashboard.putNumber("Hood Spark Angle", getAngle().get(Angle.Unit.DEGREE));
                 SmartDashboard.putNumber("Hood setAngle", setAngleHood.get(Angle.Unit.DEGREE));
 
-                F_POS_HOOD = SmartDashboard.getNumber("F_POS_HOOD", 0);
-                P_POS_HOOD = SmartDashboard.getNumber("P_POS_HOOD", 0);
-                I_POS_HOOD = SmartDashboard.getNumber("I_POS_HOOD", 0);
-                D_POS_HOOD = SmartDashboard.getNumber("D_POS_HOOD", 0);
+                F_POS_HOOD = SmartDashboard.getNumber("F_POS_HOOD", POS_SLOT);
+                P_POS_HOOD = SmartDashboard.getNumber("P_POS_HOOD", POS_SLOT);
+                I_POS_HOOD = SmartDashboard.getNumber("I_POS_HOOD", POS_SLOT);
+                D_POS_HOOD = SmartDashboard.getNumber("D_POS_HOOD", POS_SLOT);
 
-                F_VEL_HOOD = SmartDashboard.getNumber("F_VEL_HOOD", 0);
-                P_VEL_HOOD = SmartDashboard.getNumber("P_VEL_HOOD", 0);
-                I_VEL_HOOD = SmartDashboard.getNumber("I_VEL_HOOD", 0);
-                D_VEL_HOOD = SmartDashboard.getNumber("D_VEL_HOOD", 0);
+                hoodSpark.getPIDController().setFF(F_POS_HOOD, POS_SLOT);
+                hoodSpark.getPIDController().setP(P_POS_HOOD, POS_SLOT);
+                hoodSpark.getPIDController().setI(I_POS_HOOD, POS_SLOT);
+                hoodSpark.getPIDController().setD(D_POS_HOOD, POS_SLOT);
                 
                 SmartDashboard.putBoolean("Lim Hood Lower", EnabledSensors.getInstance().LimHoodLower.get());
 
-                goalAngleHood = new Angle(SmartDashboard.getNumber("Hood Goal Angle", goalAngleHood.get(Angle.Unit.DEGREE)),
-                    Angle.Unit.DEGREE);
+                //goalPercent = SmartDashboard.getNumber("Hood Percent", 0);
+
+                goalAngleHood = new Angle(SmartDashboard.getNumber("Hood Goal Angle", goalAngleHood.get(Angle.Unit.DEGREE)), Angle.Unit.DEGREE);
+                deltaAngleHood = new Angle(SmartDashboard.getNumber("Hood Delta Angle", deltaAngleHood.get(Angle.Unit.DEGREE)), Angle.Unit.DEGREE);
             }
 
         }
@@ -225,15 +233,18 @@ public class Hood extends NRSubsystem {
         // check if limits are triggered, set to max / min hood spot if applicable
         if (EnabledSubsystems.HOOD_ENABLED) {
             if (EnabledSensors.getInstance().LimHoodLower.get()) {
-                hoodSpark.getEncoder().setPosition(0); // should reset position
+                //hoodSpark.getEncoder().setPosition(0); // should reset position
 
                 if (getSpeed().get(Angle.Unit.ROTATION, Time.Unit.MINUTE) < 0) { // might be backwards...
                     setMotorSpeedRaw(0);
                 }
             }
 
-            if (setAngleHood.get(Angle.Unit.DEGREE) > 70) {
-                setAngle(new Angle(70, Angle.Unit.DEGREE));
+            if (EnabledSensors.getInstance().LimHoodUpper.get()) {
+                if(getSpeed().get(Angle.Unit.ROTATION, Time.Unit.MINUTE) > 0)
+                {
+                    setMotorSpeedRaw(0);
+                }
             }
         }
     }
