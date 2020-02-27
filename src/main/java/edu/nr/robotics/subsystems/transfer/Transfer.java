@@ -20,7 +20,7 @@ import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.multicommands.CanWeIndexCommand;
-import edu.nr.robotics.multicommands.IndexingProcedureCommand;
+import edu.nr.robotics.subsystems.indexer.IndexingProcedureCommand;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -82,7 +82,7 @@ public class Transfer extends NRSubsystem{
    public static final Time TRANSFER_TIME = new Time(1, Time.Unit.SECOND);
    public static final Time TRANSFER_ALL_TIME = new Time(0.1, Time.Unit.SECOND);
    
-   public static final int TRANSFER_THRESHOLD = 0;
+   public static int TRANSFER_THRESHOLD = 0;
    //need sensors for have a ball, tune transfer percent and time for transfer command
 
    private boolean previousSensorValue = false;
@@ -167,7 +167,7 @@ public class Transfer extends NRSubsystem{
    public synchronized static void init(){
        if(singleton == null){
            singleton = new Transfer();
-           //singleton.setDefaultCommand(new IndexingProcedureCommand());
+           singleton.setDefaultCommand(new TransferProcedureCommand());
        }
    }
    
@@ -191,7 +191,7 @@ public class Transfer extends NRSubsystem{
    public void smartDashboardInit(){
        if(EnabledSubsystems.TRANSFER_SMARTDASHBOARD_DEBUG_ENABLED)
        {
-            //   SmartDashboard.putNumber("Transfer Percent", 0);
+               SmartDashboard.putNumber("Transfer Percent", 0);
 
                SmartDashboard.putNumber("F_POS_TRANSFER: ", F_POS_TRANSFER);
                SmartDashboard.putNumber("P_POS_TRANSFER: ", P_POS_TRANSFER);
@@ -225,7 +225,7 @@ public class Transfer extends NRSubsystem{
    public void smartDashboardInfo()
    {
        if(EnabledSubsystems.TRANSFER_SMARTDASHBOARD_DEBUG_ENABLED){
-        //   setMotorSpeedInPercent(SmartDashboard.getNumber("Transfer Percent", 0));
+           setMotorSpeedInPercent(SmartDashboard.getNumber("Transfer Percent", 0));
  
            F_POS_TRANSFER = SmartDashboard.getNumber("F_POS_TRANSFER: ", F_POS_TRANSFER);
            P_POS_TRANSFER = SmartDashboard.getNumber("P_POS_TRANSFER: ", P_POS_TRANSFER);
@@ -342,7 +342,10 @@ public class Transfer extends NRSubsystem{
     previousSensorValue = EnabledSensors.getInstance().transferSensor.get();*/
    }
    public boolean hasBall(){
-       return EnabledSensors.getInstance().transferSensor.get();
+       if(EnabledSubsystems.TRANSFER_ENABLED){
+            return EnabledSensors.getInstance().transferSensor.get();
+       }
+       return false;
    }
 
    public int getNumberOfBalls()
@@ -359,6 +362,3 @@ public class Transfer extends NRSubsystem{
        ballCount--;
    }
 }
- 
- 
- 

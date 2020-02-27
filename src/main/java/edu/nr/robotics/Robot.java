@@ -34,6 +34,8 @@ import edu.nr.robotics.auton.automaps.SimpleMiddleAutoCommand;
 import edu.nr.robotics.auton.autoroutes.AutoChoosers;
 import edu.nr.robotics.auton.autoroutes.AutoChoosers.ballLocation;
 import edu.nr.robotics.auton.autoroutes.AutoChoosers.startPos;
+import edu.nr.robotics.subsystems.indexer.IndexingProcedureCommand;
+import edu.nr.robotics.multicommands.States;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.bashbar.ToggleDeployBashBarCommand;
 import edu.nr.robotics.subsystems.climbdeploy.ClimbDeploy;
@@ -56,6 +58,7 @@ import edu.nr.robotics.subsystems.hood.Hood;
 import edu.nr.robotics.subsystems.hood.SetHoodAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.transfer.Transfer;
 import edu.nr.robotics.subsystems.transfer.TransferCommand;
+import edu.nr.robotics.subsystems.transfer.TransferProcedureCommand;
 import edu.nr.robotics.subsystems.indexer.IndexerDeltaPositionSmartDashboardCommand;
 import edu.nr.robotics.subsystems.indexer.IndexerSetVelocityCommand;
 import edu.nr.robotics.subsystems.indexer.IndexerSetVelocitySmartDashboardCommand;
@@ -119,16 +122,16 @@ public class Robot extends TimedRobot {
         // GameData.init();
         // ColorWheel.init();
 
-        OI.init();
+        // OI.init();
         // Winch.init();
         // ClimbDeploy.init();
-        Drive.init();
+        // Drive.init();
         // Turret.init();
-        // Shooter.init();
+        //Shooter.init();
         // Hood.init();
         // Intake.init();
-        // Indexer.init();
-        // Transfer.init();
+        Indexer.init();
+        Transfer.init();
         // robotCompressor = new Compressor(RobotMap.PCM_ID);
         // robotCompressor.start();
 
@@ -168,7 +171,10 @@ public class Robot extends TimedRobot {
         SmartDashboard.putData(new CSVSaverDisable());
         SmartDashboard.putNumber("Auto Wait Time", 0);
 
-        //SmartDashboard.putData(new SimpleMiddleAutoCommand());
+        SmartDashboard.putData(new IndexingProcedureCommand());
+        SmartDashboard.putData(new TransferProcedureCommand());
+
+        // SmartDashboard.putData(new SimpleMiddleAutoCommand());
 
         // SmartDashboard.putData(new ToggleDeployBashBarCommand());
 
@@ -226,7 +232,11 @@ public class Robot extends TimedRobot {
             SmartDashboard.putData(new ToggleColorWheelSmartDashboardCommand());
         }
 
-        SmartDashboard.putData("Turn to Angle", new TurnSmartDashboardCommand());
+        // SmartDashboard.putData("Turn to Angle", new TurnSmartDashboardCommand());
+
+        if (EnabledSubsystems.TRANSFER_ENABLED && EnabledSubsystems.INDEXER_ENABLED) {
+            SmartDashboard.putString("STATE: ", States.getState().name());
+        }
 
         // SmartDashboard.putNumber("F TESTER", 0);
         // SmartDashboard.putNumber("P TESTER", 0);
@@ -286,6 +296,8 @@ public class Robot extends TimedRobot {
             count = 0;
         }
 
+        // System.out.println("code running...");
+
         // tester.config_kF(0, SmartDashboard.getNumber("F TESTER", 0));
         // tester.config_kP(0, SmartDashboard.getNumber("P TESTER", 0));
 
@@ -326,11 +338,11 @@ public class Robot extends TimedRobot {
 
     public Command getAutoCommand() {
         if (selectedStartPos == startPos.middleOfNowhere)
-            //It's a five for five
+            // It's a five for five
             return new MiddleOfNowhereCommand();
-        else if(selectedStartPos == startPos.directlyInFrontOfGoal && selectedBallLocation == ballLocation.none)
+        else if (selectedStartPos == startPos.directlyInFrontOfGoal && selectedBallLocation == ballLocation.none)
             return new JustShootCommand();
-        else if(selectedStartPos == startPos.threePosition && selectedBallLocation == ballLocation.none)
+        else if (selectedStartPos == startPos.threePosition && selectedBallLocation == ballLocation.none)
             return new SimpleMiddleAutoCommand();
         else if (selectedStartPos == startPos.threePosition && selectedBallLocation == ballLocation.threeRendezvous)
             return new MiddleToThreeRendezvousAutoCommand();

@@ -32,7 +32,7 @@ public class EnabledSensors {
 
     private EnabledSensors(){
         if(EnabledSubsystems.INDEXER_ENABLED){
-            this.indexerPukeSensor = new AnalogSensor(RobotMap.INDEXER_PUKE_SENSOR, Indexer.INDEXER_PUKE_SENSOR_THRESHOLD);
+            //this.indexerPukeSensor = new AnalogSensor(RobotMap.INDEXER_PUKE_SENSOR, Indexer.INDEXER_PUKE_SENSOR_THRESHOLD);
             this.indexerSetting2 = new AnalogSensor(RobotMap.INDEXER_SETTING2, Indexer.INDEXER_SETTING1_THRESHOLD);
             this.indexerSetting1 = new AnalogSensor(RobotMap.INDEXER_SETTING1, Indexer.INDEXER_SETTING2_THRESHOLD);
             this.indexerSetting3 = new AnalogSensor(RobotMap.INDEXER_SETTING3, Indexer.INDEXER_SETTING3_THRESHOLD);

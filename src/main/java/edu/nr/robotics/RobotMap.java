@@ -25,25 +25,25 @@ public class RobotMap {
     public static final int PCM_ID = 1;
     public static final int PDP_ID = 62;
 
-    public static final int LIM_HOOD_UPPER = 6;
+    public static final int LIM_HOOD_UPPER = 0;
     public static final int LIM_HOOD_LOWER = 1;
 
     public static final int LIM_TURRET_LEFT = 2;
     public static final int LIM_TURRET_RIGHT = 3;
 
-    public static final int INDEXER_PUKE_SENSOR = 4;
+    //public static final int INDEXER_PUKE_SENSOR = 4;
     public static final int INDEXER_SETTING1 = 1;
     public static final int INDEXER_SETTING2 = 2;
     public static final int INDEXER_SETTING3 = 3;
     public static final int INDEXER_SHOOTER_SENSOR = 0; // real for robot
     public static final int INDEXER_TALON = 20; //7
     
-    public static final int TRANSFER_SENSOR = 5;
+    public static final int TRANSFER_SENSOR = 4;
     public static final int TRANSFER_SPARK = 1000;
     public static final int TRANSFER_VICTOR = 14;
 
     //Change to thing
-    public static final int INTAKE_TALON = 0;
+    public static final int INTAKE_TALON = 13;
     public static final int INTAKE_SOLENOID_PCM_PORT = 0;
     
     public static final int CLIMB_DEPLOY_VICTOR = 4;

@@ -1,23 +1,25 @@
-package edu.nr.robotics.multicommands;
-
+package edu.nr.robotics.subsystems.transfer;
+ 
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
+import edu.nr.robotics.multicommands.States;
 import edu.nr.robotics.multicommands.States.State;
+import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.indexer.Indexer;
 import edu.nr.robotics.subsystems.transfer.Transfer;
-
-public class IndexingProcedureCommand extends NRCommand{
-
-    public IndexingProcedureCommand(){
-        super(new NRSubsystem []{Transfer.getInstance(), Indexer.getInstance()});
+ 
+public class TransferProcedureCommand extends NRCommand{
+ 
+    public TransferProcedureCommand(){
+        super(Transfer.getInstance());
     }
-
+ 
     public void onStart(){
-
+ 
     }
-
+ 
     public void onExecute(){
-
+ 
         ///maybe setmotor speeds for vPID, ensure consistent performance
         /*
         if(Indexer.getInstance().continueMoving()){
@@ -34,33 +36,35 @@ public class IndexingProcedureCommand extends NRCommand{
             Transfer.getInstance().setMotorSpeedInPercent(0);
         }
         */
+        if(EnabledSubsystems.TRANSFER_ENABLED){
         if(!(States.getState() == States.State.IndexerReadyToShoot))
         {
             if(States.getState() == States.State.IndexerStillIndexing)
             {
-                
-                Indexer.getInstance().setSpeed(Indexer.INDEXING_SPEED);
                 Transfer.getInstance().setMotorSpeedInPercent(0);
             }
-
+ 
             else if(States.getState() == States.State.ReadyToTransfer)
             {
-                
-                Indexer.getInstance().setSpeed(Indexer.INDEXING_SPEED);
                 Transfer.getInstance().setMotorSpeedInPercent(0);
             }
-
+ 
             else if(States.getState() == States.State.PreparingToTransfer)
             {
                 Transfer.getInstance().setMotorSpeedInPercent(0.6);
-                Indexer.getInstance().setMotorSpeedInPercent(0);
             }
         }
         else
         {
-            Indexer.getInstance().setMotorSpeedInPercent(0);
             Transfer.getInstance().setMotorSpeedInPercent(0);
         }
     }
-
+    }
+    @Override
+    protected boolean isFinishedNR()
+    {
+        return false;
+    }
 }
+ 
+ 

@@ -2,10 +2,10 @@ package edu.nr.robotics.subsystems;
 
 public class EnabledSubsystems {
 
-    public static final boolean DRIVE_ENABLED                                    = true;
+    public static final boolean DRIVE_ENABLED                                    = false;
     public static boolean DRIVE_DUMB_ENABLED                                     = false;
-    public static final boolean DRIVE_SMARTDASHBOARD_BASIC_ENABLED               = true;
-    public static final boolean DRIVE_SMARTDASHBOARD_DEBUG_ENABLED               = true;
+    public static final boolean DRIVE_SMARTDASHBOARD_BASIC_ENABLED               = false;
+    public static final boolean DRIVE_SMARTDASHBOARD_DEBUG_ENABLED               = false;
 
     public static final boolean TURRET_ENABLED                                   = false;
     public static final boolean TURRET_DUMB_ENABLED                              = false;
@@ -26,10 +26,9 @@ public class EnabledSubsystems {
 
     public static final boolean INTAKE_ENABLED                                   = false;
     public static final boolean INTAKE_SMARTDASHBOARD_DEBUG_ENABLED              = false;
-    
-    //Two Falcons
-	public static final boolean INDEXER_ENABLED                                  = true;
-    public static final boolean INDEXER_DUMB_ENABLED                             = true;
+
+    public static final boolean INDEXER_ENABLED                                  = true;
+    public static final boolean INDEXER_DUMB_ENABLED                             = false;
     public static final boolean INDEXER_SMARTDASHBOARD_DEBUG_ENABLED             = true;
 
     public static final boolean TRANSFER_ENABLED                                 = true;
@@ -48,5 +47,4 @@ public class EnabledSubsystems {
     public static final boolean COLOR_WHEEL_SMARTDASHBOARD_ENABLED               = false;
     
     public static final boolean BASH_BAR_ENABLED                                 = false;
-
 }

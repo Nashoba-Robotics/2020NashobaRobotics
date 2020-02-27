@@ -42,8 +42,7 @@ public class Hood extends NRSubsystem {
     public static final AngularSpeed MAX_SPEED_HOOD = new AngularSpeed(45, Angle.Unit.DEGREE, Time.Unit.SECOND);
     public static final AngularAcceleration MAX_ACCELERATION_HOOD = new AngularAcceleration(200, Angle.Unit.DEGREE,
             Time.Unit.SECOND, Time.Unit.SECOND);
-    public DigitalSensor limSwitchTop = new DigitalSensor(RobotMap.LIM_HOOD_UPPER); // change IDs
-    public DigitalSensor limSwitchBottom = new DigitalSensor(RobotMap.LIM_HOOD_LOWER);
+    
 
     // Change this
 
@@ -233,9 +232,12 @@ public class Hood extends NRSubsystem {
                 }
             }
 
-            if (setAngleHood.get(Angle.Unit.DEGREE) > 70) {
-                setAngle(new Angle(70, Angle.Unit.DEGREE));
-            }*/
-        //}
-    }
+            if(EnabledSensors.getInstance().limHoodUpper.get()){
+                if(getSpeed.get(Angle.Unit.ROTATION, Time.Unit.MINUTE) > 0){
+                    setMotorSpeedRaw(0);
+                }
+
+            }   
+        */
+        }
 }
