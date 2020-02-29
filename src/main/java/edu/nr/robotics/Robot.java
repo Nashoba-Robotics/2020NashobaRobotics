@@ -37,9 +37,11 @@ import edu.nr.robotics.auton.autoroutes.AutoChoosers.startPos;
 import edu.nr.robotics.subsystems.indexer.IndexingProcedureCommand;
 import edu.nr.robotics.multicommands.ProjectileVomitCommand;
 import edu.nr.robotics.multicommands.States;
+import edu.nr.robotics.multicommands.States.State;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.bashbar.ToggleDeployBashBarCommand;
 import edu.nr.robotics.subsystems.climbdeploy.ClimbDeploy;
+import edu.nr.robotics.subsystems.climbdeploy.ClimbDeployJoystickCommand;
 import edu.nr.robotics.subsystems.climbdeploy.ClimbDeploySmartDashboardCommand;
 import edu.nr.robotics.subsystems.colorwheel.ColorWheel;
 import edu.nr.robotics.subsystems.colorwheel.ColorWheelRotateCommand;
@@ -63,6 +65,7 @@ import edu.nr.robotics.subsystems.transfer.Transfer;
 import edu.nr.robotics.subsystems.transfer.TransferCommand;
 import edu.nr.robotics.subsystems.transfer.TransferProcedureCommand;
 import edu.nr.robotics.subsystems.indexer.IndexerDeltaPositionSmartDashboardCommand;
+import edu.nr.robotics.subsystems.indexer.IndexerPukeCommand;
 import edu.nr.robotics.subsystems.indexer.IndexerSetVelocityCommand;
 import edu.nr.robotics.subsystems.indexer.IndexerSetVelocitySmartDashboardCommand;
 import edu.nr.robotics.subsystems.indexer.IndexingProcedureCommand;
@@ -131,11 +134,11 @@ public class Robot extends TimedRobot {
 
         OI.init();
         //Winch.init();
-        //ClimbDeploy.init();
+        ClimbDeploy.init();
         //Drive.init();
         // Turret.init();
-        // Shooter.init();
-        Hood.init();
+        //Shooter.init();
+        //Hood.init();
         //Intake.init();
         //Indexer.init();
         //Transfer.init();
@@ -144,13 +147,13 @@ public class Robot extends TimedRobot {
 
         // CameraInit();
 
-        //LimelightNetworkTable.getInstance().lightLED(true);
-        //LimelightNetworkTable.getInstance().setPipeline(Pipeline.Target);
+        LimelightNetworkTable.getInstance().lightLED(true);
+        LimelightNetworkTable.getInstance().setPipeline(Pipeline.Target);
 
         
         if(EnabledSubsystems.INDEXER_ENABLED)
         {
-            CommandScheduler.getInstance().setDefaultCommand(Indexer.getInstance(), new IndexingProcedureCommand());
+            Indexer.getInstance().setDefaultCommand(new IndexingProcedureCommand());
             System.out.println("The Indexer default command line has been passed");
         }
         if(EnabledSubsystems.TRANSFER_ENABLED)
@@ -158,8 +161,12 @@ public class Robot extends TimedRobot {
             CommandScheduler.getInstance().setDefaultCommand(Transfer.getInstance(), new TransferProcedureCommand());
             System.out.println("The Transfer default command line has been passed");
         }
+
+        if(EnabledSubsystems.CLIMB_DEPLOY_ENABLED){
+            //ClimbDeploy.getInstance().setDefaultCommand(new ClimbDeployJoystickCommand());
+        }
         
-        System.out.println("end of robot init");
+        //System.out.println("end of robot init");
     }
 
     public void autoChooserInit() {
@@ -216,10 +223,11 @@ public class Robot extends TimedRobot {
             SmartDashboard.putData(new IndexerDeltaPositionSmartDashboardCommand());
             SmartDashboard.putData(new IndexerSetVelocitySmartDashboardCommand());
             SmartDashboard.putData(new IndexingProcedureCommand());
+            SmartDashboard.putData(new IndexerPukeCommand());
         }
 
         if (EnabledSubsystems.SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED) {
-            // SmartDashboard.putData(new SetShooterSpeedSmartDashboardCommand());
+             SmartDashboard.putData(new SetShooterSpeedSmartDashboardCommand());
             // SmartDashboard.putNumber("Prototype Speed Percent: ", 0);
             // SmartDashboard.putNumber("1 Prototype Current Reading: ", 0);
             // SmartDashboard.putNumber("2 Prototype Current Reading: ", 0);

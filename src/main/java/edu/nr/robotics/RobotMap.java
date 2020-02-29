@@ -45,7 +45,7 @@ public class RobotMap {
     public static final int INTAKE_VICTOR = 13;
     public static final int INTAKE_SOLENOID_PCM_PORT = 0;
     
-    public static final int CLIMB_DEPLOY_VICTOR = 4;
+    public static final int CLIMB_DEPLOY_VICTOR = 1;
     public static final int CLIMB_DEPLOY_CHANNEL = 100;
     
     public static final int WINCH_TALON = 3;

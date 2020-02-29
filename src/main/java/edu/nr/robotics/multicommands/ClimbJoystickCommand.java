@@ -15,10 +15,10 @@ public class ClimbJoystickCommand extends NRCommand
 
     public void onExecute()
     {
-        if(OI.getInstance().getClimbTurn() > 0)
-            ClimbDeploy.getInstance().setMotorSpeedRaw(OI.getInstance().getClimbTurn());
-        else if(OI.getInstance().getClimbTurn() < 0)
-            Winch.getInstance().setMotorSpeedRaw(OI.getInstance().getClimbTurn());
+        if(OI.getInstance().getClimbValue() > 0)
+            ClimbDeploy.getInstance().setMotorSpeedRaw(OI.getInstance().getClimbValue());
+        else if(OI.getInstance().getClimbValue() < 0)
+            Winch.getInstance().setMotorSpeedRaw(OI.getInstance().getClimbValue());
     }
 
     public boolean isFinishedNR()

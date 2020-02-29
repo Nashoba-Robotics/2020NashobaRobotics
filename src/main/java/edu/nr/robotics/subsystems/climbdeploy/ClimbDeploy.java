@@ -123,7 +123,7 @@ public class ClimbDeploy extends NRSubsystem{
    public synchronized static void init(){
        if(singleton == null){
            singleton = new ClimbDeploy();
-           singleton.setDefaultCommand(new ClimbDeployJoystickCommand());
+           //singleton.setDefaultCommand(new ClimbDeployJoystickCommand());
        }
    }
  
@@ -152,15 +152,19 @@ public class ClimbDeploy extends NRSubsystem{
            SmartDashboard.putNumber("P_POS_CLIMB_DEPLOY", P_POS_CLIMB_DEPLOY);
            SmartDashboard.putNumber("I_POS_CLIMB_DEPLOY", I_POS_CLIMB_DEPLOY);
            SmartDashboard.putNumber("D_POS_CLIMB_DEPLOY", D_POS_CLIMB_DEPLOY);
+
+           SmartDashboard.putNumber("CLIMB DEPLOY PERCENT", 0);
  
        //    SmartDashboard.putNumber("run percent", 0);
  
            SmartDashboard.putNumber("Set Distance Climb Deploy", DEPLOY_DISTANCE.get(Distance.Unit.INCH));
+
+           SmartDashboard.putNumber("Climb Deploy Encoder", climbDeployVictor.getSelectedSensorPosition());
  
            SmartDashboard.putNumber("Climb Deploy Position", getPosition().get(Distance.Unit.INCH));
            //SmartDashboard.putNumber("Climb Deploy Current", climbDeployTalon.getStatorCurrent());
            //Don't know if Victor has a .getStatorCurrent() equivalent
-           SmartDashboard.putNumber("Climb Deploy Current", pdp.getCurrent(RobotMap.CLIMB_DEPLOY_CHANNEL));
+           //SmartDashboard.putNumber("Climb Deploy Current", pdp.getCurrent(RobotMap.CLIMB_DEPLOY_CHANNEL));
            SmartDashboard.putNumber("Goal Position Climb Deploy: ", ClimbDeploy.goalPositionClimb.get(Distance.Unit.INCH));
        }
    }
@@ -229,7 +233,7 @@ public class ClimbDeploy extends NRSubsystem{
  
    public void smartDashboardInfo(){
        /*
-       if(climbDeployTalon != null){
+       if(climbDeployVictor != null){
  
            if(EnabledSubsystems.CLIMB_DEPLOY_SMARTDASHBOARD_DEBUG_ENABLED){
                F_POS_CLIMB_DEPLOY = SmartDashboard.getNumber("F_POS_CLIMB_DEPLOY", F_POS_CLIMB_DEPLOY);
@@ -237,17 +241,14 @@ public class ClimbDeploy extends NRSubsystem{
                I_POS_CLIMB_DEPLOY = SmartDashboard.getNumber("I_POS_CLIMB_DEPLOY", I_POS_CLIMB_DEPLOY);
                D_POS_CLIMB_DEPLOY = SmartDashboard.getNumber("D_POS_CLIMB_DEPLOY", D_POS_CLIMB_DEPLOY);
  
-               climbDeployTalon.config_kF(POS_SLOT, F_POS_CLIMB_DEPLOY);
-               climbDeployTalon.config_kP(POS_SLOT, P_POS_CLIMB_DEPLOY);
-               climbDeployTalon.config_kI(POS_SLOT, I_POS_CLIMB_DEPLOY);
-               climbDeployTalon.config_kD(POS_SLOT, D_POS_CLIMB_DEPLOY);
+               //climbDeployTalon.config_kF(POS_SLOT, F_POS_CLIMB_DEPLOY);
+               //climbDeployTalon.config_kP(POS_SLOT, P_POS_CLIMB_DEPLOY);
+               //climbDeployTalon.config_kI(POS_SLOT, I_POS_CLIMB_DEPLOY);
+               //climbDeployTalon.config_kD(POS_SLOT, D_POS_CLIMB_DEPLOY);
  
                SmartDashboard.putNumber("Set Distance Climb Deploy", DEPLOY_DISTANCE.get(Distance.Unit.INCH));
  
-           //    setMotorSpeedRaw(SmartDashboard.getNumber("run percent", 0));
- 
-               SmartDashboard.putNumber("Climb Deploy Position", getPosition().get(Distance.Unit.INCH));
-               SmartDashboard.putNumber("Climb Deploy Current", climbDeployTalon.getStatorCurrent());
+               //SmartDashboard.putNumber("Climb Deploy Current", climbDeployTalon.getStatorCurrent());
  
                goalPositionClimb = new Distance(SmartDashboard.getNumber("Goal Position Climb Deploy: ", goalPositionClimb.get(Distance.Unit.INCH)), Distance.Unit.INCH);
            }
@@ -274,9 +275,15 @@ public class ClimbDeploy extends NRSubsystem{
 
         //    setMotorSpeedRaw(SmartDashboard.getNumber("run percent", 0));
 
+        setMotorSpeedRaw(SmartDashboard.getNumber("CLIMB DEPLOY PERCENT", 0));
+
+        SmartDashboard.putNumber("Climb Deploy Encoder", climbDeployVictor.getSelectedSensorPosition());
+
+       SmartDashboard.putNumber("Climb Deploy Position", getPosition().get(Distance.Unit.INCH));
+
             SmartDashboard.putNumber("Climb Deploy Position", getPosition().get(Distance.Unit.INCH));
             //SmartDashboard.putNumber("Climb Deploy Current", climbDeployTalon.getStatorCurrent());
-            SmartDashboard.putNumber("Climb Deploy Current", pdp.getCurrent(RobotMap.CLIMB_DEPLOY_CHANNEL));
+            //SmartDashboard.putNumber("Climb Deploy Current", pdp.getCurrent(RobotMap.CLIMB_DEPLOY_CHANNEL));
 
             goalPositionClimb = new Distance(SmartDashboard.getNumber("Goal Position Climb Deploy: ", goalPositionClimb.get(Distance.Unit.INCH)), Distance.Unit.INCH);
         }   

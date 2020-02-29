@@ -1,7 +1,6 @@
 package edu.nr.robotics.subsystems.sensors;
 
 import com.revrobotics.ColorSensorV3;
-
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.drive.Drive;

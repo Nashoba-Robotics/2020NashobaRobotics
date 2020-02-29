@@ -279,7 +279,7 @@ public class OI implements SmartDashboardSource {
         return snapDriveJoysticks(hoodStick.getX(), JOYSTICK_DEAD_ZONE);
     }
 
-    public double getClimbTurn() {
+    public double getClimbValue() {
         return snapDriveJoysticks(climbStick.getY(), JOYSTICK_DEAD_ZONE);
     }
 

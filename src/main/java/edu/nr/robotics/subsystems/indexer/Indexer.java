@@ -7,6 +7,7 @@ import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
 import edu.nr.lib.units.Distance.Unit;
 import edu.nr.robotics.RobotMap;
+import edu.nr.robotics.multicommands.States;
 import edu.nr.robotics.subsystems.indexer.IndexingProcedureCommand;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.AnalogSensor;
@@ -31,11 +32,11 @@ public class Indexer extends NRSubsystem {
  
     private TalonFX indexerTalon;
     
-    public static int INDEXER_PUKE_SENSOR_THRESHOLD = 0; // needs to be final for real code in comp.
-    public static int INDEXER_SETTING1_THRESHOLD = 0;
-    public static int INDEXER_SETTING2_THRESHOLD = 0;
-    public static int INDEXER_SETTING3_THRESHOLD = 0;
-    public static int INDEXER_SHOOTER_SENSOR_THRESHOLD = 0;
+    public static int INDEXER_PUKE_SENSOR_THRESHOLD = 650; // needs to be final for real code in comp.
+    public static int INDEXER_SETTING1_THRESHOLD = 400;
+    public static int INDEXER_SETTING2_THRESHOLD = 400;
+    public static int INDEXER_SETTING3_THRESHOLD = 400;
+    public static int INDEXER_SHOOTER_SENSOR_THRESHOLD = 400;
     
     public static final double ENCODER_TICKS_PER_DEGREE = 2048 / 360;
     public static final double ENCODER_TICKS_PER_INCH_BALL_MOVED = 400;//not really, will have to change
@@ -48,13 +49,13 @@ public class Indexer extends NRSubsystem {
     public static final double MIN_MOVE_VOLTAGE = 0.0;
     public static final int DEFAULT_TIMEOUT = 0;
  
-    public static double F_POS_INDEXER = 0;
-    public static double P_POS_INDEXER = 0;
+    public static double F_POS_INDEXER = 0.0;
+    public static double P_POS_INDEXER = 0.0;
     public static double I_POS_INDEXER = 0;
     public static double D_POS_INDEXER = 0;
 
-    public static double F_VEL_INDEXER = 1;
-    public static double P_VEL_INDEXER = 0.015;
+    public static double F_VEL_INDEXER = .5;
+    public static double P_VEL_INDEXER = 0.01;
     public static double I_VEL_INDEXER = 0;
     public static double D_VEL_INDEXER = 0;
  
@@ -162,7 +163,7 @@ public class Indexer extends NRSubsystem {
  
         if(EnabledSubsystems.INDEXER_SMARTDASHBOARD_DEBUG_ENABLED){
  
-            SmartDashboard.putNumber("Sensor Threshold", 0);
+            SmartDashboard.putNumber("Sensor Threshold", 650);
 
             SmartDashboard.putNumber("Indexer Percent", 0);
 
@@ -188,15 +189,21 @@ public class Indexer extends NRSubsystem {
             SmartDashboard.putBoolean("Indexer Sensor 2", EnabledSensors.getInstance().indexerSetting2.get());
             SmartDashboard.putBoolean("Indexer Sensor 3", EnabledSensors.getInstance().indexerSetting3.get());
             SmartDashboard.putBoolean("Ready To Shoot Sensor", EnabledSensors.getInstance().indexerShooterSensor.get());
-        
+
+            SmartDashboard.putNumber("Indexer Current", getCurrent());
+
         }
     }
  
     public void smartDashboardInfo(){
         if(EnabledSubsystems.INDEXER_SMARTDASHBOARD_DEBUG_ENABLED){
-            setMotorSpeedInPercent(SmartDashboard.getNumber("Indexer Percent", 0));
+            //setMotorSpeedInPercent(SmartDashboard.getNumber("Indexer Percent", 0));
+
+            SmartDashboard.putNumber("Indexer Current", getCurrent());
 
             SmartDashboard.putNumber("Indexer Speed" , getSpeed().get(Distance.Unit.INCH, Time.Unit.SECOND));
+
+            SmartDashboard.putNumber("Number of Balls", Transfer.getInstance().getNumberOfBalls());
 
             F_POS_INDEXER = SmartDashboard.getNumber("F_POS_INDEXER", F_POS_INDEXER);
             P_POS_INDEXER = SmartDashboard.getNumber("P_POS_INDEXER", P_POS_INDEXER);
@@ -225,12 +232,12 @@ public class Indexer extends NRSubsystem {
  
             //EnabledSensors.IndexerInput.setThreshold(INDEXER_INPUT_THRESHOLD);
  
-            EnabledSensors.getInstance().transferSensor.setThreshold((int) SmartDashboard.getNumber("Sensor Threshold", INDEXER_SETTING1_THRESHOLD));
+        /*    EnabledSensors.getInstance().transferSensor.setThreshold((int) SmartDashboard.getNumber("Sensor Threshold", INDEXER_SETTING1_THRESHOLD));
             EnabledSensors.getInstance().indexerSetting1.setThreshold((int) SmartDashboard.getNumber("Sensor Threshold", INDEXER_SETTING1_THRESHOLD));
             EnabledSensors.getInstance().indexerSetting2.setThreshold((int) SmartDashboard.getNumber("Sensor Threshold", INDEXER_SETTING1_THRESHOLD));
             EnabledSensors.getInstance().indexerSetting3.setThreshold((int) SmartDashboard.getNumber("Sensor Threshold", INDEXER_SETTING1_THRESHOLD));
             EnabledSensors.getInstance().indexerShooterSensor.setThreshold((int) SmartDashboard.getNumber("Sensor Threshold", INDEXER_SETTING1_THRESHOLD));
-
+*/
 
             SmartDashboard.putBoolean("Transfer Sensor", EnabledSensors.getInstance().transferSensor.get());
             SmartDashboard.putBoolean("Indexer Sensor 1", EnabledSensors.getInstance().indexerSetting1.get());
@@ -245,6 +252,7 @@ public class Indexer extends NRSubsystem {
             SmartDashboard.putNumber("Indexer Delta Position", DeltaPosition.get(Distance.Unit.INCH));
             SmartDashboard.putNumber("Indexer Position", getPosition().get(Distance.Unit.INCH));
             SmartDashboard.putNumber("Indexer Set Position", distanceSetPoint.get(Distance.Unit.INCH));
+            SmartDashboard.putString("State: ", States.getState().name());
             
             //setMotorSpeedInPercent(SmartDashboard.getNumber("Indexer Goal Speed", 0));
             goalSpeed = new Speed(SmartDashboard.getNumber("Indexer Goal Speed", goalSpeed.get(Distance.Unit.INCH, Time.Unit.SECOND)), Distance.Unit.INCH, Time.Unit.SECOND);
@@ -296,9 +304,8 @@ public class Indexer extends NRSubsystem {
     }
  
     public void setSpeed(Speed target){
-        speedSetPoint = target;
-        
         if(indexerTalon != null){
+            speedSetPoint = target;
             indexerTalon.selectProfileSlot(VEL_SLOT, DEFAULT_TIMEOUT);
           //  System.out.println(target.get(Distance.Unit.INCH, Time.Unit.SECOND) + "setSpeeed working");
           //  System.out.println(target.get(Distance.Unit.MAGNETIC_ENCODER_TICK_INDEXER,Time.Unit.SECOND)+ "target unitys"); // always 400?
@@ -346,7 +353,7 @@ public class Indexer extends NRSubsystem {
 
     public boolean readyToShoot(){
         if(EnabledSubsystems.INDEXER_ENABLED){
-            return(EnabledSensors.getInstance().indexerShooterSensor.get());
+            return (EnabledSensors.getInstance().indexerShooterSensor.get());
         }
         return false;
     }
