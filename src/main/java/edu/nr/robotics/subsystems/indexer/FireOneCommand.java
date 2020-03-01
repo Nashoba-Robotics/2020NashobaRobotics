@@ -15,7 +15,6 @@ public class FireOneCommand extends NRCommand
 
     }
 
-
     @Override
     protected void onExecute()
     {

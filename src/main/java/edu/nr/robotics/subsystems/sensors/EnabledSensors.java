@@ -32,7 +32,6 @@ public class EnabledSensors {
 
     private EnabledSensors(){
         if(EnabledSubsystems.INDEXER_ENABLED){
-            //this.indexerPukeSensor = new AnalogSensor(RobotMap.INDEXER_PUKE_SENSOR, Indexer.INDEXER_PUKE_SENSOR_THRESHOLD);
             this.indexerSetting2 = new AnalogSensor(RobotMap.INDEXER_SETTING2, Indexer.INDEXER_SETTING1_THRESHOLD);
             this.indexerSetting1 = new AnalogSensor(RobotMap.INDEXER_SETTING1, Indexer.INDEXER_SETTING2_THRESHOLD);
             this.indexerSetting3 = new AnalogSensor(RobotMap.INDEXER_SETTING3, Indexer.INDEXER_SETTING3_THRESHOLD);
@@ -44,8 +43,8 @@ public class EnabledSensors {
         }
 
         if(EnabledSubsystems.TURRET_ENABLED){
-            LimTurretLeft = new DigitalSensor(RobotMap.LIM_TURRET_LEFT);
-            LimTurretRight = new DigitalSensor(RobotMap.LIM_TURRET_RIGHT); 
+            LimTurretRight = new DigitalSensor(RobotMap.LIM_TURRET_RIGHT, true);
+            LimTurretLeft = new DigitalSensor(RobotMap.LIM_TURRET_LEFT, true); 
         }
 
         if(EnabledSubsystems.HOOD_ENABLED){
@@ -64,17 +63,4 @@ public class EnabledSensors {
     }
     return singleton;
     }
-
-
-    //more sensors, way more sensors
-
-    //public static DigitalInput cargoIntakeSensorOne = new DigitalInput(RobotMap.CARGO_INTAKE_SENSOR_PORT_1);
-    //public static DigitalInput cargoIntakeSensorTwo = new DigitalInput(RobotMap.CARGO_INTAKE_SENSOR_PORT_2);
-    //public static DigitalInput cargoIntakeSensorThree = new DigitalInput(RobotMap.CARGO_INTAKE_SENSOR_PORT_3);
-
- 
-    //public static DigitalSensor forceSensorOne = new DigitalSensor(RobotMap.FORCE_SENSOR_1);
-    //public static DigitalSensor forceSensorTwo = new DigitalSensor(RobotMap.FORCE_SENSOR_2);
-    //public static DigitalSensor forceSensorThree = new DigitalSensor(RobotMap.FORCE_SENSOR_3);
-
 }

@@ -51,6 +51,7 @@ import edu.nr.robotics.subsystems.drive.CSVSaverDisable;
 import edu.nr.robotics.subsystems.drive.CSVSaverEnable;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.DriveForwardBasicSmartDashboardCommand;
+import edu.nr.robotics.subsystems.drive.DrivePercentSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.DriveToBallCommand;
 import edu.nr.robotics.subsystems.drive.EnableMotionProfile;
 import edu.nr.robotics.subsystems.drive.EnableMotionProfileSmartDashboardCommand;
@@ -79,8 +80,10 @@ import edu.nr.robotics.subsystems.shooter.Shooter;
 import edu.nr.robotics.subsystems.turret.DeltaTurretAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.turret.SetTurretAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.turret.SetTurretLimelightCommand;
+import edu.nr.robotics.subsystems.turret.SetTurretPercentCommand;
 import edu.nr.robotics.subsystems.turret.Turret;
 import edu.nr.robotics.subsystems.turret.TurretLimelightCommand;
+import edu.nr.robotics.subsystems.turret.ZeroTurretEncoderCommand;
 import edu.nr.robotics.subsystems.winch.SetWinchPositionCommand;
 import edu.nr.robotics.subsystems.winch.WinchClimbRetractCommand;
 import edu.nr.robotics.subsystems.indexer.Indexer;
@@ -134,16 +137,16 @@ public class Robot extends TimedRobot {
 
         OI.init();
         //Winch.init();
-        ClimbDeploy.init();
-        //Drive.init();
-        // Turret.init();
+        //ClimbDeploy.init();
+        Drive.init();
+        //Turret.init();
         //Shooter.init();
         //Hood.init();
         //Intake.init();
         //Indexer.init();
         //Transfer.init();
-        // robotCompressor = new Compressor(RobotMap.PCM_ID);
-        // robotCompressor.start();
+        //robotCompressor = new Compressor(RobotMap.PCM_ID);
+        //robotCompressor.start();
 
         // CameraInit();
 
@@ -160,6 +163,11 @@ public class Robot extends TimedRobot {
         {
             CommandScheduler.getInstance().setDefaultCommand(Transfer.getInstance(), new TransferProcedureCommand());
             System.out.println("The Transfer default command line has been passed");
+        }
+
+        if(EnabledSubsystems.TURRET_ENABLED)
+        {
+            //Turret.getInstance().setDefaultCommand(new SetTurretLimelightCommand());
         }
 
         if(EnabledSubsystems.CLIMB_DEPLOY_ENABLED){
@@ -207,12 +215,17 @@ public class Robot extends TimedRobot {
             SmartDashboard.putData(new TurnSmartDashboardCommand());
             SmartDashboard.putData(new EnableTwoDMotionProfileSmartDashboardCommand());
             SmartDashboard.putData(new EnableReverseTwoDMotionProfileSmartDashboardCommand());
+
+            SmartDashboard.putData(new DriveForwardBasicSmartDashboardCommand());
+            SmartDashboard.putData(new DrivePercentSmartDashboardCommand());
         }
 
         if (EnabledSubsystems.TURRET_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putData(new SetTurretAngleSmartDashboardCommand());
             SmartDashboard.putData(new DeltaTurretAngleSmartDashboardCommand());
             SmartDashboard.putData(new SetTurretLimelightCommand());
+            SmartDashboard.putData(new SetTurretPercentCommand());
+            SmartDashboard.putData(new ZeroTurretEncoderCommand());
         }
 
         if (EnabledSubsystems.SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED) {
@@ -224,13 +237,6 @@ public class Robot extends TimedRobot {
             SmartDashboard.putData(new IndexerSetVelocitySmartDashboardCommand());
             SmartDashboard.putData(new IndexingProcedureCommand());
             SmartDashboard.putData(new IndexerPukeCommand());
-        }
-
-        if (EnabledSubsystems.SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED) {
-             SmartDashboard.putData(new SetShooterSpeedSmartDashboardCommand());
-            // SmartDashboard.putNumber("Prototype Speed Percent: ", 0);
-            // SmartDashboard.putNumber("1 Prototype Current Reading: ", 0);
-            // SmartDashboard.putNumber("2 Prototype Current Reading: ", 0);
         }
 
         if (EnabledSubsystems.CLIMB_DEPLOY_SMARTDASHBOARD_DEBUG_ENABLED) {

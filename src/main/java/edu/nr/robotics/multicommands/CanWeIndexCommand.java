@@ -8,6 +8,7 @@ import edu.nr.robotics.subsystems.indexer.IndexerDeltaPositionSmartDashboardComm
 import edu.nr.robotics.subsystems.transfer.Transfer;
 import edu.nr.robotics.subsystems.transfer.TransferCommand;
  
+//OUTDATED. IndexingProcedureCommand and TransferProcedureCommand are most recent
 public class CanWeIndexCommand extends NRCommand {
  
     boolean can = false;

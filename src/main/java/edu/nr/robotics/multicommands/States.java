@@ -20,22 +20,18 @@ public class States
     {
         if(EnabledSubsystems.TRANSFER_ENABLED && EnabledSubsystems.INDEXER_ENABLED){
         if(Indexer.getInstance().readyToShoot()){
-            //System.out.println("Ready To Shoot");
             return State.IndexerReadyToShoot;
         }
         else if(Indexer.getInstance().continueMoving(Transfer.getInstance().getNumberOfBalls())){
-            //System.out.println("Indexer Still Indexing");
             return State.IndexerStillIndexing;
         }
         
         else if(!Indexer.getInstance().continueMoving(Transfer.getInstance().getNumberOfBalls()) && Transfer.getInstance().hasBall())
         {
-            //System.out.println("Ready To Transfer");
             return State.ReadyToTransfer;
         }
 
         else if(!Transfer.getInstance().hasBall() && !Indexer.getInstance().continueMoving(Transfer.getInstance().getNumberOfBalls())){
-            //System.out.println("Preparing to Transfer");
             return State.PreparingToTransfer;
         }
         return State.UhOhNoClue;

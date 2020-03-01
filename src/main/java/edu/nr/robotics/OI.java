@@ -53,14 +53,14 @@ public class OI implements SmartDashboardSource {
      * private static final int TOGGLE_KID_MODE_NUMBER = 5;
      */
 
-    private static final int EMERGENCY_MANUAL_SWITCH = 100;
-    private static final int ACQUIRE_TARGET_NUMBER = 100;
-    private static final int TOGGLE_SHOOTER_NUMBER = 100;
-    private static final int FIRE_NUMBER = 100;
+    private static final int EMERGENCY_MANUAL_SWITCH = 12;
+    private static final int ACQUIRE_TARGET_NUMBER = 5; //Change for actual Control Board
+    private static final int TOGGLE_SHOOTER_NUMBER = 6;
+    private static final int FIRE_NUMBER = 7;
 
     private static final int BASH_BAR_NUMBER = 7;
 
-    private static final int EMERGENCY_SUBSYSTEM_DISABLE_NUMBER = 100;
+    private static final int EMERGENCY_SUBSYSTEM_DISABLE_NUMBER = 9;
 
     private static final int INCREMENT_HOOD_UP_NUMBER = 100;
     private static final int INCREMENT_HOOD_DOWN_NUMBER = 100;
@@ -192,10 +192,18 @@ public class OI implements SmartDashboardSource {
          * new JoystickButton(operatorLeft, PUKE_ALL_NUMBER).whileActiveOnce(new
          * ProjectileVomitCommand());
          */
+
+        //acquireTargetButton = new JoystickButton(operatorLeft, ACQUIRE_TARGET_NUMBER); 
+        //acquireTargetButton.whileActiveOnce(new AcquireTargetCommand(), true);
+
+        //shooterToggleButton = new JoystickButton(operatorLeft, TOGGLE_SHOOTER_NUMBER); 
+        //shooterToggleButton.whileActiveOnce(new ShooterToggleCommand(), true);
     }
 
     public void initOperatorRight() {
-
+        //new JoystickButton(operatorRight, FIRE_NUMBER).whileActiveOnce(new FireCommand(), true);
+        //emergencyManualSwitch = new JoystickButton(operatorRight, EMERGENCY_MANUAL_SWITCH);
+        //new JoystickButton(operatorRight, EMERGENCY_SUBSYSTEM_DISABLE_NUMBER).whileActiveOnce(new EmergencyBallStopCommand(), false);
     }
 
     public static OI getInstance() {

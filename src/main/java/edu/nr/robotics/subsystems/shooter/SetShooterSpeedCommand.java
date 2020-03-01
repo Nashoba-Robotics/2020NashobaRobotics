@@ -15,7 +15,7 @@ public class SetShooterSpeedCommand extends NRCommand{
     }
     @Override
     protected void onStart(){
-        //Shooter.getInstance().setMotorSpeed(targetSpeed);
+        Shooter.getInstance().setMotorSpeed(targetSpeed);
     }
 
     @Override

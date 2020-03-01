@@ -33,9 +33,12 @@ public class AcquireTargetCommand extends NRCommand
     protected boolean isFinishedNR()
     {
         if(OI.getInstance().getManualMode())
+        {
             return true;
-
-        return (Math.abs(Turret.getInstance().getAngle().sub(LimelightNetworkTable.getInstance().getHorizOffset()).get(Angle.Unit.DEGREE)) < 1) && true;
+        }
+        //Shouldn't this return false always since whileActiveOnce?
+        //return (Math.abs(Turret.getInstance().getAngle().sub(LimelightNetworkTable.getInstance().getHorizOffset()).get(Angle.Unit.DEGREE)) < 1) && true;
+        return false;
         //hood error as well
     }
 }

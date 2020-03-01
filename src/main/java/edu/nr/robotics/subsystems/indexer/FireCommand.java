@@ -25,6 +25,10 @@ public class FireCommand extends NRCommand
                 {
                     Indexer.getInstance().setSpeed(Indexer.SHOOTING_SPEED);
                 }
+                else
+                {
+                    Indexer.getInstance().setMotorSpeedInPercent(0);
+                }
             }
         }
 
@@ -35,6 +39,10 @@ public class FireCommand extends NRCommand
                 if(Shooter.getInstance().getSpeedShooter1().get(Angle.Unit.ROTATION, Time.Unit.MINUTE) >= 0.9 * Shooter.SHOOT_SPEED.get(Angle.Unit.ROTATION, Time.Unit.MINUTE))
                 {
                     Indexer.getInstance().setSpeed(Indexer.SHOOTING_SPEED);
+                }
+                else
+                {
+                    Indexer.getInstance().setMotorSpeedInPercent(0);
                 }
             }
         }

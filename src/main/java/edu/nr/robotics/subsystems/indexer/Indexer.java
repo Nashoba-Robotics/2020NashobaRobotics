@@ -32,14 +32,14 @@ public class Indexer extends NRSubsystem {
  
     private TalonFX indexerTalon;
     
-    public static int INDEXER_PUKE_SENSOR_THRESHOLD = 650; // needs to be final for real code in comp.
+    //Are these 400 or 650
     public static int INDEXER_SETTING1_THRESHOLD = 400;
     public static int INDEXER_SETTING2_THRESHOLD = 400;
     public static int INDEXER_SETTING3_THRESHOLD = 400;
     public static int INDEXER_SHOOTER_SENSOR_THRESHOLD = 400;
     
     public static final double ENCODER_TICKS_PER_DEGREE = 2048 / 360;
-    public static final double ENCODER_TICKS_PER_INCH_BALL_MOVED = 400;//not really, will have to change
+    public static final double ENCODER_TICKS_PER_INCH_BALL_MOVED = 400; //not really, will have to change
  
     public static final Speed MAX_SPEED_INDEXER = new Speed(10, Distance.Unit.METER, Time.Unit.SECOND);
     public static final Acceleration MAX_ACCELERATION_INDEXER = new Acceleration(10, Distance.Unit.METER, Time.Unit.SECOND, Time.Unit.SECOND);
@@ -91,7 +91,7 @@ public class Indexer extends NRSubsystem {
 
     private Indexer(){
         if(EnabledSubsystems.INDEXER_ENABLED){
-            indexerTalon = new TalonFX(RobotMap.INDEXER_TALON); //no ctrecreator
+            indexerTalon = new TalonFX(RobotMap.INDEXER_FALCON);
  
             indexerTalon.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, PID_TYPE, DEFAULT_TIMEOUT);
 
@@ -142,7 +142,6 @@ public class Indexer extends NRSubsystem {
     public synchronized static void init(){
         if(singleton == null){
             singleton = new Indexer();
-            //CommandScheduler.getInstance().setDefaultCommand(singleton, new IndexingProcedureCommand());
         }
     }
  
@@ -156,14 +155,14 @@ public class Indexer extends NRSubsystem {
     public void disable(){
         if(indexerTalon != null)
             indexerTalon.set(ControlMode.PercentOutput,0);
-        //setposition to current position
     }
  
     public void smartDashboardInit(){
  
         if(EnabledSubsystems.INDEXER_SMARTDASHBOARD_DEBUG_ENABLED){
  
-            SmartDashboard.putNumber("Sensor Threshold", 650);
+            //Why sending 650?
+            //SmartDashboard.putNumber("Indexer Sensor Threshold", 650);
 
             SmartDashboard.putNumber("Indexer Percent", 0);
 
@@ -322,7 +321,8 @@ public class Indexer extends NRSubsystem {
 
     public boolean continueMoving(int numSensor){
 
-        if(EnabledSubsystems.INDEXER_ENABLED && EnabledSubsystems.TRANSFER_ENABLED){
+        if(EnabledSubsystems.INDEXER_ENABLED && EnabledSubsystems.TRANSFER_ENABLED)
+        {
         if(numSensor == 0)
         {
             return false;

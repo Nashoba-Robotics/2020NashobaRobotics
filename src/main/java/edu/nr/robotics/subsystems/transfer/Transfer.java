@@ -21,9 +21,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Transfer extends NRSubsystem {
     private static Transfer singleton;
 
-    // private TalonSRX transferTalon;
-    // private CANSparkMax transferSpark;
-
     private VictorSPX transferVictor;
 
     public static final int VOLTAGE_COMPENSATION_LEVEL = 12;
@@ -50,8 +47,6 @@ public class Transfer extends NRSubsystem {
 
     public static final NeutralMode NEUTRAL_MODE_TRANSFER = NeutralMode.Brake;
 
-    public static final IdleMode IDLE_MODE_TRANSFER = IdleMode.kBrake;
-
     public static final int PID_TYPE = 0;
     public static final int VEL_SLOT = 0;
     public static final int POS_SLOT = 1;
@@ -77,6 +72,8 @@ public class Transfer extends NRSubsystem {
     public static final Time TRANSFER_ALL_TIME = new Time(0.1, Time.Unit.SECOND);
 
     public static int TRANSFER_THRESHOLD = 650;
+
+    public static double goalPercent = 0.0;
     // need sensors for have a ball, tune transfer percent and time for transfer
     // command
 
@@ -89,72 +86,16 @@ public class Transfer extends NRSubsystem {
 
     private Transfer() {
         if (EnabledSubsystems.TRANSFER_ENABLED) {
-            // transferTalon = CTRECreator.createMasterTalon(RobotMap.TRANSFER_TALON);
-
-            // transferSpark = SparkMax.createSpark(RobotMap.TRANSFER_SPARK,
-            // MotorType.kBrushless);
 
             transferVictor = new VictorSPX(RobotMap.TRANSFER_VICTOR);
-            /*
-             * transferSpark.getPIDController().setFF(F_POS_TRANSFER, 0);
-             * transferSpark.getPIDController().setP(P_POS_TRANSFER, 0);
-             * transferSpark.getPIDController().setI(I_POS_TRANSFER, 0);
-             * transferSpark.getPIDController().setD(D_POS_TRANSFER, 0);
-             * 
-             * transferSpark.setIdleMode(IDLE_MODE_TRANSFER);
-             * 
-             * transferSpark.setInverted(false);
-             * 
-             * transferSpark.setSmartCurrentLimit(CONTINUOUS_CURRENT_LIMIT_TRANSFER);
-             * transferSpark.setSecondaryCurrentLimit(PEAK_CURRENT_TRANSFER);
-             * 
-             * transferSpark.enableVoltageCompensation(VOLTAGE_COMPENSATION_LEVEL);
-             * 
-             * transferSpark.setClosedLoopRampRate(VOLTAGE_RAMP_RATE_TRANSFER.get(Time.Unit.
-             * SECOND));
-             * transferSpark.setOpenLoopRampRate(VOLTAGE_RAMP_RATE_TRANSFER.get(Time.Unit.
-             * SECOND));
-             * 
-             * //transferSpark.getPIDController().setOutputRange(-1, 1, VEL_SLOT);
-             * //transferSpark.getPIDController().setOutputRange(-1, 1, POS_SLOT);
-             * transferTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder,
-             * PID_TYPE, DEFAULT_TIMEOUT); transferTalon.config_kF(POS_SLOT, F_POS_TRANSFER,
-             * DEFAULT_TIMEOUT); transferTalon.config_kP(POS_SLOT, P_POS_TRANSFER,
-             * DEFAULT_TIMEOUT); transferTalon.config_kI(POS_SLOT, I_POS_TRANSFER,
-             * DEFAULT_TIMEOUT); transferTalon.config_kD(POS_SLOT, D_POS_TRANSFER,
-             * DEFAULT_TIMEOUT); transferTalon.config_kF(VEL_SLOT, F_VEL_TRANSFER,
-             * DEFAULT_TIMEOUT); transferTalon.config_kP(VEL_SLOT, P_VEL_TRANSFER,
-             * DEFAULT_TIMEOUT); transferTalon.config_kI(VEL_SLOT, I_VEL_TRANSFER,
-             * DEFAULT_TIMEOUT); transferTalon.config_kD(VEL_SLOT, D_VEL_TRANSFER,
-             * DEFAULT_TIMEOUT); transferTalon.setNeutralMode(NEUTRAL_MODE_TRANSFER);
-             * transferTalon.setInverted(false); //Change to Talon Version
-             * transferTalon.setSensorPhase(false);
-             * transferTalon.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT_TRANSFER)
-             * ; transferTalon.enableVoltageCompensation(true);
-             * transferTalon.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL,
-             * DEFAULT_TIMEOUT);
-             * 
-             * transferTalon.enableCurrentLimit(true);
-             * transferTalon.configPeakCurrentLimit(PEAK_CURRENT_TRANSFER, DEFAULT_TIMEOUT);
-             * transferTalon.configPeakCurrentDuration(CONTINUOUS_CURRENT_LIMIT_TRANSFER,
-             * DEFAULT_TIMEOUT);
-             * transferTalon.configClosedloopRamp(VOLTAGE_RAMP_RATE_TRANSFER.get(Time.Unit.
-             * SECOND), DEFAULT_TIMEOUT);
-             * transferTalon.configOpenloopRamp(VOLTAGE_RAMP_RATE_TRANSFER.get(Time.Unit.
-             * SECOND), DEFAULT_TIMEOUT);
-             * transferTalon.getSensorCollection().setQuadraturePosition(0,
-             * DEFAULT_TIMEOUT);
-             */
+
             transferVictor.setNeutralMode(NeutralMode.Brake);
             transferVictor.setInverted(false);
 
             if (EnabledSubsystems.TRANSFER_DUMB_ENABLED) {
-                // transferTalon.set(ControlMode.PercentOutput, 0);
-                // transferSpark.set(0);
+
                 transferVictor.set(ControlMode.PercentOutput, 0);
             } else {
-                // transferTalon.set(ControlMode.Velocity, 0);
-                // transferSpark.set(0);
                 transferVictor.set(ControlMode.PercentOutput, 0);
             }
         }
@@ -176,11 +117,6 @@ public class Transfer extends NRSubsystem {
     }
 
     public void disable() {
-        /*
-         * if(transferTalon != null){ transferTalon.set(ControlMode.PercentOutput, 0);
-         * //set position to current position } if(transferSpark != null){
-         * transferSpark.set(0); }
-         */
         if (transferVictor != null) {
             transferVictor.set(ControlMode.PercentOutput, 0);
         }
@@ -199,16 +135,6 @@ public class Transfer extends NRSubsystem {
             SmartDashboard.putNumber("P_VEL_TRANSFER: ", P_VEL_TRANSFER);
             SmartDashboard.putNumber("I_VEL_TRANSFER: ", I_VEL_TRANSFER);
             SmartDashboard.putNumber("D_VEL_TRANSFER: ", D_VEL_TRANSFER);
-            /*
-             * if(transferTalon != null){
-             * SmartDashboard.putNumber("Transfer Encoder Position",
-             * transferTalon.getSelectedSensorPosition()); }
-             * 
-             * if(transferSpark != null){ SmartDashboard.putNumber("Transfer Spark Encoder",
-             * transferSpark.getEncoder().getPosition());
-             * SmartDashboard.putNumber("Transfer Spark Speed (RPM)",
-             * transferSpark.getEncoder().getVelocity()); }
-             */
             if (transferVictor != null) {
                 SmartDashboard.putNumber("Transfer Bus Voltage: ", transferVictor.getBusVoltage());
                 SmartDashboard.putNumber("Transfer Victor Output Percent: ", transferVictor.getMotorOutputPercent());
@@ -216,6 +142,8 @@ public class Transfer extends NRSubsystem {
             SmartDashboard.putNumber("Transfer Set Position", distanceSetPoint.get(Distance.Unit.INCH));
             SmartDashboard.putNumber("Transfer Delta Position", deltaDistance.get(Distance.Unit.INCH));
             SmartDashboard.putNumber("Transfer Goal Speed", goalSpeed);
+
+            SmartDashboard.putNumber("Transfer Goal Percent", 0);
         }
     }
 
@@ -233,33 +161,21 @@ public class Transfer extends NRSubsystem {
             I_VEL_TRANSFER = SmartDashboard.getNumber("I_VEL_TRANSFER: ", I_VEL_TRANSFER);
             D_VEL_TRANSFER = SmartDashboard.getNumber("D_VEL_TRANSFER: ", D_VEL_TRANSFER);
 
-            //setMotorSpeedInPercent(goalSpeed);
-            /*
-             * if(transferTalon != null) { SmartDashboard.putNumber("Transfer Current",
-             * transferTalon.getStatorCurrent()); }
-             * 
-             * if(transferSpark != null) {
-             * SmartDashboard.putNumber("Transfer Spark Position",
-             * transferSpark.getEncoder().getPosition()); }
-             */
             if (transferVictor != null) {
                 SmartDashboard.putNumber("Transfer Bus Voltage: ", transferVictor.getBusVoltage());
                 SmartDashboard.putNumber("Transfer Victor Output Percent: ", transferVictor.getMotorOutputPercent());
             }
 
             goalSpeed = SmartDashboard.getNumber("Transfer Goal Speed", goalSpeed);
+
+            goalPercent = SmartDashboard.getNumber("Tansfer Goal Percent", 0);
+
             distanceSetPoint = new Distance(SmartDashboard.getNumber("Transfer Set Position", distanceSetPoint.get(Distance.Unit.INCH)), Distance.Unit.INCH);
             deltaDistance = new Distance(SmartDashboard.getNumber("Transfer Delta Position", deltaDistance.get(Distance.Unit.INCH)), Distance.Unit.INCH);
         }
     }
 
     public double getEncoderPosition() {
-        /*
-         * if(transferTalon != null){ return transferTalon.getSelectedSensorPosition();
-         * }
-         * 
-         * if(transferSpark != null){ return transferSpark.getEncoder().getPosition(); }
-         */
         if (transferVictor != null) {
             return transferVictor.getSelectedSensorPosition();
         }
@@ -268,29 +184,12 @@ public class Transfer extends NRSubsystem {
     }
 
     public void setMotorSpeedInPercent(double percent) {
-        /*
-         * if(transferTalon != null){ transferTalon.set(ControlMode.PercentOutput,
-         * percent); speedSetPoint = MAX_SPEED_TRANSFER.mul(percent); }
-         * 
-         * if(transferSpark != null){ transferSpark.set(percent); speedSetPoint =
-         * MAX_SPEED_TRANSFER.mul(percent); }
-         */
         if (transferVictor != null) {
             transferVictor.set(ControlMode.PercentOutput, percent);
         }
     }
 
     public AngularSpeed getSpeed() {
-        /*
-         * if(transferTalon != null) { return new
-         * AngularSpeed(transferTalon.getSelectedSensorVelocity(),
-         * Angle.Unit.TRANSFER_ENCODER_TICK, Time.Unit.HUNDRED_MILLISECOND); }
-         * 
-         * if(transferSpark != null) { return new
-         * AngularSpeed(transferSpark.getEncoder().getVelocity(), Angle.Unit.ROTATION,
-         * Time.Unit.MINUTE); }
-         */
-
         if (transferVictor != null) {
             return new AngularSpeed(transferVictor.getSelectedSensorVelocity(), Angle.Unit.TRANSFER_ENCODER_TICK,
                     Time.Unit.HUNDRED_MILLISECOND);
@@ -299,14 +198,11 @@ public class Transfer extends NRSubsystem {
         return AngularSpeed.ZERO;
     }
 
-    /*
-     * public void setSpeed(AngularSpeed targetSpeed) { if(transferTalon != null) {
-     * speedSetPoint = targetSpeed; transferTalon.set(ControlMode.PercentOutput,
-     * targetSpeed.div(MAX_SPEED_TRANSFER)); }
-     * 
-     * if(transferSpark != null) { speedSetPoint = targetSpeed;
-     * transferSpark.set(targetSpeed.div(MAX_SPEED_TRANSFER)); } }
-     */
+    public void setSpeed(AngularSpeed targetSpeed) 
+    { 
+
+    }
+
     public void periodic() {
         if (EnabledSensors.getInstance().transferSensor.get() == false) {
             if (!(EnabledSensors.getInstance().transferSensor.get() == previousSensorValue)) {

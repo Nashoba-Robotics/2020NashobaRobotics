@@ -22,7 +22,7 @@ public class ShootCommand extends NRCommand
     public ShootCommand()
     //OLD?
     {
-        super(new NRSubsystem[] {Hood.getInstance(), Turret.getInstance(), Shooter.getInstance(), Indexer.getInstance()});
+        super(new NRSubsystem[] {Hood.getInstance(), Turret.getInstance(), Transfer.getInstance(), Shooter.getInstance(), Indexer.getInstance()});
     }
 
     @Override
@@ -39,8 +39,9 @@ public class ShootCommand extends NRCommand
     @Override
     protected void onExecute()
     {
-        if(Shooter.getInstance().getSpeedShooter1().get(Angle.Unit.DEGREE, Time.Unit.SECOND) >= Shooter.SHOOT_SPEED.mul(0.9).get(Angle.Unit.DEGREE, Time.Unit.SECOND)){
+        if(Shooter.getInstance().getSpeedShooter1().get(Angle.Unit.ROTATION, Time.Unit.MINUTE) >= 0.9 * Shooter.SHOOT_SPEED.get(Angle.Unit.ROTATION, Time.Unit.MINUTE)){
             Indexer.getInstance().setSpeed(Indexer.SHOOTING_SPEED);
+            Transfer.getInstance().setMotorSpeedInPercent(Transfer.TRANSFER_PERCENT);
         }
             
 
