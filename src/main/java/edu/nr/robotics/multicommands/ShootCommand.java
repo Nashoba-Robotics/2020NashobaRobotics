@@ -39,11 +39,13 @@ public class ShootCommand extends NRCommand
     @Override
     protected void onExecute()
     {
-        if(Shooter.getInstance().getSpeedShooter1().get(Angle.Unit.ROTATION, Time.Unit.MINUTE) >= 0.9 * Shooter.SHOOT_SPEED.get(Angle.Unit.ROTATION, Time.Unit.MINUTE)){
-            Indexer.getInstance().setSpeed(Indexer.SHOOTING_SPEED);
+        if(Shooter.getInstance().getSpeedShooter1().get(Angle.Unit.ROTATION, Time.Unit.MINUTE) >= 0.94 * Shooter.SHOOT_SPEED.get(Angle.Unit.ROTATION, Time.Unit.MINUTE)){
+            Indexer.getInstance().setMotorSpeedInPercent(1);
             Transfer.getInstance().setMotorSpeedInPercent(Transfer.TRANSFER_PERCENT);
+        } else{
+            Indexer.getInstance().setMotorSpeedInPercent(0);
+            Transfer.getInstance().setMotorSpeedInPercent(0);
         }
-            
 
     }
 

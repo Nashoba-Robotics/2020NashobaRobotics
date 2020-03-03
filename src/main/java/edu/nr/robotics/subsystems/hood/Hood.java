@@ -3,15 +3,19 @@ package edu.nr.robotics.subsystems.hood;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
+import com.revrobotics.EncoderType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.*;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.motorcontrollers.SparkMax;
+import edu.nr.lib.network.LimelightNetworkTable;
 import edu.nr.lib.units.Angle;
 import edu.nr.lib.units.AngularAcceleration;
 import edu.nr.lib.units.AngularSpeed;
+import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Time;
 import edu.nr.lib.units.Angle.Unit;
 import edu.nr.robotics.RobotMap;
@@ -26,7 +30,9 @@ public class Hood extends NRSubsystem {
 
     private static CANSparkMax hoodSpark;
 
-    public static final double ENCODER_TICKS_PER_DEGREE_HOOD = 76.222222222;
+    private static CANEncoder hoodEncoder;
+
+    public static final double ENCODER_TICKS_PER_DEGREE_HOOD = (4096 /360);
 
     public static final int VOLTAGE_COMPENSATION_LEVEL = 12;
     public static final double MIN_MOVE_VOLTAGE = 0.0; // unknown for sparkmax
@@ -38,8 +44,7 @@ public class Hood extends NRSubsystem {
     public static final double MOTION_MAGIC_PERCENT = 0.8; // n/a for sparkmax
 
     public static final AngularSpeed MAX_SPEED_HOOD = new AngularSpeed(45, Angle.Unit.DEGREE, Time.Unit.SECOND);
-    public static final AngularAcceleration MAX_ACCELERATION_HOOD = new AngularAcceleration(200, Angle.Unit.DEGREE,
-            Time.Unit.SECOND, Time.Unit.SECOND);
+    public static final AngularAcceleration MAX_ACCELERATION_HOOD = new AngularAcceleration(200, Angle.Unit.DEGREE, Time.Unit.SECOND, Time.Unit.SECOND);
 
     // Change this
 
@@ -60,7 +65,7 @@ public class Hood extends NRSubsystem {
 
     private AngularSpeed speedSetPointHood = AngularSpeed.ZERO;
 
-    public static final Angle startAngle = new Angle(10, Angle.Unit.DEGREE);
+    public static final Angle startAngle = new Angle(24, Angle.Unit.DEGREE);
     public static Angle setAngleHood = Angle.ZERO;
     public static Angle deltaAngleHood = Angle.ZERO;
     public static Angle goalAngleHood = Angle.ZERO;
@@ -81,7 +86,11 @@ public class Hood extends NRSubsystem {
     private Hood() {
         if (EnabledSubsystems.HOOD_ENABLED) {
 
-            hoodSpark = SparkMax.createSpark(RobotMap.HOOD_TALON, MotorType.kBrushless);
+            hoodSpark = new CANSparkMax(RobotMap.HOOD_SPARK, MotorType.kBrushless);
+
+            hoodEncoder = new CANEncoder(hoodSpark);
+
+            hoodEncoder = hoodSpark.getEncoder(EncoderType.kHallSensor, 4096);
 
             hoodSpark.getPIDController().setFF(F_POS_HOOD, POS_SLOT);
             hoodSpark.getPIDController().setP(P_POS_HOOD, POS_SLOT);
@@ -103,7 +112,7 @@ public class Hood extends NRSubsystem {
             hoodSpark.getPIDController().setOutputRange(-1, 1, VEL_SLOT);
             hoodSpark.getPIDController().setOutputRange(-1, 1, POS_SLOT);
 
-            hoodSpark.getEncoder().setPosition(0);
+            hoodEncoder.setPosition(0);
         }
         smartDashboardInit();
     }
@@ -124,13 +133,17 @@ public class Hood extends NRSubsystem {
 
     public static Angle getAngle() {
         if (hoodSpark != null) {
-            return new Angle(hoodSpark.getEncoder().getPosition(), Angle.Unit.ROTATION);
+            return new Angle(hoodEncoder.getPosition(), Angle.Unit.ROTATION).add(startAngle);
         }
         return Angle.ZERO;
     }
 
     public void setAngle(Angle target) {
         if (hoodSpark != null) {
+        //    hoodSpark.set(target.get(Angle.Unit.DEGREE));
+
+           // System.out.println("CALLED" + target.get(Angle.Unit.ROTATION));
+            //hoodSpark.getPIDController().setReference(target.get(Angle.Unit.ROTATION) * 1.815, ControlType.kPosition, POS_SLOT);
             // System.out.println(setAngleHood.get(Angle.Unit.DEGREE) *
             // Hood.HoodDegreePerMotorRotation);
             if (target.get(Angle.Unit.DEGREE) < 24) {
@@ -143,12 +156,11 @@ public class Hood extends NRSubsystem {
             // hoodSpark.getPIDController().seReference(setAngleHood.get(Angle.Unit.ROTATION),
             // ControlType.kPosition, POS_SLOT);
         }
-
     }
 
     public void smartDashboardInit() {
         if (EnabledSubsystems.HOOD_SMARTDASHBOARD_BASIC_ENABLED) {
-            SmartDashboard.putNumber("Spark Encoder Position Hood", hoodSpark.getEncoder().getPosition());
+            SmartDashboard.putNumber("Spark Encoder Position Hood", hoodEncoder.getPosition());
 
             SmartDashboard.putNumber("Spark Hood Current", hoodSpark.getOutputCurrent());
             SmartDashboard.putNumber("Hood Spark Angle", getAngle().get(Angle.Unit.DEGREE));
@@ -162,9 +174,11 @@ public class Hood extends NRSubsystem {
 
             SmartDashboard.putNumber("Hood Goal Angle", goalAngleHood.get(Angle.Unit.DEGREE));
             SmartDashboard.putNumber("Hood Delta Angle", deltaAngleHood.get(Angle.Unit.DEGREE));
-
+            
             SmartDashboard.putBoolean("Lim Hood Lower", EnabledSensors.getInstance().LimHoodLower.get());
-        }
+            SmartDashboard.putBoolean("Lim Hood Upper", EnabledSensors.getInstance().LimHoodUpper.get());
+            SmartDashboard.putNumber("Limelight Calculated Distance", LimelightNetworkTable.getInstance().getDistance().get(Distance.Unit.FOOT));
+            }
     }
 
     public void disable() {
@@ -176,7 +190,7 @@ public class Hood extends NRSubsystem {
     public AngularSpeed getSpeed() {
 
         if (hoodSpark != null) {
-            return new AngularSpeed(hoodSpark.getEncoder().getVelocity(), Angle.Unit.ROTATION, Time.Unit.MINUTE);
+            return new AngularSpeed(hoodEncoder.getVelocity(), Angle.Unit.ROTATION, Time.Unit.MINUTE);
         }
         return AngularSpeed.ZERO;
     }
@@ -197,8 +211,9 @@ public class Hood extends NRSubsystem {
 
                 SmartDashboard.putNumber("Spark Hood Current", hoodSpark.getOutputCurrent());
 
-                SmartDashboard.putNumber("Hood Spark Angular Speed", hoodSpark.getEncoder().getVelocity());
-                SmartDashboard.putNumber("Hood Spark Angle", getAngle().get(Angle.Unit.DEGREE));
+                SmartDashboard.putNumber("Hood Spark Angular Speed", hoodEncoder.getVelocity());
+                SmartDashboard.putNumber("Hood Spark Angle", getAngle().get(Angle.Unit.DEGREE)); 
+                
                 SmartDashboard.putNumber("Hood setAngle", setAngleHood.get(Angle.Unit.DEGREE));
 
                 F_POS_HOOD = SmartDashboard.getNumber("F_POS_HOOD", POS_SLOT);
@@ -213,15 +228,14 @@ public class Hood extends NRSubsystem {
 
                 SmartDashboard.putBoolean("Lim Hood Lower", EnabledSensors.getInstance().LimHoodLower.get());
 
+                SmartDashboard.putBoolean("Lim Hood Upper", EnabledSensors.getInstance().LimHoodUpper.get());
+
                 // goalPercent = SmartDashboard.getNumber("Hood Percent", 0);
 
-                goalAngleHood = new Angle(
-                        SmartDashboard.getNumber("Hood Goal Angle", goalAngleHood.get(Angle.Unit.DEGREE)),
-                        Angle.Unit.DEGREE);
-                deltaAngleHood = new Angle(
-                        SmartDashboard.getNumber("Hood Delta Angle", deltaAngleHood.get(Angle.Unit.DEGREE)),
-                        Angle.Unit.DEGREE);
-            }
+                goalAngleHood = new Angle(SmartDashboard.getNumber("Hood Goal Angle", goalAngleHood.get(Angle.Unit.DEGREE)), Angle.Unit.DEGREE);
+                deltaAngleHood = new Angle(SmartDashboard.getNumber("Hood Delta Angle", deltaAngleHood.get(Angle.Unit.DEGREE)), Angle.Unit.DEGREE);
+                SmartDashboard.putNumber("Limelight Calculated Distance", LimelightNetworkTable.getInstance().getDistance().get(Distance.Unit.FOOT));
+                }
 
         }
         // System.out.println("Hood angle" + goalAngleHood.get(Angle.Unit.DEGREE));
@@ -239,7 +253,8 @@ public class Hood extends NRSubsystem {
         // check if limits are triggered, set to max / min hood spot if applicable
         if (EnabledSubsystems.HOOD_ENABLED) {
             if (EnabledSensors.getInstance().LimHoodLower.get()) {
-                //hoodSpark.getEncoder().setPosition(0); // should reset position
+                hoodSpark.getEncoder().setPosition(0); // should reset position
+                //Change to hoodEncoder
 
                 if (getSpeed().get(Angle.Unit.ROTATION, Time.Unit.MINUTE) < 0) { // might be backwards...
                     setMotorSpeedRaw(0);

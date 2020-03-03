@@ -9,6 +9,7 @@ import edu.nr.lib.units.Distance;
 import edu.nr.robotics.multicommands.AcquireTargetCommand;
 import edu.nr.robotics.multicommands.EmergencyBallStopCommand;
 import edu.nr.robotics.multicommands.ProjectileVomitCommand;
+import edu.nr.robotics.multicommands.ShootCommand;
 import edu.nr.robotics.subsystems.bashbar.ToggleDeployBashBarCommand;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.DriveToBallCommand;
@@ -18,12 +19,15 @@ import edu.nr.robotics.subsystems.drive.DumbDriveToggleCommand;
 import edu.nr.robotics.subsystems.drive.EnableSniperForwardMode;
 import edu.nr.robotics.subsystems.drive.EnableSniperTurnMode;
 import edu.nr.robotics.subsystems.drive.TurnCommand;
+import edu.nr.robotics.subsystems.hood.ZeroHoodCommand;
 import edu.nr.robotics.subsystems.indexer.FireCommand;
+import edu.nr.robotics.subsystems.indexer.IndexerSetVelocitySmartDashboardCommand;
 import edu.nr.robotics.subsystems.intake.IntakePukeCommand;
 import edu.nr.robotics.subsystems.intake.IntakeToggleDeployCommand;
 import edu.nr.robotics.subsystems.intake.IntakeSubroutineCommand;
 import edu.nr.robotics.subsystems.intake.ToggleRunIntakeCommand;
 import edu.nr.robotics.subsystems.shooter.ShooterToggleCommand;
+import edu.nr.robotics.subsystems.transferhook.TransferHook;
 import edu.nr.robotics.subsystems.drive.StayInPlaceDriveCommand;
 import edu.nr.lib.commandbased.DoNothingCommand;
 import edu.wpi.first.wpilibj.Joystick;
@@ -100,6 +104,7 @@ public class OI implements SmartDashboardSource {
     private final Joystick turretStick;
     private final Joystick hoodStick;
     private final Joystick climbStick;
+    private final Joystick transferHookStick;
 
     private JoystickButton kidModeSwitch;
     private JoystickButton elevGearSwitcherSwitch;
@@ -128,8 +133,10 @@ public class OI implements SmartDashboardSource {
         operatorRight = new Joystick(STICK_OPERATOR_RIGHT);
 
         turretStick = operatorRight;
+        transferHookStick = operatorRight;
         hoodStick = operatorLeft;
         climbStick = operatorLeft; // only if climbing and no turret, but figure out later
+
 
         // initDriveLeft();
         initDriveRight();
@@ -146,11 +153,15 @@ public class OI implements SmartDashboardSource {
         // new SetTurretLimelightCommand();
         // end PID loop cancel into velocity PID
 
-        stayInPlaceModeButton = new JoystickButton(driveLeft, STAY_IN_PLACE_MODE_NUMBER);
-        stayInPlaceModeButton.whileActiveOnce(new StayInPlaceDriveCommand());
+        //stayInPlaceModeButton = new JoystickButton(driveLeft, STAY_IN_PLACE_MODE_NUMBER);
+        //stayInPlaceModeButton.whileActiveOnce(new StayInPlaceDriveCommand());
+        new JoystickButton(driveLeft, 1).whenPressed(new IndexerSetVelocitySmartDashboardCommand());
+        new JoystickButton(driveLeft, 2).whenPressed(new ZeroHoodCommand());
     }
 
     public void initDriveRight() {
+
+        new JoystickButton(driveRight, 1).whenPressed(new ShootCommand());
     }
 
     public void initOperatorLeft() {
@@ -201,6 +212,8 @@ public class OI implements SmartDashboardSource {
     }
 
     public void initOperatorRight() {
+        new JoystickButton(operatorRight, 7).whileActiveOnce(new ShootCommand(), true);
+        new JoystickButton(operatorRight, 1).whileActiveOnce(new IntakePukeCommand(), true);
         //new JoystickButton(operatorRight, FIRE_NUMBER).whileActiveOnce(new FireCommand(), true);
         //emergencyManualSwitch = new JoystickButton(operatorRight, EMERGENCY_MANUAL_SWITCH);
         //new JoystickButton(operatorRight, EMERGENCY_SUBSYSTEM_DISABLE_NUMBER).whileActiveOnce(new EmergencyBallStopCommand(), false);
@@ -289,6 +302,11 @@ public class OI implements SmartDashboardSource {
 
     public double getClimbValue() {
         return snapDriveJoysticks(climbStick.getY(), JOYSTICK_DEAD_ZONE);
+    }
+
+    public double getTransferHookTurn()
+    {
+        return snapDriveJoysticks(transferHookStick.getX(), JOYSTICK_DEAD_ZONE);
     }
 
     private double getTurnAdjust() {

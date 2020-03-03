@@ -5,6 +5,7 @@ import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.units.Time;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 //import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,6 +21,8 @@ public class Intake extends NRSubsystem
     private VictorSPX IntakeVictor;
 
     private Solenoid IntakeSolenoid;
+
+    private PowerDistributionPanel pdp;
 
     public static final Time ACTUATION_TIME = new Time(0.5, Time.Unit.SECOND);
 
@@ -39,6 +42,8 @@ public class Intake extends NRSubsystem
         if(EnabledSubsystems.INTAKE_ENABLED)
         {
             IntakeVictor= new VictorSPX(RobotMap.INTAKE_VICTOR);
+
+            pdp = new PowerDistributionPanel(RobotMap.PDP_ID);
         }
         SmartDashboardInit();
     }
@@ -112,9 +117,14 @@ public class Intake extends NRSubsystem
     {
         if(IntakeVictor != null)
         {
-            //return IntakeVictor.getStatorCurrent();
+            return pdp.getCurrent(RobotMap.INTAKE_VICTOR);
         }
         return 0;
+    }
+
+    public double getSetPercent()
+    {
+        return currentIntakePercent;
     }
 
     public void setMotorSpeedRaw(double percent) {
@@ -128,26 +138,11 @@ public class Intake extends NRSubsystem
         }
     }
 
-    public double getIdealMotorSpeed()
-    {
-        return currentIntakePercent;
-    }
-
-    public double getActualMotorSpeed()
-    {
-        if(IntakeVictor != null)
-        {
-            return IntakeVictor.getSelectedSensorVelocity();
-        }
-        return 0;
-    }
-
     public void SmartDashboardInit() {
 		if (EnabledSubsystems.INTAKE_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putBoolean("Intake deployed: ", isIntakeDeployed());
-            SmartDashboard.putNumber("Intake Ideal Motor Speed: ", getIdealMotorSpeed());
-            SmartDashboard.putNumber("Intake Actual Motor Speed: ", getActualMotorSpeed());
             SmartDashboard.putNumber("SET SPEED INTAKE (PERCENT)", 0);
+            SmartDashboard.putNumber("Intake Current: ", getOutputCurrent());
 		}
 	}
 
@@ -157,8 +152,7 @@ public class Intake extends NRSubsystem
         {
             SmartDashboard.putBoolean("Intake Deployed: ", isIntakeDeployed());
             setMotorSpeedRaw(SmartDashboard.getNumber("SET SPEED INTAKE (PERCENT)", 0));
-            SmartDashboard.putNumber("Intake Ideal Motor Speed: ", getIdealMotorSpeed());
-            SmartDashboard.putNumber("Intake Actual Motor Speed: ", getActualMotorSpeed());
+            SmartDashboard.putNumber("Intake Current: ", getOutputCurrent());
         }
 	}
 

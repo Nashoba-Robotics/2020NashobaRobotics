@@ -22,15 +22,17 @@ public class LimelightNetworkTable extends TimerTask {
 	
 	private static final Time DEFAULT_PERIOD = new Time(10, Time.Unit.MILLISECOND);
 	private static final boolean DEFAULT_LED_LIGHT = false;
-	private static final Pipeline DEFAULT_PIPELINE = Pipeline.DriverCam;
+	private static final Pipeline DEFAULT_PIPELINE = Pipeline.Target;
 	
 	private static final Time IMAGE_CAPTURE_LATENCY = new Time(11, Time.Unit.MILLISECOND);
 
-	private static final Distance TARGET_HEIGHT = new Distance(0, Distance.Unit.INCH);
-	private static final Distance LIMELIGHT_HEIGHT = new Distance(26, Distance.Unit.INCH); // may change
+	private static final Distance TARGET_HEIGHT = new Distance(90.75, Distance.Unit.INCH);
+	//new Distance(230 / 100.0, Distance.Unit.METER);
+	//new Distance(6, Distance.Unit.FOOT).add(new Distance(11.25, Distance.Unit.INCH))
 
-	private static final Angle LIMELIGHT_MOUNT_ANGLE = new Angle(-7, Angle.Unit.DEGREE); //may change as well
-	//ethan has small arms
+	private static final Distance LIMELIGHT_HEIGHT = new Distance(26.25, Distance.Unit.INCH); // may change
+
+	private static final Angle LIMELIGHT_MOUNT_ANGLE = new Angle(31, Angle.Unit.DEGREE); //may change as well
 
 	
 	private static double [] camtranHolder;
@@ -132,9 +134,7 @@ public class LimelightNetworkTable extends TimerTask {
 
 	public Distance getDistance(){
 		double distance = (TARGET_HEIGHT.sub(LIMELIGHT_HEIGHT)).get(Distance.Unit.INCH) / ( Math.tan(LIMELIGHT_MOUNT_ANGLE.add(vertOffsetAngle).get(Angle.Unit.RADIAN)));
-
 		return new Distance(distance, Distance.Unit.INCH);
-
 	}
 	
 	/**

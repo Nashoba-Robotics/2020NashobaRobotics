@@ -28,8 +28,8 @@ public class Shooter extends NRSubsystem {
     public static final double RUN_PERCENT = 0.6;
     public static final Time PUKE_TIME = new Time(0.8, Time.Unit.SECOND);
 
-    public static double F_VEL_SHOOTER = 0.05;
-    public static double P_VEL_SHOOTER = 0.2; //Might want to be higher
+    public static double F_VEL_SHOOTER = 0.02; //0.02 < F < 0.2
+    public static double P_VEL_SHOOTER = 0.0;
     public static double I_VEL_SHOOTER = 0;
     public static double D_VEL_SHOOTER = 0;
 
@@ -41,12 +41,13 @@ public class Shooter extends NRSubsystem {
 
     public static final AngularAcceleration MAX_ACCEL = new AngularAcceleration(580, Angle.Unit.DEGREE,
             Time.Unit.SECOND, Time.Unit.SECOND);
-    public static final AngularSpeed MAX_SPEED = new AngularSpeed(3750, Angle.Unit.ROTATION, Time.Unit.MINUTE); // should be 3750
+    public static final AngularSpeed MAX_SPEED = new AngularSpeed(4000, Angle.Unit.ROTATION, Time.Unit.MINUTE); // should be 3750
     public static final AngularSpeed CRUISE_SPEED = AngularSpeed.ZERO;
-    public static final AngularSpeed SHOOT_SPEED = new AngularSpeed(1000, Angle.Unit.ROTATION, Time.Unit.MINUTE);
+    public static final AngularSpeed SHOOT_SPEED = new AngularSpeed(4000, Angle.Unit.ROTATION, Time.Unit.MINUTE);
     public static final double MAX_PERCENT = 0.5;
     public static final double MIN_PERCENT = -0.5;
     public static final int PID_TYPE = 0;
+
     public static final int VEL_SLOT = 0;
     public static final int POS_SLOT = 1;
     public static final int MOTION_MAGIC_SLOT = 2;
@@ -148,6 +149,9 @@ public class Shooter extends NRSubsystem {
             SmartDashboard.putNumber("P_VEL_SHOOTER", P_VEL_SHOOTER);
             SmartDashboard.putNumber("I_VEL_SHOOTER", I_VEL_SHOOTER);
             SmartDashboard.putNumber("D_VEL_SHOOTER", D_VEL_SHOOTER);
+
+            SmartDashboard.putNumber("Shooter1 Current", shooterTalon1.getStatorCurrent());
+            SmartDashboard.putNumber("Shooter2 Current", shooterTalon2.getStatorCurrent());
         }
     }
 

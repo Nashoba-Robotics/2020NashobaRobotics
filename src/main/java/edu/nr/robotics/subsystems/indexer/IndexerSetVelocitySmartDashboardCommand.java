@@ -12,7 +12,7 @@ public class IndexerSetVelocitySmartDashboardCommand extends NRCommand {
 
     @Override
     public void onStart(){
-        Indexer.getInstance().setSpeed(Indexer.goalSpeed);
+        Indexer.getInstance().setMotorSpeedInPercent(1);
     //    System.out.println(Indexer.goalSpeed.get(Distance.Unit.INCH, Time.Unit.SECOND));
     }
 

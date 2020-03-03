@@ -15,6 +15,7 @@ import edu.nr.lib.units.Time;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -29,6 +30,8 @@ public class Transfer extends NRSubsystem {
     public static final double PUKE_PERCENT = -1;
     public static final double TRANSFER_PERCENT = 0.42; // more for real
     public static final Time PUKE_TIME = new Time(1, Time.Unit.SECOND);
+
+    public PowerDistributionPanel pdp;
 
     public static double F_POS_TRANSFER = 0;
     public static double P_POS_TRANSFER = 0;
@@ -91,6 +94,8 @@ public class Transfer extends NRSubsystem {
 
             transferVictor.setNeutralMode(NeutralMode.Brake);
             transferVictor.setInverted(false);
+
+            pdp = new PowerDistributionPanel(RobotMap.PDP_ID);
 
             if (EnabledSubsystems.TRANSFER_DUMB_ENABLED) {
 
@@ -175,6 +180,15 @@ public class Transfer extends NRSubsystem {
         }
     }
 
+    public double getOutputCurrent()
+    {
+        if(transferVictor != null)
+        {
+            return pdp.getCurrent(RobotMap.TRANSFER_VICTOR);
+        }
+        return 0.0;
+    }
+
     public double getEncoderPosition() {
         if (transferVictor != null) {
             return transferVictor.getSelectedSensorPosition();
@@ -204,12 +218,15 @@ public class Transfer extends NRSubsystem {
     }
 
     public void periodic() {
-        if (EnabledSensors.getInstance().transferSensor.get() == false) {
-            if (!(EnabledSensors.getInstance().transferSensor.get() == previousSensorValue)) {
-                Transfer.getInstance().incrementBallCount();
+        if(EnabledSubsystems.TRANSFER_ENABLED)
+        {
+            if(EnabledSensors.getInstance().transferSensor.get() == false) {
+                if(!(EnabledSensors.getInstance().transferSensor.get() == previousSensorValue)) {
+                    Transfer.getInstance().incrementBallCount();
+                }
             }
+            previousSensorValue = EnabledSensors.getInstance().transferSensor.get();
         }
-        previousSensorValue = EnabledSensors.getInstance().transferSensor.get();
     }
 
     public boolean hasBall() {

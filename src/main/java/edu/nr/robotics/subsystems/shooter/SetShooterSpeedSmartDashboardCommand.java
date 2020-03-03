@@ -12,7 +12,8 @@ public class SetShooterSpeedSmartDashboardCommand extends NRCommand {
     }
 
     protected void onStart(){
-        Shooter.getInstance().setMotorSpeed(Shooter.goalSpeed);
+        Shooter.getInstance().setMotorSpeed(Shooter.SHOOT_SPEED);
+        //Shooter.getInstance().setMotorSpeedInPercent(1);
     }
 
     protected boolean isFinishedNR(){

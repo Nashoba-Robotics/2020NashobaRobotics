@@ -4,23 +4,19 @@ public class RobotMap {
 
     public static final int ARM_TALON = 15;
 
-    public static final int RIGHT_DRIVE = 5;  //define these, should be going to 12, SHOULD BE 5 2020 BOT
-    public static final int LEFT_DRIVE = 6;  // should be 0 // SHOULD BE 6 2020 BOT
-    public static final int RIGHT_DRIVE_FOLLOW_1 = 4;  //define these  SHOULD BE 2 2020 BOT
-    public static final int RIGHT_DRIVE_FOLLOW_2 = 2;   // SHOULD BE 4 2020 BOT
-    public static final int LEFT_DRIVE_FOLLOW_1 = 0; // SHOULD BE 3 2020 BOT
-    public static final int LEFT_DRIVE_FOLLOW_2 = 3; // SHOULD BE 1 2020 BOT
-    //public static final int RIGHT_DRIVE_FOLLOW_1_CURRENT = 2;
-    //public static final int RIGHT_DRIVE_FOLLOW_2_CURRENT = 0;
-    //public static final int LEFT_DRIVE_FOLLOW_1_CURRENT = 15;
-    //public static final int LEFT_DRIVE_FOLLOW_2_CURRENT = 14;
-    public static final int TURRET_TALON = 11;
+    public static final int RIGHT_DRIVE = 13;  // 13 real robot
+    public static final int LEFT_DRIVE = 2;  // 2 real robot
+    public static final int RIGHT_DRIVE_FOLLOW_1 = 14; // 14 real robot
+    public static final int RIGHT_DRIVE_FOLLOW_2 = 12; // 12 real robot
+    public static final int LEFT_DRIVE_FOLLOW_1 = 3; // 3 real robot
+    public static final int LEFT_DRIVE_FOLLOW_2 = 1; // 1 real robot
+
+    public static final int TURRET_TALON = 4;// 4 real robot
     
-    public static final int TRANSFER_TALON = 1;
-    public static final int HOOD_TALON = 11;
-    public static final int SHOOTER_TALON1 = 9; // falcon 500 motor on 2019 bot at pdp six is slot 0
-    public static final int SHOOTER_TALON2 = 1;
-    public static final int PIGEON_ID = 10;
+    public static final int HOOD_SPARK = 11; // ITS A SPARK WONT SHOW UP ON PHOENIX TUNER
+    public static final int SHOOTER_TALON1 = 6; /// 6 real robot
+    public static final int SHOOTER_TALON2 = 7; // 7 real robot
+    public static final int PIGEON_ID = 0;
 
     public static final int PCM_ID = 0;
     public static final int PDP_ID = 0;
@@ -35,25 +31,25 @@ public class RobotMap {
     public static final int INDEXER_SETTING2 = 2;
     public static final int INDEXER_SETTING3 = 3;
     public static final int INDEXER_SHOOTER_SENSOR = 0;
-    public static final int INDEXER_FALCON = 20; //7
+    public static final int INDEXER_FALCON = 15; //15 real robot
     
     public static final int TRANSFER_SENSOR = 4;
-    public static final int TRANSFER_SPARK = 1000;
-    public static final int TRANSFER_VICTOR = 14;
+    public static final int TRANSFER_VICTOR = 5; //5 For real robot
 
-    //Change to thing
-    public static final int INTAKE_VICTOR = 13;
+    public static final int INTAKE_VICTOR = 6; //6 real robot
     public static final int INTAKE_SOLENOID_PCM_PORT = 0;
     
-    public static final int CLIMB_DEPLOY_VICTOR = 1;
+    public static final int CLIMB_DEPLOY_VICTOR = 10; // 10 real robot
     public static final int CLIMB_DEPLOY_CHANNEL = 100;
     
-    public static final int WINCH_TALON = 3;
+    public static final int WINCH_TALON = 18; // 18 real robot
 
     public static final int BASH_BAR_SOLENOID = 7;//pcm for 2019 bot
 
-    public static final int COLOR_WHEEL_VICTOR = 0;
+    public static final int COLOR_WHEEL_VICTOR = 9; // unknown but hopefully this one for system
     public static final int COLOR_WHEEL_SOLENOID = 0;
+
+    public static final int TRANSFER_HOOK_SPARK = 0;
 
 //    public static final int INTAKE_SPARKMAX = 0;
 //    public static final int INTAKE_SOLENOID_PCM_PORT = 0;

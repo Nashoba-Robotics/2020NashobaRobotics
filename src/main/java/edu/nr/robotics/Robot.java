@@ -65,6 +65,8 @@ import edu.nr.robotics.subsystems.hood.SetHoodAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.transfer.Transfer;
 import edu.nr.robotics.subsystems.transfer.TransferCommand;
 import edu.nr.robotics.subsystems.transfer.TransferProcedureCommand;
+import edu.nr.robotics.subsystems.transferhook.TransferHook;
+import edu.nr.robotics.subsystems.transferhook.TransferHookJoystickCommand;
 import edu.nr.robotics.subsystems.indexer.IndexerDeltaPositionSmartDashboardCommand;
 import edu.nr.robotics.subsystems.indexer.IndexerPukeCommand;
 import edu.nr.robotics.subsystems.indexer.IndexerSetVelocityCommand;
@@ -95,6 +97,7 @@ import edu.nr.robotics.subsystems.indexer.IndexerSetVelocitySmartDashboardComman
 /*import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;*/
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PWMSparkMax;
 import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -106,6 +109,8 @@ public class Robot extends TimedRobot {
     private static Robot singleton;
 
     private static double period = 0.02;
+
+    private PWMSparkMax testSpark = new PWMSparkMax(RobotMap.HOOD_SPARK);
 
     double dt;
     double dtTot = 0;
@@ -130,24 +135,25 @@ public class Robot extends TimedRobot {
 
         m_period = period; // period that the code runs at
 
-        smartDashboardInit();
-        // autoChooserInit();
-        // GameData.init();
-        // ColorWheel.init();
+        //autoChooserInit();
+        //GameData.init();
+        //ColorWheel.init();
 
         OI.init();
         //Winch.init();
         //ClimbDeploy.init();
-        Drive.init();
-        //Turret.init();
-        //Shooter.init();
-        //Hood.init();
+        //Drive.init();
+        Turret.init();
+        Shooter.init();
+        Hood.init();
         //Intake.init();
-        //Indexer.init();
-        //Transfer.init();
+        Indexer.init();
+        Transfer.init();
+
         //robotCompressor = new Compressor(RobotMap.PCM_ID);
         //robotCompressor.start();
 
+        smartDashboardInit();
         // CameraInit();
 
         LimelightNetworkTable.getInstance().lightLED(true);
@@ -157,12 +163,12 @@ public class Robot extends TimedRobot {
         if(EnabledSubsystems.INDEXER_ENABLED)
         {
             Indexer.getInstance().setDefaultCommand(new IndexingProcedureCommand());
-            System.out.println("The Indexer default command line has been passed");
+            //System.out.println("The Indexer default command line has been passed");
         }
         if(EnabledSubsystems.TRANSFER_ENABLED)
         {
             CommandScheduler.getInstance().setDefaultCommand(Transfer.getInstance(), new TransferProcedureCommand());
-            System.out.println("The Transfer default command line has been passed");
+            //System.out.println("The Transfer default command line has been passed");
         }
 
         if(EnabledSubsystems.TURRET_ENABLED)
@@ -172,6 +178,10 @@ public class Robot extends TimedRobot {
 
         if(EnabledSubsystems.CLIMB_DEPLOY_ENABLED){
             //ClimbDeploy.getInstance().setDefaultCommand(new ClimbDeployJoystickCommand());
+        }
+        if(EnabledSubsystems.TRANSFER_HOOK_ENABLED)
+        {
+            //TransferHook.getInstance().setDefaultCommand(new TransferHookJoystickCommand());
         }
         
         //System.out.println("end of robot init");
@@ -313,6 +323,15 @@ public class Robot extends TimedRobot {
 
         // LimelightNetworkTable.getInstance().lightLED(true);
         // LimelightNetworkTable.getInstance().lightLED(false);
+        /*SmartDashboard.putNumber("Hood goal angle", 0);
+        SmartDashboard.putNumber("testSpark Set Angle", 0);
+
+        SmartDashboard.putNumber("testSpart F", 0);
+        SmartDashboard.putNumber("testSpart P", 0);
+        SmartDashboard.putNumber("testSpart I", 0);
+        SmartDashboard.putNumber("testSpart D", 0);
+
+        SmartDashboard.putNumber("testSpark Percent", 0);*/
     }
 
     public void teleopPeriodic() {
@@ -327,6 +346,8 @@ public class Robot extends TimedRobot {
             dtTot = 0;
             count = 0;
         }
+
+        //testSpark.set(SmartDashboard.getNumber("testSpark Percent", 0));
 
         // tester.config_kF(0, SmartDashboard.getNumber("F TESTER", 0));
         // tester.config_kP(0, SmartDashboard.getNumber("P TESTER", 0));
@@ -351,6 +372,22 @@ public class Robot extends TimedRobot {
     @Override
     public void testPeriodic() {
     }
+
+    /*public void setAngle(Angle target) {
+        if (testSpark != null) {
+            // System.out.println(setAngleHood.get(Angle.Unit.DEGREE) *
+            // Hood.HoodDegreePerMotorRotation);
+            if (target.get(Angle.Unit.DEGREE) < 24) {
+                target = new Angle(24, Angle.Unit.DEGREE);
+            }
+            SmartDashboard.putNumber("testSpark Set Angle", target.get(Angle.Unit.DEGREE));
+            Angle a = new Angle(target.get(Angle.Unit.DEGREE) - 24, Angle.Unit.DEGREE);
+            double b = a.get(Angle.Unit.DEGREE) * 1.815;
+            //testSpark.getPIDController().setReference(b, ControlType.kPosition, 1);
+            // hoodSpark.getPIDController().seReference(setAngleHood.get(Angle.Unit.ROTATION),
+            // ControlType.kPosition, POS_SLOT);
+        }
+    }*/
 
     @Override
     public void robotPeriodic() {
