@@ -9,8 +9,8 @@ import java.util.ArrayList;
  */
 public interface Periodic {
 	
-	/**
-	 * A list of all the classes that should be called every loop of the code.
+	/*
+	 A list of all the classes that should be called every loop of the code.
 	 */
 	public final static ArrayList<Periodic> periodics = new ArrayList<>();
 	

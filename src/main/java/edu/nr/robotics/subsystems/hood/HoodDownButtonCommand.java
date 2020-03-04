@@ -10,7 +10,7 @@ public class HoodDownButtonCommand extends NRCommand {
     }
 
     public void onStart(){
-        Hood.getInstance().setAngle(Hood.getInstance().getAngle().sub(new Angle(5, Angle.Unit.DEGREE)));
+        Hood.getInstance().setAngle(Hood.getAngle().sub(new Angle(-.5, Angle.Unit.DEGREE)));
     }
 
     public boolean isFinishedNR(){

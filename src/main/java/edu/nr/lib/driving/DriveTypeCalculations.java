@@ -20,7 +20,6 @@ public class DriveTypeCalculations {
 	private static double lowNegInertiaFarScalar;
 	
 	public DriveTypeCalculations(double highNegInertiaThreshold_, double highNegInertiaTurnScalar_, double highNegInertiaCloseScalar_, double highNegInertiaFarScalar_, double lowNegInertiaThreshold_, double lowNegInertiaTurnScalar_, double lowNegInertiaCloseScalar_, double lowNegInertiaFarScalar_) {
-			
 		highNegInertiaThreshold = highNegInertiaThreshold_;
 		highNegInertiaTurnScalar = highNegInertiaTurnScalar_;
 		highNegInertiaCloseScalar = highNegInertiaCloseScalar_;

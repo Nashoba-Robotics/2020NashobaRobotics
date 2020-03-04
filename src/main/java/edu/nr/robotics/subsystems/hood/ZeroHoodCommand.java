@@ -1,19 +1,24 @@
 package edu.nr.robotics.subsystems.hood;
 
 import edu.nr.lib.commandbased.NRCommand;
+import edu.nr.robotics.subsystems.sensors.EnabledSensors;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ZeroHoodCommand extends NRCommand{
-
-
-    public ZeroHoodCommand(){
-        super(Hood.getInstance());
+public class ZeroHoodCommand extends CommandBase{
+    public ZeroHoodCommand()
+    {
+        addRequirements(Hood.getInstance());
     }
 
-    public void onStart(){
-        Hood.getInstance().setMotorSpeedRaw(-.4);
+    @Override
+    public void execute()
+    {
+        Hood.getInstance().setMotorSpeedRaw(-0.3);
     }
 
-    public boolean isFinishedNR(){
-        return true;
+    @Override
+    public boolean isFinished()
+    {
+        return EnabledSensors.getInstance().LimHoodLower.get();
     }
 }

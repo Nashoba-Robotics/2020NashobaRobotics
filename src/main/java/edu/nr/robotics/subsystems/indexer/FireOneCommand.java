@@ -18,7 +18,7 @@ public class FireOneCommand extends NRCommand
     @Override
     protected void onExecute()
     {
-
+        Indexer.getInstance().setMotorSpeedInPercent(1);
     }
 
     @Override

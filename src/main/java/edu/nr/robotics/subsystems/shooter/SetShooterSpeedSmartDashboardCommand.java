@@ -2,6 +2,7 @@ package edu.nr.robotics.subsystems.shooter;
 
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.units.Angle;
+import edu.nr.lib.units.AngularSpeed;
 import edu.nr.lib.units.Time;
 
 
@@ -11,13 +12,20 @@ public class SetShooterSpeedSmartDashboardCommand extends NRCommand {
         super(Shooter.getInstance());
     }
 
-    protected void onStart(){
-        Shooter.getInstance().setMotorSpeed(Shooter.SHOOT_SPEED);
+    protected void onExecute(){
+        Shooter.getInstance().setMotorSpeed(Shooter.goalSpeed);
         //Shooter.getInstance().setMotorSpeedInPercent(1);
     }
 
+    @Override
     protected boolean isFinishedNR(){
-        return true;
+        return false;
+    }
+
+    @Override
+    protected void onEnd()
+    {
+        Shooter.getInstance().setNeutralOutput();
     }
 
 }

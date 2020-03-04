@@ -28,7 +28,6 @@ public class ShootCommand extends NRCommand
     @Override
     protected void onStart()
     {
-        Shooter.getInstance().setMotorSpeed(Shooter.SHOOT_SPEED);
         /*
         Angle limeLightAngle = LimelightNetworkTable.getInstance().getHorizOffset();
         Turret.getInstance().setAngle(limeLightAngle.add(Turret.getInstance().getAngle()));
@@ -39,39 +38,31 @@ public class ShootCommand extends NRCommand
     @Override
     protected void onExecute()
     {
-        if(Shooter.getInstance().getSpeedShooter1().get(Angle.Unit.ROTATION, Time.Unit.MINUTE) >= 0.94 * Shooter.SHOOT_SPEED.get(Angle.Unit.ROTATION, Time.Unit.MINUTE)){
+        Shooter.getInstance().setMotorSpeed(Shooter.SHOOT_SPEED);
+        /*if(Shooter.getInstance().getSpeedShooter1().get(Angle.Unit.ROTATION, Time.Unit.MINUTE) >= 0.85 * Shooter.SHOOT_SPEED.get(Angle.Unit.ROTATION, Time.Unit.MINUTE)){
             Indexer.getInstance().setMotorSpeedInPercent(1);
             Transfer.getInstance().setMotorSpeedInPercent(Transfer.TRANSFER_PERCENT);
         } else{
             Indexer.getInstance().setMotorSpeedInPercent(0);
             Transfer.getInstance().setMotorSpeedInPercent(0);
-        }
+        }*/
+
+        Indexer.getInstance().setMotorSpeedInPercent(1);
+        Transfer.getInstance().setMotorSpeedInPercent(Transfer.TRANSFER_PERCENT);
 
     }
 
     @Override
     protected boolean isFinishedNR()
     {
-        current = Timer.getFPGATimestamp();
-        
-        //Logic needs to be changed
-        
-        if(EnabledSensors.getInstance().indexerShooterSensor.get()){
-            lastBall = Timer.getFPGATimestamp();
-        }
-        
-        
-        if(current - lastBall > 0.5){ // half a second passes, no ball to shoot, we've run out and should stop making loud shooter noises
-            return true;
-        }
         return false;
     }
 
     @Override
     protected void onEnd()
     {
-        Shooter.getInstance().setMotorSpeed(AngularSpeed.ZERO);
-        //Transfer.getInstance().ballCount = 0;
+        Shooter.getInstance().setNeutralOutput();
+        Transfer.ballCount = 0;
         Indexer.getInstance().setSpeed(Speed.ZERO);
     }
 }

@@ -44,7 +44,6 @@ public class DriveJoystickCommand extends JoystickCommand {
                         gyroCorrection.clearInitialValue();
                     }
 
-
                     Drive.getInstance().arcadeDrive(moveValue * OI.getInstance().getDriveSpeedMultiplier(), rotateValue * OI.getInstance().getDriveSpeedMultiplier());
 
                     break;

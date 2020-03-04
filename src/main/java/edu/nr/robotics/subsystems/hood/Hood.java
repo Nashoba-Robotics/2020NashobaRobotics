@@ -140,9 +140,9 @@ public class Hood extends NRSubsystem {
 
     public void setAngle(Angle target) {
         if (hoodSpark != null) {
-        //    hoodSpark.set(target.get(Angle.Unit.DEGREE));
+            //hoodSpark.set(target.get(Angle.Unit.DEGREE));
 
-           // System.out.println("CALLED" + target.get(Angle.Unit.ROTATION));
+            //System.out.println("CALLED" + target.get(Angle.Unit.ROTATION));
             //hoodSpark.getPIDController().setReference(target.get(Angle.Unit.ROTATION) * 1.815, ControlType.kPosition, POS_SLOT);
             // System.out.println(setAngleHood.get(Angle.Unit.DEGREE) *
             // Hood.HoodDegreePerMotorRotation);
@@ -198,6 +198,7 @@ public class Hood extends NRSubsystem {
     public void setMotorSpeedRaw(double percent) {
 
         if (hoodSpark != null) {
+            System.out.println(percent);
             hoodSpark.set(percent);
         }
     }
@@ -236,7 +237,6 @@ public class Hood extends NRSubsystem {
                 deltaAngleHood = new Angle(SmartDashboard.getNumber("Hood Delta Angle", deltaAngleHood.get(Angle.Unit.DEGREE)), Angle.Unit.DEGREE);
                 SmartDashboard.putNumber("Limelight Calculated Distance", LimelightNetworkTable.getInstance().getDistance().get(Distance.Unit.FOOT));
                 }
-
         }
         // System.out.println("Hood angle" + goalAngleHood.get(Angle.Unit.DEGREE));
     }
@@ -254,6 +254,7 @@ public class Hood extends NRSubsystem {
         if (EnabledSubsystems.HOOD_ENABLED) {
             if (EnabledSensors.getInstance().LimHoodLower.get()) {
                 hoodSpark.getEncoder().setPosition(0); // should reset position
+                hoodSpark.getPIDController().setReference(0, ControlType.kPosition);
                 //Change to hoodEncoder
 
                 if (getSpeed().get(Angle.Unit.ROTATION, Time.Unit.MINUTE) < 0) { // might be backwards...

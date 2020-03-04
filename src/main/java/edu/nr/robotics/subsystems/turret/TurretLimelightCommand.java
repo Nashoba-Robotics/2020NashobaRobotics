@@ -7,7 +7,7 @@ import edu.nr.lib.units.Angle;
 public class TurretLimelightCommand extends NRCommand
 {
 
-    private Angle limeLightAngle;
+    public static Angle limeLightAngle = Angle.ZERO;
 
     public TurretLimelightCommand()
     {
@@ -18,7 +18,12 @@ public class TurretLimelightCommand extends NRCommand
     @Override
     protected void onStart()
     {
-        Turret.getInstance().setAngle(limeLightAngle.add(Turret.getInstance().getAngle()));
+        Turret.getInstance().setAngle((Turret.getInstance().getAngle().sub(limeLightAngle)));
+    }
+
+    @Override
+    protected void onExecute() {
+        
     }
 
     @Override

@@ -7,9 +7,9 @@ import edu.nr.lib.units.Angle;
 
 public class SetTurretLimelightCommand extends NRCommand
 {
-    //this ones for constantly adjusting
+    //this one's for constantly adjusting
 
-    private Angle limeLightAngle;
+    public static Angle limeLightAngle = Angle.ZERO;
 
     public SetTurretLimelightCommand()
     {
@@ -21,7 +21,8 @@ public class SetTurretLimelightCommand extends NRCommand
     protected void onExecute()
     {
         this.limeLightAngle = LimelightNetworkTable.getInstance().getHorizOffset();
-        Turret.getInstance().setAngle(limeLightAngle.add(Turret.getInstance().getAngle()));
+        Turret.getInstance().setAngle((Turret.getInstance().getAngle().sub(limeLightAngle)));
+
     }
 
     @Override

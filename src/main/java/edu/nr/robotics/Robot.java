@@ -51,7 +51,6 @@ import edu.nr.robotics.subsystems.drive.CSVSaverDisable;
 import edu.nr.robotics.subsystems.drive.CSVSaverEnable;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.DriveForwardBasicSmartDashboardCommand;
-import edu.nr.robotics.subsystems.drive.DrivePercentSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.DriveToBallCommand;
 import edu.nr.robotics.subsystems.drive.EnableMotionProfile;
 import edu.nr.robotics.subsystems.drive.EnableMotionProfileSmartDashboardCommand;
@@ -142,13 +141,13 @@ public class Robot extends TimedRobot {
         OI.init();
         //Winch.init();
         //ClimbDeploy.init();
-        //Drive.init();
-        Turret.init();
-        Shooter.init();
-        Hood.init();
+        Drive.init();
+        //Turret.init();
+        //Shooter.init();
+        //Hood.init();
         //Intake.init();
-        Indexer.init();
-        Transfer.init();
+        //Indexer.init();
+        //Transfer.init();
 
         //robotCompressor = new Compressor(RobotMap.PCM_ID);
         //robotCompressor.start();
@@ -227,7 +226,6 @@ public class Robot extends TimedRobot {
             SmartDashboard.putData(new EnableReverseTwoDMotionProfileSmartDashboardCommand());
 
             SmartDashboard.putData(new DriveForwardBasicSmartDashboardCommand());
-            SmartDashboard.putData(new DrivePercentSmartDashboardCommand());
         }
 
         if (EnabledSubsystems.TURRET_SMARTDASHBOARD_DEBUG_ENABLED) {

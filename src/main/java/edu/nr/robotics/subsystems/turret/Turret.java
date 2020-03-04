@@ -22,7 +22,7 @@ public class Turret extends NRSubsystem {
 
     public static final double ENCODER_TICKS_PER_DEGREE_TURRET = (4096.0 / 360);
     private static double F_POS_TURRET = 0.1;
-    private static double P_POS_TURRET = 0.2;
+    private static double P_POS_TURRET = 04; // 0.2 before this
     private static double I_POS_TURRET = 0;
     private static double D_POS_TURRET = 0;
 
@@ -107,12 +107,17 @@ public class Turret extends NRSubsystem {
             SmartDashboard.putNumber("Turret Actual Speed", getActualSpeed().get(Angle.Unit.DEGREE, Time.Unit.SECOND));
 
             SmartDashboard.putNumber("Turret Encoder Position", turretTalon.getSelectedSensorPosition());
+
+            SmartDashboard.putNumber("Turret Limelight Angle", SetTurretLimelightCommand.limeLightAngle.get(Angle.Unit.DEGREE));
         }
     }
 
     public void smartDashboardInfo() {
         if (turretTalon != null) {
             if (EnabledSubsystems.TURRET_SMARTDASHBOARD_DEBUG_ENABLED) {
+
+                SmartDashboard.putNumber("Turret Limelight Angle", SetTurretLimelightCommand.limeLightAngle.get(Angle.Unit.DEGREE));
+
                 F_POS_TURRET = SmartDashboard.getNumber("F_POS_TURRET", F_POS_TURRET);
                 P_POS_TURRET = SmartDashboard.getNumber("P_POS_TURRET", P_POS_TURRET);
                 I_POS_TURRET = SmartDashboard.getNumber("I_POS_TURRET", I_POS_TURRET);

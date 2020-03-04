@@ -28,10 +28,10 @@ public class Shooter extends NRSubsystem {
     public static final double RUN_PERCENT = 0.6;
     public static final Time PUKE_TIME = new Time(0.8, Time.Unit.SECOND);
 
-    public static double F_VEL_SHOOTER = 0.02; //0.02 < F < 0.2
-    public static double P_VEL_SHOOTER = 0.0;
+    public static double F_VEL_SHOOTER = 0.049; //0.02 < F < 0.2 ??  .0155 / 2 = 0.007 .049 TESTING
+    public static double P_VEL_SHOOTER = 0.15;
     public static double I_VEL_SHOOTER = 0;
-    public static double D_VEL_SHOOTER = 0;
+    public static double D_VEL_SHOOTER = 1.5;
 
     public static final int PEAK_CURRENT_SHOOTER = 60;
     public static final int CONTINUOUS_CURRENT_LIMIT_SHOOTER = 40;
@@ -41,9 +41,9 @@ public class Shooter extends NRSubsystem {
 
     public static final AngularAcceleration MAX_ACCEL = new AngularAcceleration(580, Angle.Unit.DEGREE,
             Time.Unit.SECOND, Time.Unit.SECOND);
-    public static final AngularSpeed MAX_SPEED = new AngularSpeed(4000, Angle.Unit.ROTATION, Time.Unit.MINUTE); // should be 3750
+    public static final AngularSpeed MAX_SPEED = new AngularSpeed(10000, Angle.Unit.ROTATION, Time.Unit.MINUTE); // should be 3750
     public static final AngularSpeed CRUISE_SPEED = AngularSpeed.ZERO;
-    public static final AngularSpeed SHOOT_SPEED = new AngularSpeed(4000, Angle.Unit.ROTATION, Time.Unit.MINUTE);
+    public static final AngularSpeed SHOOT_SPEED = new AngularSpeed(6000, Angle.Unit.ROTATION, Time.Unit.MINUTE);
     public static final double MAX_PERCENT = 0.5;
     public static final double MIN_PERCENT = -0.5;
     public static final int PID_TYPE = 0;
@@ -236,6 +236,12 @@ public class Shooter extends NRSubsystem {
             percent = MIN_PERCENT;
         shooterTalon1.set(ControlMode.PercentOutput, percent);
         shooterTalon2.set(ControlMode.PercentOutput, percent);
+    }
+
+    public void setNeutralOutput()
+    {
+        shooterTalon1.neutralOutput();
+        shooterTalon2.neutralOutput();
     }
 
     public void periodic()

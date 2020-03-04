@@ -3,9 +3,6 @@ package edu.nr.robotics.subsystems.indexer;
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.robotics.OI;
-import edu.nr.robotics.subsystems.shooter.Shooter;
-import edu.nr.lib.units.Angle;
-import edu.nr.lib.units.Time;
 
 public class FireCommand extends NRCommand
 {
@@ -21,14 +18,7 @@ public class FireCommand extends NRCommand
         {
             if(OI.getInstance().getAcquireTargetHeld())
             {
-                if(Shooter.getInstance().getSpeedShooter1().get(Angle.Unit.ROTATION, Time.Unit.MINUTE) >= 0.9 * Shooter.SHOOT_SPEED.get(Angle.Unit.ROTATION, Time.Unit.MINUTE))
-                {
-                    Indexer.getInstance().setSpeed(Indexer.SHOOTING_SPEED);
-                }
-                else
-                {
-                    Indexer.getInstance().setMotorSpeedInPercent(0);
-                }
+                Indexer.getInstance().setMotorSpeedInPercent(1);
             }
         }
 
@@ -36,14 +26,7 @@ public class FireCommand extends NRCommand
         {
             if(OI.getInstance().getShooterToggleHeld())
             {
-                if(Shooter.getInstance().getSpeedShooter1().get(Angle.Unit.ROTATION, Time.Unit.MINUTE) >= 0.9 * Shooter.SHOOT_SPEED.get(Angle.Unit.ROTATION, Time.Unit.MINUTE))
-                {
-                    Indexer.getInstance().setSpeed(Indexer.SHOOTING_SPEED);
-                }
-                else
-                {
-                    Indexer.getInstance().setMotorSpeedInPercent(0);
-                }
+                Indexer.getInstance().setMotorSpeedInPercent(1);
             }
         }
     }

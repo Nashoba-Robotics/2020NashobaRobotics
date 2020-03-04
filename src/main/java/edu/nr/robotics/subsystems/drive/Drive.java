@@ -76,7 +76,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
     public static final Speed MAX_SPEED_DRIVE = new Speed(18, Distance.Unit.FOOT, Time.Unit.SECOND);
 
-    public static final Acceleration MAX_ACCEL_DRIVE = new Acceleration(25, Distance.Unit.FOOT, Time.Unit.SECOND,
+    public static final Acceleration MAX_ACCEL_DRIVE = new Acceleration(10, Distance.Unit.FOOT, Time.Unit.SECOND,
             Time.Unit.SECOND);
 
     public static final Jerk MAX_JERK_DRIVE = new Jerk(100, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND,
@@ -90,7 +90,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
     public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_LEFT = 0.037; // .065
     public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_RIGHT = 0.037; // .0645
 
-	public static Time DRIVE_RAMP_RATE = new Time(0.0, Time.Unit.SECOND);
+	public static Time DRIVE_RAMP_RATE = new Time(1, Time.Unit.HUNDRED_MILLISECOND);
 
     public static double P_LEFT = 0.0;
     public static double I_LEFT = 0.0;
@@ -121,7 +121,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
     public static final double ONE_D_ACCEL_PERCENT = 0.8;
     public static final double TWO_D_ACCEL_PERCENT = 0.6;
 
-    public static double TURN_JOYSTICK_MULTIPLIER = 1;
+    public static double TURN_JOYSTICK_MULTIPLIER = .7;
     public static double MOVE_JOYSTICK_MULTIPLIER = 1;
 
     public static final double MAX_PROFILE_TURN_PERCENT = 1;
@@ -134,7 +134,6 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
     public static final Angle DRIVE_ANGLE_THRESHOLD = new Angle(2, Angle.Unit.DEGREE); // change?
     public static final Angle DRIVE_STOP_ANGLE = new Angle(45, Angle.Unit.DEGREE); // find angle that robot stops at
                                                                                     // when turning goes from 1 to 0
-
     private static final int PEAK_DRIVE_CURRENT = 80;// amps
     private static final int PEAK_DRIVE_CURRENT_DURATION = 1000;// miliseconds, so one second
     private static final int CONTINUOUS_CURRENT_LIMIT = 40; // amps
@@ -163,10 +162,6 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
     private Speed leftMotorSetpoint = Speed.ZERO;
     private Speed rightMotorSetpoint = Speed.ZERO;
     private double oldTurn;
-
-    public static boolean rampDown; //Test boolean
-
-    public static double startTime; //Test double
 
     private PIDSourceType type = PIDSourceType.kRate;
 
@@ -410,7 +405,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
         if (EnabledSubsystems.DRIVE_DUMB_ENABLED) {
             leftDrive.set(ControlMode.PercentOutput, left);
             rightDrive.set(ControlMode.PercentOutput, right);
-        } else {
+        }
+        else {
             setMotorSpeed(MAX_SPEED_DRIVE.mul(left), MAX_SPEED_DRIVE.mul(right));
         }
     }
@@ -444,9 +440,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
                         .get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND));
                 rightDrive.set(rightDrive.getControlMode(), rightMotorSetpoint
                         .get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND));
- 
             }
- 
         }
     }
  
@@ -456,9 +450,6 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
         leftDrive.configOpenloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
         rightDrive.configOpenloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
     }
- 
-    // will it work?
-    
  
     public void tankDrive(double left, double right) {
         setMotorSpeedInPercent(left, right);
@@ -477,7 +468,6 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
         oldTurn = turn;
  
         tankDrive(cheesyMotorPercents[0], cheesyMotorPercents[1]);
-//Nick in the future, Hello. - Nick in the past. You got this bud. You're so great. Better than me already. Tyler sends his disdain.
     }
  
     public void setPIDSourceType(PIDSourceType pidSource) {
@@ -721,20 +711,6 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
     public void periodic() {
         //call iqsuaredc sensor periodic?
         //System.out.println("Left Drive Sensor Position: " + leftDrive.getSelectedSensorPosition());
-        
-        //rampDown is for testing
-        if(rampDown == true)
-        {
-            if(Drive.getInstance().getLeftVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND) <= 0 || Drive.getInstance().getRightVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND) <= 0) 
-            {
-                double end = Timer.getFPGATimestamp();
-                Drive.getInstance().setMotorSpeedInPercent(Drive.goalPercent * (startTime - end), Drive.goalPercent * (startTime - end));
-            }
-            else
-            {
-                rampDown = false;
-            }
-        }
     }
  
     public void disable() {
