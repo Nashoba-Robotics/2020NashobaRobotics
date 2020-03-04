@@ -199,7 +199,8 @@ public class Hood extends NRSubsystem {
 
         if (hoodSpark != null) {
             System.out.println(percent);
-            hoodSpark.set(percent);
+            //hoodSpark.set(percent);
+            hoodSpark.getPIDController().setReference(percent, ControlType.kVoltage);
         }
     }
 
@@ -253,9 +254,7 @@ public class Hood extends NRSubsystem {
         // check if limits are triggered, set to max / min hood spot if applicable
         if (EnabledSubsystems.HOOD_ENABLED) {
             if (EnabledSensors.getInstance().LimHoodLower.get()) {
-                hoodSpark.getEncoder().setPosition(0); // should reset position
-                hoodSpark.getPIDController().setReference(0, ControlType.kPosition);
-                //Change to hoodEncoder
+                hoodSpark.getEncoder().setPosition(0);
 
                 if (getSpeed().get(Angle.Unit.ROTATION, Time.Unit.MINUTE) < 0) { // might be backwards...
                     setMotorSpeedRaw(0);

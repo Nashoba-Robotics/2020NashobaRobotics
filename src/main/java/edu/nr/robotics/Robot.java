@@ -109,8 +109,6 @@ public class Robot extends TimedRobot {
 
     private static double period = 0.02;
 
-    private PWMSparkMax testSpark = new PWMSparkMax(RobotMap.HOOD_SPARK);
-
     double dt;
     double dtTot = 0;
     int count = 0;
@@ -143,11 +141,11 @@ public class Robot extends TimedRobot {
         //ClimbDeploy.init();
         Drive.init();
         //Turret.init();
-        //Shooter.init();
-        //Hood.init();
-        //Intake.init();
-        //Indexer.init();
-        //Transfer.init();
+        Shooter.init();
+        Hood.init();
+        Intake.init();
+        Indexer.init();
+        Transfer.init();
 
         //robotCompressor = new Compressor(RobotMap.PCM_ID);
         //robotCompressor.start();
@@ -184,6 +182,8 @@ public class Robot extends TimedRobot {
         }
         
         //System.out.println("end of robot init");
+
+        //Where did you come from where did you go? Where did you come from 2020RobotCode
     }
 
     public void autoChooserInit() {

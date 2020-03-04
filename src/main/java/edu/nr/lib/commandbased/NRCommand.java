@@ -109,7 +109,6 @@ public class NRCommand extends CommandBase {
         setName(name);
     }
  
-    //Ethan has small arms
     public NRCommand(double timeout) {
         //super(timeout);
         

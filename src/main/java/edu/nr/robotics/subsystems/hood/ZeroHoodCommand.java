@@ -14,6 +14,7 @@ public class ZeroHoodCommand extends CommandBase{
     public void execute()
     {
         Hood.getInstance().setMotorSpeedRaw(-0.3);
+        
     }
 
     @Override

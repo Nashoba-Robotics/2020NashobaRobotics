@@ -21,7 +21,7 @@ public class ShooterToggleCommand extends NRCommand
     @Override
     protected void onEnd()
     {
-        Shooter.getInstance().setMotorSpeed(AngularSpeed.ZERO);
+        Shooter.getInstance().setNeutralOutput();
     }
 
     @Override

@@ -79,7 +79,7 @@ public class OneDimensionalTrajectoryRamped implements OneDimensionalTrajectory 
         }
         if (timeAccel < 0) {
             timeRamp = Math.pow(endPosition / (4 * timeMult), 1 / (pow + 1));
-            timeAccel = 0;//Ethan has small arms
+            timeAccel = 0;
             velMaxUsed = 2 * rampFunc(timeRamp);
             accelMaxUsed = derivRampFunc(timeRamp);
         }
