@@ -9,11 +9,20 @@ public class HoodDownButtonCommand extends NRCommand {
         super(Hood.getInstance());
     }
 
+    @Override
     public void onStart(){
-        Hood.getInstance().setAngle(Hood.getAngle().sub(new Angle(-.5, Angle.Unit.DEGREE)));
+        Hood.getInstance().setMotorSpeedRaw(-0.1);
     }
 
+    @Override
     public boolean isFinishedNR(){
-        return true;
+        return false;
     }
+
+    @Override
+    protected void onEnd() {
+        Hood.getInstance().setMotorSpeedRaw(0);
+    }
+
+    
 }

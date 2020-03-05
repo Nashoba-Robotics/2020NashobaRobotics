@@ -12,14 +12,23 @@ public class ClimbCommand extends NRCommand
         super(new NRSubsystem[] {ClimbDeploy.getInstance(), Winch.getInstance()});
     }
 
-    public void onStart()
+    @Override
+    protected void onStart()
     {
         ClimbDeploy.getInstance().setMotorSpeedRaw(ClimbDeploy.RETRACT_PERCENT);
         Winch.getInstance().setMotorSpeedRaw(Winch.WINCH_PERCENT);
     }
 
-    public boolean isFinishedNR()
+    @Override
+    protected boolean isFinishedNR()
     {
-        return true;
+        return false;
+    }
+
+    @Override
+    protected void onEnd()
+    {
+        ClimbDeploy.getInstance().setMotorSpeedRaw(0);
+        Winch.getInstance().setMotorSpeedRaw(0);
     }
 }

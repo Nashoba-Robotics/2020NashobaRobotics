@@ -7,10 +7,14 @@ import edu.nr.lib.network.LimelightNetworkTable.Pipeline;
 import edu.nr.lib.units.Angle;
 import edu.nr.lib.units.Distance;
 import edu.nr.robotics.multicommands.AcquireTargetCommand;
+import edu.nr.robotics.multicommands.ClimbCommand;
 import edu.nr.robotics.multicommands.EmergencyBallStopCommand;
+import edu.nr.robotics.multicommands.PointBlankShotCommand;
 import edu.nr.robotics.multicommands.ProjectileVomitCommand;
 import edu.nr.robotics.multicommands.ShootCommand;
 import edu.nr.robotics.subsystems.bashbar.ToggleDeployBashBarCommand;
+import edu.nr.robotics.subsystems.climbdeploy.ClimbDeploy;
+import edu.nr.robotics.subsystems.climbdeploy.ClimbDeployCommand;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.DriveToBallCommand;
 import edu.nr.robotics.subsystems.drive.DriveToSomethingJoystickCommand;
@@ -64,6 +68,8 @@ public class OI implements SmartDashboardSource {
     private static final int ACQUIRE_TARGET_NUMBER = 5; 
     private static final int TOGGLE_SHOOTER_NUMBER = 6;
     private static final int FIRE_NUMBER = 7;
+    private static final int FIRE_ONE_NUMBER = 100;
+    private static final int POINT_BLANK_SHOT_NUMBER = 100;
 
     private static final int BASH_BAR_NUMBER = 7;
 
@@ -117,10 +123,8 @@ public class OI implements SmartDashboardSource {
     private static final int STICK_OPERATOR_LEFT = 2;
     private static final int STICK_OPERATOR_RIGHT = 3;
 
-    private JoystickButton stayInPlaceModeButton;
     private JoystickButton acquireTargetButton;
     private JoystickButton shooterToggleButton;
-    private JoystickButton fireButton;
 
     private JoystickButton emergencyDisableSwitch;
 
@@ -141,7 +145,7 @@ public class OI implements SmartDashboardSource {
         climbStick = operatorLeft; // only if climbing and no turret, but figure out later
 
 
-        // initDriveLeft();
+        initDriveLeft();
         initDriveRight();
 
         initOperatorLeft();
@@ -163,7 +167,7 @@ public class OI implements SmartDashboardSource {
 
         //new JoystickButton(driveLeft, 3).whileActiveOnce(new SetTurretLimelightCommand(), true);
         
-        new JoystickButton(driveLeft, 1).whileActiveOnce(new StayInPlaceDriveCommand());
+        //new JoystickButton(driveLeft, 1).whileActiveOnce(new StayInPlaceDriveCommand());
     }
 
     public void initDriveRight() {
@@ -216,9 +220,9 @@ public class OI implements SmartDashboardSource {
         shooterToggleButton = new JoystickButton(operatorLeft, TOGGLE_SHOOTER_NUMBER); 
         shooterToggleButton.whileActiveOnce(new ShooterToggleCommand(), true);
 
-        new JoystickButton(operatorLeft, INCREMENT_HOOD_UP_NUMBER).whenPressed(new HoodUpButtonCommand());
+        new JoystickButton(operatorLeft, INCREMENT_HOOD_UP_NUMBER).whileActiveOnce(new HoodUpButtonCommand());
         
-        new JoystickButton(operatorLeft, INCREMENT_HOOD_DOWN_NUMBER).whenPressed(new HoodDownButtonCommand());
+        new JoystickButton(operatorLeft, INCREMENT_HOOD_DOWN_NUMBER).whileActiveOnce(new HoodDownButtonCommand());
 
         new JoystickButton(operatorLeft, ZERO_HOOD_NUMBER).whenPressed(new ZeroHoodCommand());
     }
@@ -226,11 +230,20 @@ public class OI implements SmartDashboardSource {
     public void initOperatorRight() {
         //new JoystickButton(operatorRight, 1).whileActiveOnce(new IntakePukeCommand(), true);
         new JoystickButton(operatorRight, FIRE_NUMBER).whileActiveOnce(new FireCommand(), true);
-        //emergencyManualSwitch = new JoystickButton(operatorRight, EMERGENCY_MANUAL_SWITCH);
-        //new JoystickButton(operatorRight, EMERGENCY_SUBSYSTEM_DISABLE_NUMBER).whileActiveOnce(new EmergencyBallStopCommand(), false);
+        new JoystickButton(operatorRight, POINT_BLANK_SHOT_NUMBER).whileActiveOnce(new PointBlankShotCommand(), true);
+        emergencyManualSwitch = new JoystickButton(operatorRight, EMERGENCY_MANUAL_SWITCH);
+        new JoystickButton(operatorRight, EMERGENCY_SUBSYSTEM_DISABLE_NUMBER).whileActiveOnce(new EmergencyBallStopCommand(), false);
         
+        new JoystickButton(operatorRight, CLIMB_NUMBER).whileActiveOnce(new ClimbCommand(), true);
 
         new JoystickButton(operatorRight, 6).whenPressed(new ToggleRunIntakeCommand());
+
+        new JoystickButton(operatorRight, DEPLOY_CLIMB_LOW).whenPressed(new ClimbDeployCommand(ClimbDeploy.LOW_DISTANCE));
+        new JoystickButton(operatorRight, DEPLOY_CLIMB_MID).whenPressed(new ClimbDeployCommand(ClimbDeploy.MID_DISTANCE));
+        new JoystickButton(operatorRight, DEPLOY_CLIMB_HIGH).whenPressed(new ClimbDeployCommand(ClimbDeploy.HIGH_DISTANCE));
+
+
+
     }
 
     public static OI getInstance() {
@@ -359,8 +372,8 @@ public class OI implements SmartDashboardSource {
     }
 
     public boolean getManualMode() {
-        return true;
-        //return emergencyManualSwitch.get();
+        //return true;
+        return emergencyManualSwitch.get();
     }
 
     public boolean getAcquireTargetHeld() {

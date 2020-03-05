@@ -70,6 +70,8 @@ public class Hood extends NRSubsystem {
     public static Angle deltaAngleHood = Angle.ZERO;
     public static Angle goalAngleHood = Angle.ZERO;
 
+    public static final Angle POINT_BLANK_SHOT_ANGLE = new Angle(26.25, Angle.Unit.DEGREE);
+
     public static final double motorRotationsPerHoodDegree = 1.815; // Motor Rev / Deg Hood
 
     public static double goalPercent = 0.0;
@@ -82,6 +84,9 @@ public class Hood extends NRSubsystem {
 
     public static final int VEL_SLOT = 0;
     public static final int POS_SLOT = 1;
+
+    private double[] hoodAngles = {37.25, 39.5, 40, 41, 41.75, 43.1, 43.2, 42.75, 42.5, 42.4, 42.4, 42.35};
+    private double[] limeLightDistances = {5.32, 6.38, 6.97, 7.4, 9.43, 10.55, 12.19, 12.6, 13.3, 14.1, 15.3, 17.6};
 
     private Hood() {
         if (EnabledSubsystems.HOOD_ENABLED) {
@@ -158,6 +163,32 @@ public class Hood extends NRSubsystem {
         }
     }
 
+    public Angle getAngleLimelight()
+    {
+        double limeLightDistance = LimelightNetworkTable.getInstance().getDistance().get(Distance.Unit.FOOT);
+        if(limeLightDistance >= limeLightDistances[0] && limeLightDistance <= limeLightDistances[limeLightDistances.length - 1])
+        {
+            int i;
+            for(i = 0; i < limeLightDistances.length; i++)
+            {
+                if(limeLightDistances[i] > limeLightDistance)
+                {
+                    break;
+                }
+            }
+            
+            double slope = (hoodAngles[i] - hoodAngles[i - 1]) / (limeLightDistances[i] - limeLightDistances[i - 1]);
+            double a = slope * (limeLightDistance - limeLightDistances[i - 1]);
+            return new Angle(a, Angle.Unit.DEGREE);
+        }
+
+        else if(LimelightNetworkTable.getInstance().getDistance().get(Distance.Unit.FOOT) > 18.8)
+        {
+
+        }
+        return Angle.ZERO;
+    }
+
     public void smartDashboardInit() {
         if (EnabledSubsystems.HOOD_SMARTDASHBOARD_BASIC_ENABLED) {
             SmartDashboard.putNumber("Spark Encoder Position Hood", hoodEncoder.getPosition());
@@ -199,8 +230,8 @@ public class Hood extends NRSubsystem {
 
         if (hoodSpark != null) {
             System.out.println(percent);
-            //hoodSpark.set(percent);
-            hoodSpark.getPIDController().setReference(percent, ControlType.kVoltage);
+            hoodSpark.set(percent);
+            //hoodSpark.getPIDController().setReference(percent, ControlType.kVoltage);
         }
     }
 

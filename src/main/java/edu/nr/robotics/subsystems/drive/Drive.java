@@ -76,8 +76,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
     public static final Speed MAX_SPEED_DRIVE = new Speed(18, Distance.Unit.FOOT, Time.Unit.SECOND);
 
-    public static final Acceleration MAX_ACCEL_DRIVE = new Acceleration(10, Distance.Unit.FOOT, Time.Unit.SECOND,
-            Time.Unit.SECOND);
+    public static final Acceleration MAX_ACCEL_DRIVE = new Acceleration(10, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND);
 
     public static final Jerk MAX_JERK_DRIVE = new Jerk(100, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND,
             Time.Unit.SECOND);
@@ -90,7 +89,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
     public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_LEFT = 0.037; // .065
     public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_RIGHT = 0.037; // .0645
 
-	public static Time DRIVE_RAMP_RATE = new Time(1, Time.Unit.HUNDRED_MILLISECOND);
+	public static Time DRIVE_RAMP_RATE = new Time(1.6, Time.Unit.SECOND); //no lower than 1.6
 
     public static double P_LEFT = 0.0;
     public static double I_LEFT = 0.0;
@@ -143,7 +142,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
     public static final int VOLTAGE_COMPENSATION_LEVEL = 12;
 
-    public static final NeutralMode NEUTRAL_MODE = NeutralMode.Brake;
+    public static final NeutralMode NEUTRAL_MODE = NeutralMode.Coast;
 
     // Type of PID. 0 = primary. 1 = cascade
     public static final int PID_TYPE = 0;

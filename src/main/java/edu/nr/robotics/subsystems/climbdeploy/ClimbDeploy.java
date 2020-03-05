@@ -42,6 +42,11 @@ public class ClimbDeploy extends NRSubsystem{
  
    public static final Distance MINIMUM = new Distance(3, Distance.Unit.INCH);
    public static final Distance MAXIMUM = new Distance(24, Distance.Unit.INCH);
+
+   public static final Distance LOW_DISTANCE = new Distance(24, Distance.Unit.INCH);
+   public static final Distance MID_DISTANCE = new Distance(36, Distance.Unit.INCH);
+   public static final Distance HIGH_DISTANCE = new Distance(48, Distance.Unit.INCH);
+
  
    NeutralMode NEUTRAL_MODE_CLIMB_DEPLOY = NeutralMode.Brake;
  
@@ -53,6 +58,8 @@ public class ClimbDeploy extends NRSubsystem{
  
    public static final Distance DEPLOY_DISTANCE = Distance.ZERO;
    public static final double RETRACT_PERCENT = 0.0;
+
+   public static double goalPercent = 0.0;
  
  
    private ClimbDeploy(){
@@ -117,7 +124,7 @@ public class ClimbDeploy extends NRSubsystem{
            SmartDashboard.putNumber("I_POS_CLIMB_DEPLOY", I_POS_CLIMB_DEPLOY);
            SmartDashboard.putNumber("D_POS_CLIMB_DEPLOY", D_POS_CLIMB_DEPLOY);
 
-           //SmartDashboard.putNumber("CLIMB DEPLOY PERCENT", 0);
+        //   SmartDashboard.putNumber("CLIMB DEPLOY PERCENT", 0);
  
            SmartDashboard.putNumber("Set Distance Climb Deploy", DEPLOY_DISTANCE.get(Distance.Unit.INCH));
 
@@ -191,7 +198,7 @@ public class ClimbDeploy extends NRSubsystem{
 
             SmartDashboard.putNumber("Set Distance Climb Deploy", DEPLOY_DISTANCE.get(Distance.Unit.INCH));
 
-            //setMotorSpeedRaw(SmartDashboard.getNumber("CLIMB DEPLOY PERCENT", 0));
+        //    SmartDashboard.getNumber("CLIMB DEPLOY PERCENT", 0);
 
             SmartDashboard.putNumber("Climb Deploy Encoder", climbDeployVictor.getSelectedSensorPosition());
 

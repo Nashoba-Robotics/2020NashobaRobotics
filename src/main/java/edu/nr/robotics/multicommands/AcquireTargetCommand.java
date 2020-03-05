@@ -25,7 +25,7 @@ public class AcquireTargetCommand extends NRCommand
 
             Turret.getInstance().setAngle(LimelightNetworkTable.getInstance().getHorizOffset().add(Turret.getInstance().getAngle()));
 
-            //Hood Limelight Command when done
+            Hood.getInstance().setAngle(Hood.getInstance().getAngleLimelight());
         }
     }
 
@@ -36,9 +36,6 @@ public class AcquireTargetCommand extends NRCommand
         {
             return true;
         }
-        //Shouldn't this return false always since whileActiveOnce?
-        //return (Math.abs(Turret.getInstance().getAngle().sub(LimelightNetworkTable.getInstance().getHorizOffset()).get(Angle.Unit.DEGREE)) < 1) && true;
         return false;
-        //hood error as well
     }
 }

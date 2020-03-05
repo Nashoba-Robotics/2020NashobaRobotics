@@ -83,6 +83,7 @@ import edu.nr.robotics.subsystems.turret.SetTurretAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.turret.SetTurretLimelightCommand;
 import edu.nr.robotics.subsystems.turret.SetTurretPercentCommand;
 import edu.nr.robotics.subsystems.turret.Turret;
+import edu.nr.robotics.subsystems.turret.TurretJoystickCommand;
 import edu.nr.robotics.subsystems.turret.TurretLimelightCommand;
 import edu.nr.robotics.subsystems.turret.ZeroTurretEncoderCommand;
 import edu.nr.robotics.subsystems.winch.SetWinchPositionCommand;
@@ -138,14 +139,14 @@ public class Robot extends TimedRobot {
 
         OI.init();
         //Winch.init();
-        //ClimbDeploy.init();
-        Drive.init();
+        ClimbDeploy.init();
+        //Drive.init();
         //Turret.init();
-        Shooter.init();
-        Hood.init();
-        Intake.init();
-        Indexer.init();
-        Transfer.init();
+        //Shooter.init();
+        //Hood.init();
+        //Intake.init();
+        //Indexer.init();
+        //Transfer.init();
 
         //robotCompressor = new Compressor(RobotMap.PCM_ID);
         //robotCompressor.start();
@@ -164,17 +165,18 @@ public class Robot extends TimedRobot {
         }
         if(EnabledSubsystems.TRANSFER_ENABLED)
         {
-            CommandScheduler.getInstance().setDefaultCommand(Transfer.getInstance(), new TransferProcedureCommand());
+            //CommandScheduler.getInstance().setDefaultCommand(Transfer.getInstance(), new TransferProcedureCommand());
+            Transfer.getInstance().setDefaultCommand(new TransferProcedureCommand());
             //System.out.println("The Transfer default command line has been passed");
         }
 
         if(EnabledSubsystems.TURRET_ENABLED)
         {
-            //Turret.getInstance().setDefaultCommand(new SetTurretLimelightCommand());
+            Turret.getInstance().setDefaultCommand(new TurretJoystickCommand());
         }
 
         if(EnabledSubsystems.CLIMB_DEPLOY_ENABLED){
-            //ClimbDeploy.getInstance().setDefaultCommand(new ClimbDeployJoystickCommand());
+            ClimbDeploy.getInstance().setDefaultCommand(new ClimbDeployJoystickCommand());
         }
         if(EnabledSubsystems.TRANSFER_HOOK_ENABLED)
         {
@@ -248,7 +250,7 @@ public class Robot extends TimedRobot {
         }
 
         if (EnabledSubsystems.CLIMB_DEPLOY_SMARTDASHBOARD_DEBUG_ENABLED) {
-            SmartDashboard.putData(new ClimbDeploySmartDashboardCommand());
+            //SmartDashboard.putData(new ClimbDeploySmartDashboardCommand());
         }
 
         if (EnabledSubsystems.WINCH_SMARTDASHBOARD_DEBUG_ENABLED) {
