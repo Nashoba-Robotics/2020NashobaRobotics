@@ -14,24 +14,24 @@ public class EnabledSubsystems {
 
     public static boolean LIMELIGHT_ENABLED                                      = false;
 
-    public static final boolean SHOOTER_ENABLED                                  = false;
+    public static final boolean SHOOTER_ENABLED                                  = true;
     public static final boolean SHOOTER_DUMB_ENABLED                             = false;
     public static final boolean SHOOTER_SMARTDASHBOARD_BASIC_ENABLED             = false;
     public static final boolean SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED             = false;
 
-    public static final boolean HOOD_ENABLED                                     = false;
+    public static final boolean HOOD_ENABLED                                     = true;
     public static final boolean HOOD_DUMB_ENABLED                                = false;
     public static final boolean HOOD_SMARTDASHBOARD_BASIC_ENABLED                = false;
     public static final boolean HOOD_SMARTDASHBOARD_DEBUG_ENABLED                = false;
 
     public static final boolean INTAKE_ENABLED                                   = true;
-    public static final boolean INTAKE_SMARTDASHBOARD_DEBUG_ENABLED              = true;
+    public static final boolean INTAKE_SMARTDASHBOARD_DEBUG_ENABLED              = false;
     
-	public static final boolean INDEXER_ENABLED                                  = false;
+	public static final boolean INDEXER_ENABLED                                  = true;
     public static final boolean INDEXER_DUMB_ENABLED                             = false;
     public static final boolean INDEXER_SMARTDASHBOARD_DEBUG_ENABLED             = false;
 
-    public static final boolean TRANSFER_ENABLED                                 = false;
+    public static final boolean TRANSFER_ENABLED                                 = true;
     public static final boolean TRANSFER_DUMB_ENABLED                            = false;
     public static final boolean TRANSFER_SMARTDASHBOARD_DEBUG_ENABLED            = false;
         

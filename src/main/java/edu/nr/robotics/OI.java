@@ -64,7 +64,7 @@ public class OI implements SmartDashboardSource {
      * private static final int TOGGLE_KID_MODE_NUMBER = 5;
      */
 
-    private static final int SNIPER_MODE_NUMBER = 2;
+    //private static final int SNIPER_MODE_NUMBER = 2;
 
     private static final int EMERGENCY_MANUAL_SWITCH = 12;
     private static final int ACQUIRE_TARGET_NUMBER = 5; 
@@ -95,8 +95,9 @@ public class OI implements SmartDashboardSource {
 
     private static final int PUKE_INTAKE_NUMBER = 1;
     private static final int TOGGLE_INTAKE_MOTORS_NUMBER = 6;
-    //private static final int TOGGLE_INTAKE_DEPLOYED_NUMBER = 3;
-    private static final int TOGGLE_INTAKE_ROUTINE_NUMBER = 100;
+    private static final int TOGGLE_INTAKE_DEPLOYED_NUMBER = 3;
+    private static final int TOGGLE_INTAKE_ROUTINE_NUMBER = 2
+    ;
 
     private static final int STAY_IN_PLACE_MODE_NUMBER = 1;
 
@@ -117,7 +118,7 @@ public class OI implements SmartDashboardSource {
     //private final Joystick climbStick;
     //private final Joystick transferHookStick;
 
-    public static boolean climbMode = true;
+    public static boolean climbMode = false;
 
     private JoystickButton kidModeSwitch;
     private JoystickButton elevGearSwitcherSwitch;
@@ -159,7 +160,7 @@ public class OI implements SmartDashboardSource {
 
     public void initDriveLeft() {
 
-        new JoystickButton(driveLeft, SNIPER_MODE_NUMBER).whileActiveOnce(new EnableSniperMode());
+        //new JoystickButton(driveLeft, SNIPER_MODE_NUMBER).whileActiveOnce(new EnableSniperMode());
         // buttons go here
 
         // new SetTurretLimelightCommand();
@@ -196,7 +197,7 @@ public class OI implements SmartDashboardSource {
     public void initOperatorRight() {
         //new JoystickButton(operatorRight, 1).whileActiveOnce(new IntakePukeCommand(), true);
         new JoystickButton(operatorRight, FIRE_NUMBER).whileActiveOnce(new FireCommand(), true);
-        new JoystickButton(operatorRight, POINT_BLANK_SHOT_NUMBER).whileActiveOnce(new PointBlankShotCommand(), true);
+        new JoystickButton(operatorRight, PUKE_INTAKE_NUMBER).whileActiveOnce(new IntakePukeCommand(), true);
         emergencyManualSwitch = new JoystickButton(operatorRight, EMERGENCY_MANUAL_SWITCH);
         new JoystickButton(operatorRight, EMERGENCY_SUBSYSTEM_DISABLE_NUMBER).whileActiveOnce(new EmergencyBallStopCommand(), false);
         
@@ -208,8 +209,11 @@ public class OI implements SmartDashboardSource {
         new JoystickButton(operatorRight, DEPLOY_CLIMB_MID).whenPressed(new ClimbDeployCommand(ClimbDeploy.MID_DISTANCE));
         new JoystickButton(operatorRight, DEPLOY_CLIMB_HIGH).whenPressed(new ClimbDeployCommand(ClimbDeploy.HIGH_DISTANCE));
 
+        new JoystickButton(operatorRight, TOGGLE_INTAKE_DEPLOYED_NUMBER).whenPressed(new IntakeToggleDeployCommand());
 
+        new JoystickButton(operatorRight, TOGGLE_INTAKE_ROUTINE_NUMBER).whenPressed(new IntakeSubroutineCommand());
 
+        new JoystickButton(operatorRight, PUKE_ALL_NUMBER).whileActiveOnce(new ProjectileVomitCommand());    
     }
 
     public static OI getInstance() {

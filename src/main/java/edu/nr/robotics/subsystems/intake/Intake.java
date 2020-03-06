@@ -32,9 +32,9 @@ public class Intake extends NRSubsystem
 
     public static double currentIntakePercent = 0.0;
 
-    public static final double INTAKE_PERCENT = 0.8;
+    public static final double INTAKE_PERCENT = 0.4;
 
-    public static final double PUKE_PERCENT = -1;
+    public static final double PUKE_PERCENT = -0.6;
 
     private Intake()
     {
@@ -42,6 +42,8 @@ public class Intake extends NRSubsystem
         if(EnabledSubsystems.INTAKE_ENABLED)
         {
             IntakeVictor= new VictorSPX(RobotMap.INTAKE_VICTOR);
+
+            IntakeSolenoid = new Solenoid(RobotMap.INTAKE_SOLENOID_PCM_PORT);
 
             pdp = new PowerDistributionPanel(RobotMap.PDP_ID);
         }
@@ -88,6 +90,7 @@ public class Intake extends NRSubsystem
 		}
     }
     
+
     public State currentDeployState() {
 		if(IntakeSolenoid != null) {
 			return State.getDeployState(IntakeSolenoid.get());

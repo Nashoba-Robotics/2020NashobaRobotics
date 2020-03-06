@@ -27,7 +27,7 @@ public class Transfer extends NRSubsystem {
     public static final int VOLTAGE_COMPENSATION_LEVEL = 12;
     public static final double MIN_MOVE_VOLTAGE = 0.0;
     public static final int DEFAULT_TIMEOUT = 0;
-    public static final double PUKE_PERCENT = -1;
+    public static final double PUKE_PERCENT = -0.6;
     public static final double TRANSFER_PERCENT = 0.42; // more for real
     public static final Time PUKE_TIME = new Time(1, Time.Unit.SECOND);
 
@@ -85,7 +85,7 @@ public class Transfer extends NRSubsystem {
 
     private boolean previousSensorValue = false;
 
-    public static int ballCount = 0;
+    public static int ballCount = 1;
 
     private Transfer() {
         if (EnabledSubsystems.TRANSFER_ENABLED) {
@@ -238,7 +238,7 @@ public class Transfer extends NRSubsystem {
             else if(EnabledSensors.getInstance().transferSensor.get())
             {
                 currentTimer = Timer.getFPGATimestamp();
-                if(currentTimer - falseTimer >= .1)
+                if(currentTimer - falseTimer >= .15)
                     return true;
             }
             //return EnabledSensors.getInstance().transferSensor.get();

@@ -1,7 +1,5 @@
 package edu.nr.robotics.subsystems.hood;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
@@ -10,14 +8,12 @@ import com.revrobotics.EncoderType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.*;
 import edu.nr.lib.commandbased.NRSubsystem;
-import edu.nr.lib.motorcontrollers.SparkMax;
 import edu.nr.lib.network.LimelightNetworkTable;
 import edu.nr.lib.units.Angle;
 import edu.nr.lib.units.AngularAcceleration;
 import edu.nr.lib.units.AngularSpeed;
 import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Time;
-import edu.nr.lib.units.Angle.Unit;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
@@ -46,7 +42,7 @@ public class Hood extends NRSubsystem {
     public static final AngularSpeed MAX_SPEED_HOOD = new AngularSpeed(45, Angle.Unit.DEGREE, Time.Unit.SECOND);
     public static final AngularAcceleration MAX_ACCELERATION_HOOD = new AngularAcceleration(200, Angle.Unit.DEGREE, Time.Unit.SECOND, Time.Unit.SECOND);
 
-    // Change this
+    //public static final double HOOD_MAX_PERCENT = 0.4;
 
     public static final Angle upperMost = new Angle(45, Angle.Unit.DEGREE);
     public static final Angle lowerMost = Angle.ZERO;
@@ -227,11 +223,14 @@ public class Hood extends NRSubsystem {
     }
 
     public void setMotorSpeedRaw(double percent) {
-
         if (hoodSpark != null) {
             System.out.println(percent);
-            hoodSpark.set(percent);
-            //hoodSpark.getPIDController().setReference(percent, ControlType.kVoltage);
+            //if(!EnabledSensors.getInstance().LimHoodLower.get() || percent >= 0)
+                //if(percent >= 0 && percent <= Hood.HOOD_MAX_PERCENT)
+                    hoodSpark.set(percent);
+            //else if(!EnabledSensors.getInstance().LimHoodUpper.get() || percent <= 0)
+                //if(percent <= 0 && percent >=-1 * Hood.HOOD_MAX_PERCENT)
+                    //hoodSpark.set(percent);
         }
     }
 
@@ -239,7 +238,6 @@ public class Hood extends NRSubsystem {
         if (hoodSpark != null) {
 
             if (EnabledSubsystems.HOOD_SMARTDASHBOARD_BASIC_ENABLED) {
-
                 SmartDashboard.putNumber("Spark Encoder Position Hood", hoodSpark.getEncoder().getPosition());
 
                 SmartDashboard.putNumber("Spark Hood Current", hoodSpark.getOutputCurrent());

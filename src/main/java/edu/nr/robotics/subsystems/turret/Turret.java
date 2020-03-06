@@ -1,14 +1,12 @@
 package edu.nr.robotics.subsystems.turret;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.units.Angle;
 import edu.nr.lib.units.AngularSpeed;
-import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
@@ -22,18 +20,16 @@ public class Turret extends NRSubsystem {
 
     public static final double ENCODER_TICKS_PER_DEGREE_TURRET = (4096.0 / 360);
     private static double F_POS_TURRET = 0.1;
-    private static double P_POS_TURRET = 04; // 0.2 before this
+    private static double P_POS_TURRET = 0.4; // 0.2 before this
     private static double I_POS_TURRET = 0;
     private static double D_POS_TURRET = 0;
 
-    private static double turretMaxOutput = 1;
+    private static double turretMaxOutput = 0.3;
+    private static double turretMinOutput = -0.3;
 
     private static Angle setAngle = Angle.ZERO;
     public static Angle goalAngle = Angle.ZERO;
     public static Angle deltaAngle = Angle.ZERO;
-
-    public static Angle LEFT_LIMIT = new Angle(-45, Angle.Unit.DEGREE);
-    public static Angle RIGHT_LIMIT = new Angle(45, Angle.Unit.DEGREE);
 
     public static final NeutralMode NEUTRAL_MODE = NeutralMode.Brake;
     // Type of PID. 0 = primary. 1 = cascade
@@ -182,14 +178,12 @@ public class Turret extends NRSubsystem {
             if (EnabledSensors.getInstance().LimTurretRight.get()) {
                 if (getActualSpeed().get(Angle.Unit.DEGREE, Time.Unit.SECOND) > 0) {
                     setMotorSpeedInPercent(0);
-                    setAngle(RIGHT_LIMIT);
                 }
             }
             if (EnabledSensors.getInstance().LimTurretLeft.get()) {
                 if (getActualSpeed().get(Angle.Unit.DEGREE, Time.Unit.SECOND) < 0) {
                     turretTalon.setSelectedSensorPosition(0);
                     setMotorSpeedInPercent(0);
-                    setAngle(LEFT_LIMIT);
                 }
             }
         }
@@ -204,8 +198,12 @@ public class Turret extends NRSubsystem {
 
     public void setMotorSpeedInPercent(double percent) {
         if (turretTalon != null) {
-            if (percent < turretMaxOutput)
-                turretTalon.set(ControlMode.PercentOutput, percent);
+            if(!EnabledSensors.getInstance().LimTurretRight.get() || percent <= 0)
+                if(percent < turretMaxOutput && percent >= 0)
+                    turretTalon.set(ControlMode.PercentOutput, percent);
+            else if(!EnabledSensors.getInstance().LimTurretLeft.get() || percent >= 0)
+                if(percent > turretMinOutput && percent <= 0)
+                    turretTalon.set(ControlMode.PercentOutput, percent);
         }
     }
 

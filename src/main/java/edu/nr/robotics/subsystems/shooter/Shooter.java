@@ -52,7 +52,7 @@ public class Shooter extends NRSubsystem {
     public static final int POS_SLOT = 1;
     public static final int MOTION_MAGIC_SLOT = 2;
 
-    public static final double PUKE_PERCENT = -0.6;
+    public static final double PUKE_PERCENT = -0.4;
 
     private Shooter() {
         if (EnabledSubsystems.SHOOTER_ENABLED) {

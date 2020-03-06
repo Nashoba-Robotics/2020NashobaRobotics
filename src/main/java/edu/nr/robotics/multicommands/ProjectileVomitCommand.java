@@ -20,16 +20,13 @@ public class ProjectileVomitCommand extends NRCommand {
     @Override
     protected void onStart() 
     {
-        if(!Intake.getInstance().isIntakeDeployed()){
-            Intake.getInstance().deployIntake();
-
         //Might need wait command for 100 ms such that intake is fully deployed before puking
     }
 
-    }
     @Override
     protected void onExecute() {
-        Intake.getInstance().setMotorSpeedRaw(Intake.PUKE_PERCENT);
+        if(Intake.getInstance().isIntakeDeployed())
+            Intake.getInstance().setMotorSpeedRaw(Intake.PUKE_PERCENT);
         Transfer.getInstance().setMotorSpeedInPercent(Transfer.PUKE_PERCENT);
         Indexer.getInstance().setMotorSpeedInPercent(Indexer.PUKE_PERCENT);
         Shooter.getInstance().setMotorSpeedInPercent(Shooter.PUKE_PERCENT);
@@ -42,11 +39,12 @@ public class ProjectileVomitCommand extends NRCommand {
      Transfer.getInstance().setMotorSpeedInPercent(0);
      Indexer.getInstance().setMotorSpeedInPercent(0);
      Shooter.getInstance().setMotorSpeedInPercent(0);
+     Transfer.ballCount = 0;
     }
- 
+
    @Override
    protected boolean isFinishedNR(){
-       return true;
+       return false;
    }
 }
  

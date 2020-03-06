@@ -74,7 +74,7 @@ public class Indexer extends NRSubsystem {
  
     public static final int MOTION_MAGIC_SLOT = 2;
 
-    public static final double PUKE_PERCENT = -1;
+    public static final double PUKE_PERCENT = -0.6;
     public static final Time PUKE_TIME = new Time(1, Time.Unit.SECOND);
  
     public static Speed speedSetPoint = Speed.ZERO;

@@ -18,6 +18,8 @@ import edu.nr.robotics.auton.autoroutes.AutoChoosers;
 import edu.nr.robotics.auton.autoroutes.AutoChoosers.ballLocation;
 import edu.nr.robotics.auton.autoroutes.AutoChoosers.startPos;
 import edu.nr.robotics.subsystems.indexer.IndexingProcedureCommand;
+import edu.nr.robotics.subsystems.intake.Intake;
+import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.nr.robotics.multicommands.ProjectileVomitCommand;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.climbdeploy.ClimbDeploy;
@@ -34,6 +36,8 @@ import edu.nr.robotics.subsystems.drive.EnableReverseTwoDMotionProfileSmartDashb
 import edu.nr.robotics.subsystems.drive.EnableTwoDMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.TurnSmartDashboardCommand;
 import edu.nr.robotics.subsystems.hood.DeltaHoodAngleSmartDashboardCommand;
+import edu.nr.robotics.subsystems.hood.Hood;
+import edu.nr.robotics.subsystems.hood.HoodJoystickCommand;
 import edu.nr.robotics.subsystems.hood.HoodPercentCommand;
 import edu.nr.robotics.subsystems.hood.SetHoodAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.transfer.Transfer;
@@ -43,6 +47,7 @@ import edu.nr.robotics.subsystems.indexer.IndexerDeltaPositionSmartDashboardComm
 import edu.nr.robotics.subsystems.indexer.IndexerPukeCommand;
 import edu.nr.robotics.subsystems.indexer.IndexerSetVelocitySmartDashboardCommand;
 import edu.nr.robotics.subsystems.shooter.SetShooterSpeedSmartDashboardCommand;
+import edu.nr.robotics.subsystems.shooter.Shooter;
 import edu.nr.robotics.subsystems.turret.DeltaTurretAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.turret.SetTurretAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.turret.SetTurretLimelightCommand;
@@ -97,14 +102,14 @@ public class Robot extends TimedRobot {
 
         OI.init();
         //Winch.init();
-        ClimbDeploy.init();
+        //ClimbDeploy.init();
         //Drive.init();
         //Turret.init();
-        //Shooter.init();
-        //Hood.init();
-        //Intake.init();
-        //Indexer.init();
-        //Transfer.init();
+        Shooter.init();
+        Hood.init();
+        Intake.init();
+        Indexer.init();
+        Transfer.init();
 
         robotCompressor = new Compressor(RobotMap.PCM_ID);
         robotCompressor.start();
@@ -135,6 +140,11 @@ public class Robot extends TimedRobot {
 
         if(EnabledSubsystems.CLIMB_DEPLOY_ENABLED){
             ClimbDeploy.getInstance().setDefaultCommand(new ClimbDeployJoystickCommand());
+        }
+
+        if(EnabledSubsystems.HOOD_ENABLED)
+        {
+            Hood.getInstance().setDefaultCommand(new HoodJoystickCommand());
         }
         if(EnabledSubsystems.TRANSFER_HOOK_ENABLED)
         {
