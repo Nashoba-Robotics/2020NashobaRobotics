@@ -102,7 +102,7 @@ public class Turret extends NRSubsystem {
             SmartDashboard.putNumber("Set Angle Turret", setAngle.get(Angle.Unit.DEGREE));
             SmartDashboard.putNumber("Turret Current Angle", getAngle().get(Angle.Unit.DEGREE));
             SmartDashboard.putNumber("Turret Goal Angle", goalAngle.get(Angle.Unit.DEGREE));
-            SmartDashboard.putNumber("SET TURRET PERCENT", 0);
+        //    SmartDashboard.putNumber("SET TURRET PERCENT", 0);
 
             SmartDashboard.putBoolean("Lim Turret Left", EnabledSensors.getInstance().LimTurretLeft.get());
             SmartDashboard.putBoolean("Lim Turret Right", EnabledSensors.getInstance().LimTurretRight.get());
@@ -136,7 +136,6 @@ public class Turret extends NRSubsystem {
                         Angle.Unit.DEGREE);
                 SmartDashboard.putNumber("Set Angle Turret", setAngle.get(Angle.Unit.DEGREE));
                 SmartDashboard.putNumber("Turret Current Angle", getAngle().get(Angle.Unit.TURRET_ENCODER_TICK));
-                goalPercent = SmartDashboard.getNumber("SET TURRET PERCENT", 0);
 
                 SmartDashboard.putBoolean("Lim Turret Left", EnabledSensors.getInstance().LimTurretLeft.get());
                 SmartDashboard.putBoolean("Lim Turret Right", EnabledSensors.getInstance().LimTurretRight.get());
@@ -197,13 +196,32 @@ public class Turret extends NRSubsystem {
     }
 
     public void setMotorSpeedInPercent(double percent) {
+        System.out.println(percent + "setmotor speed turret percent");
+        /*
+        if(percent > 0.3){
+            percent = 0.3;
+        }else if (percent < -0.3){
+            percent = -0.3;
+        }
+        */
+        percent *= 0.3;
+
         if (turretTalon != null) {
-            if(!EnabledSensors.getInstance().LimTurretRight.get() || percent <= 0)
-                if(percent < turretMaxOutput && percent >= 0)
-                    turretTalon.set(ControlMode.PercentOutput, percent);
-            else if(!EnabledSensors.getInstance().LimTurretLeft.get() || percent >= 0)
-                if(percent > turretMinOutput && percent <= 0)
-                    turretTalon.set(ControlMode.PercentOutput, percent);
+            if(EnabledSensors.getInstance().LimTurretLeft.get()){
+                if(percent >= 0){
+                    //turretTalon.set(ControlMode.PercentOutput, percent);
+                    System.out.println("Left Lim" + percent);
+                }
+            } else if(EnabledSensors.getInstance().LimTurretRight.get()){
+                if(percent <= 0){
+                    //turretTalon.set(ControlMode.PercentOutput, percent);
+                    System.out.println("Right Lim" + percent);
+                }
+
+            }else{
+                //turretTalon.set(ControlMode.PercentOutput, percent);
+                System.out.println("No Lim" + percent);
+            }
         }
     }
 

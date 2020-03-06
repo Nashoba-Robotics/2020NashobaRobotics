@@ -56,6 +56,7 @@ import edu.nr.robotics.subsystems.turret.Turret;
 import edu.nr.robotics.subsystems.turret.TurretJoystickCommand;
 import edu.nr.robotics.subsystems.turret.ZeroTurretEncoderCommand;
 import edu.nr.robotics.subsystems.winch.SetWinchPositionCommand;
+import edu.nr.robotics.subsystems.winch.Winch;
 import edu.nr.robotics.subsystems.winch.WinchClimbRetractCommand;
 import edu.nr.robotics.subsystems.indexer.Indexer;
 
@@ -101,10 +102,10 @@ public class Robot extends TimedRobot {
         //ColorWheel.init();
 
         OI.init();
-        //Winch.init();
-        //ClimbDeploy.init();
-        //Drive.init();
-        //Turret.init();
+        Winch.init();
+        ClimbDeploy.init();
+        Drive.init();
+        Turret.init();
         Shooter.init();
         Hood.init();
         Intake.init();
@@ -135,7 +136,7 @@ public class Robot extends TimedRobot {
 
         if(EnabledSubsystems.TURRET_ENABLED)
         {
-            Turret.getInstance().setDefaultCommand(new TurretJoystickCommand());
+            //Turret.getInstance().setDefaultCommand(new TurretJoystickCommand());
         }
 
         if(EnabledSubsystems.CLIMB_DEPLOY_ENABLED){
@@ -199,11 +200,13 @@ public class Robot extends TimedRobot {
         }
 
         if (EnabledSubsystems.TURRET_SMARTDASHBOARD_DEBUG_ENABLED) {
+            /*
             SmartDashboard.putData(new SetTurretAngleSmartDashboardCommand());
             SmartDashboard.putData(new DeltaTurretAngleSmartDashboardCommand());
             SmartDashboard.putData(new SetTurretLimelightCommand());
             SmartDashboard.putData(new SetTurretPercentCommand());
             SmartDashboard.putData(new ZeroTurretEncoderCommand());
+            */
         }
 
         if (EnabledSubsystems.SHOOTER_SMARTDASHBOARD_DEBUG_ENABLED) {
@@ -315,6 +318,7 @@ public class Robot extends TimedRobot {
             count = 0;
         }
 
+      //  System.out.println(OI.getInstance().getManualMode() + "manual mode");
         //testSpark.set(SmartDashboard.getNumber("testSpark Percent", 0));
 
         // tester.config_kF(0, SmartDashboard.getNumber("F TESTER", 0));
@@ -371,6 +375,8 @@ public class Robot extends TimedRobot {
     }
 
     public Command getAutoCommand() {
+        return new SimpleMiddleAutoCommand();
+        /*
         if (selectedStartPos == startPos.middleOfNowhere)
             // It's a five for five
             return new MiddleOfNowhereCommand();
@@ -387,6 +393,7 @@ public class Robot extends TimedRobot {
         else if (selectedStartPos == startPos.directlyInFrontOfTrench)
             return new DirectlyInFrontOfTrenchCommand();
         return new DoNothingCommand();
+        */
     }
 
     public double getPeriod() {

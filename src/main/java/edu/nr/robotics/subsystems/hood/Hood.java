@@ -224,13 +224,41 @@ public class Hood extends NRSubsystem {
 
     public void setMotorSpeedRaw(double percent) {
         if (hoodSpark != null) {
+            if(percent >= 0.2)
+            {
+                percent = 0.2;
+            }
+            else if(percent <= -0.2)
+            {
+                percent = -0.2;
+            }
+            /*
             System.out.println(percent);
-            //if(!EnabledSensors.getInstance().LimHoodLower.get() || percent >= 0)
-                //if(percent >= 0 && percent <= Hood.HOOD_MAX_PERCENT)
+            if(!EnabledSensors.getInstance().LimHoodLower.get() || percent >= 0)
+                if(percent <= 0.3)
                     hoodSpark.set(percent);
-            //else if(!EnabledSensors.getInstance().LimHoodUpper.get() || percent <= 0)
-                //if(percent <= 0 && percent >=-1 * Hood.HOOD_MAX_PERCENT)
-                    //hoodSpark.set(percent);
+            else if(!EnabledSensors.getInstance().LimHoodUpper.get() || percent <= 0)
+                if(percent >= -0.3)
+                    hoodSpark.set(percent);
+                    */
+            if(EnabledSensors.getInstance().LimHoodLower.get())
+            {
+                if(percent >= 0)
+                {
+                    hoodSpark.set(percent);
+                }
+            }
+            else if(EnabledSensors.getInstance().LimHoodUpper.get())
+            {
+                if(percent <= 0)
+                {
+                    hoodSpark.set(percent);
+                }
+            }
+            else
+            {
+                hoodSpark.set(percent);
+            }
         }
     }
 

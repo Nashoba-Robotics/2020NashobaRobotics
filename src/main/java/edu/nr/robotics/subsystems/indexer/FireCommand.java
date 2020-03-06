@@ -18,6 +18,7 @@ public class FireCommand extends NRCommand
         {
             if(OI.getInstance().getAcquireTargetHeld())
             {
+                //System.out.println("here we gooooo");
                 Indexer.getInstance().setMotorSpeedInPercent(1);
             }
         }

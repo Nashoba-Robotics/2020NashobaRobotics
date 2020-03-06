@@ -32,7 +32,7 @@ public class Intake extends NRSubsystem
 
     public static double currentIntakePercent = 0.0;
 
-    public static final double INTAKE_PERCENT = 0.4;
+    public static final double INTAKE_PERCENT = 0.3;
 
     public static final double PUKE_PERCENT = -0.6;
 

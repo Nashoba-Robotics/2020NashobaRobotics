@@ -19,8 +19,8 @@ public class ShootCommand extends NRCommand
 {
     double current = 0;
     double lastBall = 9999999999999.0;
+
     public ShootCommand()
-    //OLD?
     {
         super(new NRSubsystem[] {Hood.getInstance(), Turret.getInstance(), Transfer.getInstance(), Shooter.getInstance(), Indexer.getInstance()});
     }
@@ -38,6 +38,10 @@ public class ShootCommand extends NRCommand
     @Override
     protected void onExecute()
     {
+        if(EnabledSensors.getInstance().indexerShooterSensor.get())
+        {
+            lastBall = Timer.getFPGATimestamp();
+        }
         Shooter.getInstance().setMotorSpeed(Shooter.SHOOT_SPEED);
         /*if(Shooter.getInstance().getSpeedShooter1().get(Angle.Unit.ROTATION, Time.Unit.MINUTE) >= 0.85 * Shooter.SHOOT_SPEED.get(Angle.Unit.ROTATION, Time.Unit.MINUTE)){
             Indexer.getInstance().setMotorSpeedInPercent(1);
@@ -55,7 +59,8 @@ public class ShootCommand extends NRCommand
     @Override
     protected boolean isFinishedNR()
     {
-        return false;
+        current = Timer.getFPGATimestamp();
+        return current - lastBall >= 0.5;
     }
 
     @Override

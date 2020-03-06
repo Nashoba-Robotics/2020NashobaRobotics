@@ -59,7 +59,7 @@ public class ClimbDeploy extends NRSubsystem{
    public static Distance goalPositionClimb = Distance.ZERO;
  
    public static final Distance DEPLOY_DISTANCE = Distance.ZERO;
-   public static final double RETRACT_PERCENT = 0.0;
+   public static final double RETRACT_PERCENT = 0.2;
 
    public static double goalPercent = 0.0;
  

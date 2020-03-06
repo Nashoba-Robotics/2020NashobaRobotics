@@ -16,8 +16,9 @@ public class ClimbDeployCommand extends NRCommand
 
     public void onStart()
     {
-        ClimbDeploy.getInstance().setPosition(targetHeight);
+        //ClimbDeploy.getInstance().setPosition(targetHeight);
         OI.climbMode = true;
+        
     }
 
     public boolean isFinishedNR()

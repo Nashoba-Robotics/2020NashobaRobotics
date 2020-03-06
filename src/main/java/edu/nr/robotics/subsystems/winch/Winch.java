@@ -37,7 +37,7 @@ public class Winch extends NRSubsystem
     private static Distance setPositionClimb;
     public static Distance goalPositionClimb;
 
-    private NeutralMode NEUTRAL_MODE_CLIMB_DEPLOY = NeutralMode.Brake;
+    private NeutralMode NEUTRAL_MODE_CLIMB_DEPLOY = NeutralMode.Coast;
 
     private static Time VOLTAGE_RAMP_RATE_WINCH = new Time(0.05, Time.Unit.SECOND);
     private static final int VOLTAGE_COMPENSATION_LEVEL = 12;
@@ -77,6 +77,7 @@ public class Winch extends NRSubsystem
         }else{
             winchTalon.set(ControlMode.Velocity, 0);
         }
+        smartDashboardInit();
 
     }
 
@@ -117,7 +118,7 @@ public class Winch extends NRSubsystem
     {
         if(EnabledSubsystems.WINCH_SMARTDASHBOARD_DEBUG_ENABLED)
         {
-            SmartDashboard.putNumber("Set Distance Winch: ", setPositionClimb.get(Distance.Unit.INCH));
+        //    SmartDashboard.putNumber("Set Distance Winch: ", setPositionClimb.get(Distance.Unit.INCH));
             
             SmartDashboard.putNumber("F_POS_WINCH", F_POS_WINCH);
             SmartDashboard.putNumber("P_POS_WINCH", P_POS_WINCH);
@@ -131,7 +132,9 @@ public class Winch extends NRSubsystem
 
             SmartDashboard.putNumber("Current Winch Position", getPosition().get(Unit.MAGNETIC_ENCODER_TICK_WINCH));
 
-            SmartDashboard.putNumber("Goal Position Winch", goalPositionClimb.get(Distance.Unit.INCH));
+        //    SmartDashboard.putNumber("Goal Position Winch", goalPositionClimb.get(Distance.Unit.INCH));
+
+            SmartDashboard.putNumber("Winch Percent", 0);
         }
     }
 
@@ -161,11 +164,17 @@ public class Winch extends NRSubsystem
             winchTalon.config_kP(VEL_SLOT, kPVelWinch);
             winchTalon.config_kI(VEL_SLOT, kIVelWinch);
             winchTalon.config_kD(VEL_SLOT, kDVelWinch);
+
+        //    setMotorSpeedRaw(SmartDashboard.getNumber("Winch Percent", 0));
         }
     }
 
     public void setMotorSpeedRaw(double percent)
     {
+        if(percent <= 0){
+            percent = 0;
+        }
+
         if(winchTalon != null)
         {
             winchTalon.set(ControlMode.PercentOutput, percent);
@@ -174,6 +183,9 @@ public class Winch extends NRSubsystem
 
     public void setMotorSpeed(Speed speed)
     {
+        if(speed.get(Distance.Unit.MAGNETIC_ENCODER_TICK_WINCH, Time.Unit.HUNDRED_MILLISECOND) <= 0){
+            speed = Speed.ZERO;
+        }
         if(winchTalon != null)
             winchTalon.set(ControlMode.Velocity, speed.get(Distance.Unit.MAGNETIC_ENCODER_TICK_WINCH, Time.Unit.HUNDRED_MILLISECOND));
     }

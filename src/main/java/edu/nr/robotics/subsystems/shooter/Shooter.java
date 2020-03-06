@@ -21,7 +21,7 @@ public class Shooter extends NRSubsystem {
     private TalonFX shooterTalon2;
 
     public static final double ENCODER_TICKS_PER_DEGREE_SHOOTER = 2048 / 360;
-    public static Time VOLTAGE_RAMP_RATE_SHOOTER = new Time(0.05, Time.Unit.SECOND);
+    public static Time VOLTAGE_RAMP_RATE_SHOOTER = new Time(0.2, Time.Unit.SECOND);
     public static final int VOLTAGE_COMPENSATION_LEVEL = 12;
     public static final double MIN_MOVE_VOLTAGE = 0.0;
     public static final int DEFAULT_TIMEOUT = 0;
@@ -53,6 +53,8 @@ public class Shooter extends NRSubsystem {
     public static final int MOTION_MAGIC_SLOT = 2;
 
     public static final double PUKE_PERCENT = -0.4;
+
+    public static boolean runningShooter = false;
 
     private Shooter() {
         if (EnabledSubsystems.SHOOTER_ENABLED) {

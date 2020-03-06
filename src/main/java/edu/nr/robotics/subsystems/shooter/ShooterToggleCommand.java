@@ -27,8 +27,8 @@ public class ShooterToggleCommand extends NRCommand
     @Override
     protected boolean isFinishedNR()
     {
-        if(OI.getInstance().getManualMode())
-            return false;
-        return true;
+        if(!OI.getInstance().getManualMode())
+            return true;
+        return false;
     }
 }
