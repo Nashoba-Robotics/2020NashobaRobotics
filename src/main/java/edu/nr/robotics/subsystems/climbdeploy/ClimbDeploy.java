@@ -1,19 +1,19 @@
 package edu.nr.robotics.subsystems.climbdeploy;
  
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
- 
+
 import edu.nr.lib.commandbased.NRSubsystem;
-import edu.nr.lib.motorcontrollers.CTRECreator;
 import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Time;
 import edu.nr.lib.units.Distance.Unit;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.nr.robotics.subsystems.sensors.EnabledSensors;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  
 public class ClimbDeploy extends NRSubsystem{
@@ -22,6 +22,8 @@ public class ClimbDeploy extends NRSubsystem{
  
    //private TalonSRX climbDeployTalon;
    private VictorSPX climbDeployVictor;
+
+   private Encoder climbDeployEncoder;
 
    public static final double ENCODER_TICKS_PER_INCH_CLIMB_DEPLOY = 50000 / 82; // test for old robot
 
@@ -65,8 +67,8 @@ public class ClimbDeploy extends NRSubsystem{
    private ClimbDeploy(){
        if(EnabledSubsystems.CLIMB_DEPLOY_ENABLED){
             climbDeployVictor = new VictorSPX(RobotMap.CLIMB_DEPLOY_VICTOR);
- 
-           climbDeployVictor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+            //Might need to switch channels
+           climbDeployEncoder = new Encoder(8,9, false, EncodingType.k2X);
 
            pdp = new PowerDistributionPanel(RobotMap.PDP_ID);
 
@@ -77,6 +79,7 @@ public class ClimbDeploy extends NRSubsystem{
 
            climbDeployVictor.setNeutralMode(NEUTRAL_MODE_CLIMB_DEPLOY);
            climbDeployVictor.setSensorPhase(false);
+           //TEST THIS
            climbDeployVictor.setInverted(true);
  
            climbDeployVictor.enableVoltageCompensation(true);
@@ -128,7 +131,7 @@ public class ClimbDeploy extends NRSubsystem{
  
            SmartDashboard.putNumber("Set Distance Climb Deploy", DEPLOY_DISTANCE.get(Distance.Unit.INCH));
 
-           SmartDashboard.putNumber("Climb Deploy Encoder", climbDeployVictor.getSelectedSensorPosition());
+           SmartDashboard.putNumber("Climb Deploy Encoder", climbDeployEncoder.getFPGAIndex());
  
            SmartDashboard.putNumber("Climb Deploy Position", getPosition().get(Distance.Unit.INCH));
            //SmartDashboard.putNumber("Climb Deploy Current", climbDeployTalon.getStatorCurrent());
@@ -142,7 +145,7 @@ public class ClimbDeploy extends NRSubsystem{
 
       if(climbDeployVictor != null)
       {
-          return new Distance(climbDeployVictor.getSelectedSensorPosition(), Distance.Unit.MAGNETIC_ENCODER_TICK_CLIMB_DEPLOY);
+          return new Distance(climbDeployEncoder.getFPGAIndex(), Distance.Unit.MAGNETIC_ENCODER_TICK_CLIMB_DEPLOY);
       }
        return Distance.ZERO;
    }
@@ -198,6 +201,8 @@ public class ClimbDeploy extends NRSubsystem{
 
             SmartDashboard.putNumber("Set Distance Climb Deploy", DEPLOY_DISTANCE.get(Distance.Unit.INCH));
 
+            SmartDashboard.putNumber("Climb Deploy Encoder", climbDeployEncoder.getFPGAIndex());
+
         //    SmartDashboard.getNumber("CLIMB DEPLOY PERCENT", 0);
 
             SmartDashboard.putNumber("Climb Deploy Encoder", climbDeployVictor.getSelectedSensorPosition());
@@ -210,5 +215,16 @@ public class ClimbDeploy extends NRSubsystem{
             goalPositionClimb = new Distance(SmartDashboard.getNumber("Goal Position Climb Deploy: ", goalPositionClimb.get(Distance.Unit.INCH)), Distance.Unit.INCH);
         }   
       }
+   }
+
+   public void periodic()
+   {
+    if(EnabledSubsystems.CLIMB_DEPLOY_ENABLED)
+    {
+        if(getPosition().get(Distance.Unit.INCH) < 5 && !climbDeployEncoder.getDirection())
+        {
+               setMotorSpeedRaw(0);
+        }
+    }
    }
 }

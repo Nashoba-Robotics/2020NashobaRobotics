@@ -16,7 +16,7 @@ public class ZeroTurretCommand extends CommandBase
     public void execute()
     {
         //Turret.getInstance().setAngle(new Angle(0, Angle.Unit.ROTATION));
-        Turret.getInstance().setMotorSpeedInPercent(-0.5);
+        Turret.getInstance().setMotorSpeedInPercent(-0.2);
     }
 
     public boolean isFinishedNR()

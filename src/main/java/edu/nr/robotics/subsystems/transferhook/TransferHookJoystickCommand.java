@@ -12,7 +12,7 @@ public class TransferHookJoystickCommand extends JoystickCommand {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void onExecute() {
-    TransferHook.getInstance().setMotorSpeedRaw(OI.getInstance().getTransferHookTurn());
+    //TransferHook.getInstance().setMotorSpeedRaw(OI.getInstance().getTransferHookTurn());
   }
 
   public long getPeriodOfCheckingForSwitchToJoystick() {

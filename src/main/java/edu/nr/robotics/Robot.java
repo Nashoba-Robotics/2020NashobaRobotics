@@ -1,17 +1,5 @@
 package edu.nr.robotics;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
-import com.revrobotics.CANSparkMax.IdleMode;
-import edu.nr.lib.motorcontrollers.SparkMax;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANPIDController;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import org.ietf.jgss.Oid; // what is this thing??? why? 
 
 import edu.nr.lib.commandbased.DoNothingCommand;
@@ -20,11 +8,6 @@ import edu.nr.lib.interfaces.Periodic;
 import edu.nr.lib.interfaces.SmartDashboardSource;
 import edu.nr.lib.network.LimelightNetworkTable;
 import edu.nr.lib.network.LimelightNetworkTable.Pipeline;
-import edu.nr.lib.units.AngularSpeed;
-import edu.nr.lib.units.Angle;
-import edu.nr.lib.units.Distance;
-import edu.nr.lib.units.Time;
-import edu.nr.lib.units.Time.Unit;
 import edu.nr.robotics.auton.automaps.DirectlyInFrontOfTrenchCommand;
 import edu.nr.robotics.auton.automaps.JustShootCommand;
 import edu.nr.robotics.auton.automaps.MiddleOfNowhereCommand;
@@ -36,14 +19,9 @@ import edu.nr.robotics.auton.autoroutes.AutoChoosers.ballLocation;
 import edu.nr.robotics.auton.autoroutes.AutoChoosers.startPos;
 import edu.nr.robotics.subsystems.indexer.IndexingProcedureCommand;
 import edu.nr.robotics.multicommands.ProjectileVomitCommand;
-import edu.nr.robotics.multicommands.States;
-import edu.nr.robotics.multicommands.States.State;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
-import edu.nr.robotics.subsystems.bashbar.ToggleDeployBashBarCommand;
 import edu.nr.robotics.subsystems.climbdeploy.ClimbDeploy;
 import edu.nr.robotics.subsystems.climbdeploy.ClimbDeployJoystickCommand;
-import edu.nr.robotics.subsystems.climbdeploy.ClimbDeploySmartDashboardCommand;
-import edu.nr.robotics.subsystems.colorwheel.ColorWheel;
 import edu.nr.robotics.subsystems.colorwheel.ColorWheelRotateCommand;
 import edu.nr.robotics.subsystems.colorwheel.TargetColorCommand;
 import edu.nr.robotics.subsystems.colorwheel.ToggleColorWheelSmartDashboardCommand;
@@ -51,54 +29,34 @@ import edu.nr.robotics.subsystems.drive.CSVSaverDisable;
 import edu.nr.robotics.subsystems.drive.CSVSaverEnable;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.DriveForwardBasicSmartDashboardCommand;
-import edu.nr.robotics.subsystems.drive.DriveToBallCommand;
-import edu.nr.robotics.subsystems.drive.EnableMotionProfile;
 import edu.nr.robotics.subsystems.drive.EnableMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.EnableReverseTwoDMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.EnableTwoDMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.TurnSmartDashboardCommand;
 import edu.nr.robotics.subsystems.hood.DeltaHoodAngleSmartDashboardCommand;
-import edu.nr.robotics.subsystems.hood.Hood;
 import edu.nr.robotics.subsystems.hood.HoodPercentCommand;
 import edu.nr.robotics.subsystems.hood.SetHoodAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.transfer.Transfer;
 import edu.nr.robotics.subsystems.transfer.TransferCommand;
 import edu.nr.robotics.subsystems.transfer.TransferProcedureCommand;
-import edu.nr.robotics.subsystems.transferhook.TransferHook;
-import edu.nr.robotics.subsystems.transferhook.TransferHookJoystickCommand;
 import edu.nr.robotics.subsystems.indexer.IndexerDeltaPositionSmartDashboardCommand;
 import edu.nr.robotics.subsystems.indexer.IndexerPukeCommand;
-import edu.nr.robotics.subsystems.indexer.IndexerSetVelocityCommand;
 import edu.nr.robotics.subsystems.indexer.IndexerSetVelocitySmartDashboardCommand;
-import edu.nr.robotics.subsystems.indexer.IndexingProcedureCommand;
-import edu.nr.robotics.subsystems.intake.Intake;
-import edu.nr.robotics.subsystems.sensors.DigitalSensor;
-import edu.nr.robotics.subsystems.sensors.EnabledSensors;
-//import edu.nr.robotics.subsystems.sensors.EnabledSensors;
-import edu.nr.robotics.subsystems.sensors.ISquaredCSensor;
 import edu.nr.robotics.subsystems.shooter.SetShooterSpeedSmartDashboardCommand;
-import edu.nr.robotics.subsystems.shooter.Shooter;
 import edu.nr.robotics.subsystems.turret.DeltaTurretAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.turret.SetTurretAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.turret.SetTurretLimelightCommand;
 import edu.nr.robotics.subsystems.turret.SetTurretPercentCommand;
 import edu.nr.robotics.subsystems.turret.Turret;
 import edu.nr.robotics.subsystems.turret.TurretJoystickCommand;
-import edu.nr.robotics.subsystems.turret.TurretLimelightCommand;
 import edu.nr.robotics.subsystems.turret.ZeroTurretEncoderCommand;
 import edu.nr.robotics.subsystems.winch.SetWinchPositionCommand;
 import edu.nr.robotics.subsystems.winch.WinchClimbRetractCommand;
 import edu.nr.robotics.subsystems.indexer.Indexer;
-import edu.nr.robotics.subsystems.indexer.IndexerDeltaPositionCommand;
-import edu.nr.robotics.subsystems.indexer.IndexerDeltaPositionSmartDashboardCommand;
-import edu.nr.robotics.subsystems.indexer.IndexerSetVelocityCommand;
-import edu.nr.robotics.subsystems.indexer.IndexerSetVelocitySmartDashboardCommand;
 
 /*import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;*/
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.PWMSparkMax;
-import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -148,13 +106,13 @@ public class Robot extends TimedRobot {
         //Indexer.init();
         //Transfer.init();
 
-        //robotCompressor = new Compressor(RobotMap.PCM_ID);
-        //robotCompressor.start();
+        robotCompressor = new Compressor(RobotMap.PCM_ID);
+        robotCompressor.start();
 
         smartDashboardInit();
         // CameraInit();
 
-        LimelightNetworkTable.getInstance().lightLED(true);
+        LimelightNetworkTable.getInstance().lightLED(false);
         LimelightNetworkTable.getInstance().setPipeline(Pipeline.Target);
 
         

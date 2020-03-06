@@ -49,7 +49,7 @@ public class Winch extends NRSubsystem
 
     public static final double ENCODER_TICKS_PER_INCH_WINCH = 0;
 
-    public static final double WINCH_PERCENT = 0.0;
+    public static final double WINCH_PERCENT = 0.3;
 
     public Winch()
     {

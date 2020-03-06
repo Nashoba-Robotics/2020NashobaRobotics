@@ -2,6 +2,7 @@ package edu.nr.robotics.subsystems.climbdeploy;
 
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.units.Distance;
+import edu.nr.robotics.OI;
 
 public class ClimbDeployCommand extends NRCommand
 {
@@ -16,6 +17,7 @@ public class ClimbDeployCommand extends NRCommand
     public void onStart()
     {
         ClimbDeploy.getInstance().setPosition(targetHeight);
+        OI.climbMode = true;
     }
 
     public boolean isFinishedNR()

@@ -10,26 +10,26 @@ package edu.nr.robotics.subsystems.turret;
 import edu.nr.lib.commandbased.JoystickCommand;
 import edu.nr.robotics.OI;
 
-public class TurretJoystickCommand extends JoystickCommand {
+public class TurretJoystickCommand extends JoystickCommand 
+{
   public TurretJoystickCommand() 
   {
     super(Turret.getInstance());
   }
 
-  // Called repeatedly when this Command is scheduled to run
   @Override
-  protected void onExecute() {
+  protected void onExecute() 
+  {
     Turret.getInstance().setMotorSpeedInPercent(OI.getInstance().getTurretTurn());
   }
 
-  public long getPeriodOfCheckingForSwitchToJoystick() {
+  public long getPeriodOfCheckingForSwitchToJoystick() 
+  {
     return 100;
   }
 
   public boolean shouldSwitchToJoystick() {
-
     return OI.getInstance().isTurretNonZero();
-
   }
 
 }

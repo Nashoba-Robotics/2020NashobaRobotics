@@ -14,13 +14,13 @@ public class ToggleRunIntakeCommand extends CommandBase
     public void execute()
     {
         System.out.println("Toggle Run Intake Motors has been called");
-        //if(Intake.getInstance().isIntakeDeployed())
-        //{
+        if(Intake.getInstance().isIntakeDeployed())
+        {
             if(Intake.getInstance().getSetPercent() == 0)
                 Intake.getInstance().setMotorSpeedRaw(Intake.INTAKE_PERCENT);
             else
                 Intake.getInstance().setMotorSpeedRaw(0);
-        //}
+        }
     }
 
     @Override

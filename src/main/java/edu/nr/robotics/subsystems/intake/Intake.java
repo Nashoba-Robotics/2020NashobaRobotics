@@ -141,7 +141,7 @@ public class Intake extends NRSubsystem
     public void SmartDashboardInit() {
 		if (EnabledSubsystems.INTAKE_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putBoolean("Intake deployed: ", isIntakeDeployed());
-            SmartDashboard.putNumber("SET SPEED INTAKE (PERCENT)", 0);
+            //SmartDashboard.putNumber("SET SPEED INTAKE (PERCENT)", 0);
             SmartDashboard.putNumber("Intake Current: ", getOutputCurrent());
 		}
 	}
@@ -151,7 +151,7 @@ public class Intake extends NRSubsystem
         if(EnabledSubsystems.INTAKE_SMARTDASHBOARD_DEBUG_ENABLED)
         {
             SmartDashboard.putBoolean("Intake Deployed: ", isIntakeDeployed());
-            setMotorSpeedRaw(SmartDashboard.getNumber("SET SPEED INTAKE (PERCENT)", 0));
+            //setMotorSpeedRaw(SmartDashboard.getNumber("SET SPEED INTAKE (PERCENT)", 0));
             SmartDashboard.putNumber("Intake Current: ", getOutputCurrent());
         }
 	}

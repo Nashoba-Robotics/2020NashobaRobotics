@@ -45,6 +45,12 @@ public class Turret extends NRSubsystem {
 
     public static double goalPercent;
 
+    public static final Angle MID_ANGLE = new Angle(90, Angle.Unit.DEGREE);
+
+    public static final Angle LEFT_ANGLE = new Angle(45, Angle.Unit.DEGREE);
+
+    public static final Angle RIGHT_ANGLE = new Angle(135, Angle.Unit.DEGREE);
+
     private Turret() {
         if (EnabledSubsystems.TURRET_ENABLED) {
             turretTalon = new TalonSRX(RobotMap.TURRET_TALON);

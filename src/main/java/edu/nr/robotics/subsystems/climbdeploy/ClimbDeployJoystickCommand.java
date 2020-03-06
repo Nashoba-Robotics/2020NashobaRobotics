@@ -13,12 +13,20 @@ public class ClimbDeployJoystickCommand extends NRCommand
     @Override
     protected void onExecute()
     {
-        ClimbDeploy.getInstance().setMotorSpeedRaw(OI.getInstance().getClimbValue());
+        if(OI.climbMode)
+        {
+            ClimbDeploy.getInstance().setMotorSpeedRaw(OI.getInstance().getOperatorLeftTurn());
+        }
     }
 
     @Override
     protected boolean isFinishedNR()
     {
         return false;
+    }
+
+    public boolean shouldSwitchToJoystick() 
+    {
+        return OI.getInstance().isOperatorLeftNonZero();
     }
 }

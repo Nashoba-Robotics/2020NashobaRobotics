@@ -2,6 +2,7 @@ package edu.nr.robotics.multicommands;
 
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
+import edu.nr.lib.units.Distance;
 import edu.nr.robotics.subsystems.climbdeploy.ClimbDeploy;
 import edu.nr.robotics.subsystems.winch.Winch;
 
@@ -15,8 +16,9 @@ public class ClimbCommand extends NRCommand
     @Override
     protected void onStart()
     {
+        //Change to POS PID
         ClimbDeploy.getInstance().setMotorSpeedRaw(ClimbDeploy.RETRACT_PERCENT);
-        Winch.getInstance().setMotorSpeedRaw(Winch.WINCH_PERCENT);
+        Winch.getInstance().setPosition(new Distance(5, Distance.Unit.INCH));
     }
 
     @Override

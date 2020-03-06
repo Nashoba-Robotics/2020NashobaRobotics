@@ -10,7 +10,7 @@ public class HoodUpButtonCommand extends NRCommand {
     }
 
     @Override
-    public void onStart(){
+    public void onExecute(){
         Hood.getInstance().setMotorSpeedRaw(0.1);
     }
 

@@ -17,10 +17,17 @@ public class AcquireTargetCommand extends NRCommand
     }
 
     @Override
+    protected void onStart() 
+    {
+        LimelightNetworkTable.getInstance().lightLED(true);
+    }
+
+    @Override
     protected void onExecute()
     {
         if(!OI.getInstance().getManualMode())
         {
+
             Shooter.getInstance().setMotorSpeed(Shooter.SHOOT_SPEED);
 
             Turret.getInstance().setAngle(LimelightNetworkTable.getInstance().getHorizOffset().add(Turret.getInstance().getAngle()));
@@ -37,5 +44,11 @@ public class AcquireTargetCommand extends NRCommand
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected void onEnd()
+    {
+        LimelightNetworkTable.getInstance().lightLED(false);
     }
 }

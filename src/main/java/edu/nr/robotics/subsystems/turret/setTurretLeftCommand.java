@@ -12,7 +12,7 @@ public class setTurretLeftCommand extends NRCommand
 
     public void onStart()
     {
-        Turret.getInstance().setAngle(new Angle(-0.25, Angle.Unit.ROTATION));
+        Turret.getInstance().setAngle(Turret.LEFT_ANGLE);
     }
 
     public boolean isFinishedNR()
