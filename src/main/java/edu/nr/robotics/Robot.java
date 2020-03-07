@@ -275,9 +275,10 @@ public class Robot extends TimedRobot {
 
     public void autonomousInit() {
         enabledInit();
+        /*
         selectedBallLocation = AutoChoosers.ballLocationChooser.getSelected();
         selectedStartPos = AutoChoosers.startPosChooser.getSelected();
-
+        */
         autonomousCommand = getAutoCommand();
 
         if (autonomousCommand != null)

@@ -24,9 +24,6 @@ public class Turret extends NRSubsystem {
     private static double I_POS_TURRET = 0;
     private static double D_POS_TURRET = 0;
 
-    private static double turretMaxOutput = 0.3;
-    private static double turretMinOutput = -0.3;
-
     private static Angle setAngle = Angle.ZERO;
     public static Angle goalAngle = Angle.ZERO;
     public static Angle deltaAngle = Angle.ZERO;
@@ -64,11 +61,7 @@ public class Turret extends NRSubsystem {
 
             turretTalon.setSelectedSensorPosition(0);
 
-            if (EnabledSubsystems.TURRET_DUMB_ENABLED) {
-                turretTalon.set(ControlMode.PercentOutput, 0);
-            } else {
-                turretTalon.set(ControlMode.Position, getAngle().get(Angle.Unit.TURRET_ENCODER_TICK));
-            }
+            turretTalon.set(ControlMode.PercentOutput, 0);
             smartDashboardInit();
         }
     }

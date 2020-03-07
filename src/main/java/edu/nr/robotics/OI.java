@@ -182,6 +182,7 @@ public class OI implements SmartDashboardSource {
 
     public void initDriveRight() {
         //new JoystickButton(driveRight, 1).whileActiveOnce(new ShootCommand(), true);
+        new JoystickButton(driveRight, 16).whenPressed(new PointBlankShotCommand());
     }
 
     public void initOperatorLeft() {

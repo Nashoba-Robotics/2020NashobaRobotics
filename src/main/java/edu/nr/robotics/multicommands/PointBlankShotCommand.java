@@ -21,7 +21,8 @@ public class PointBlankShotCommand extends NRCommand
     {
         Hood.getInstance().setAngle(Hood.POINT_BLANK_SHOT_ANGLE);
         Shooter.getInstance().setMotorSpeed(Shooter.SHOOT_SPEED);
-        Turret.getInstance().setAngle(Angle.ZERO);
+        //MID ANGLE
+        //Turret.getInstance().setAngle(Angle.ZERO);
     }
 
     @Override
