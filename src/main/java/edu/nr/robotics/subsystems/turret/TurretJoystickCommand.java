@@ -21,7 +21,7 @@ public class TurretJoystickCommand extends JoystickCommand
   protected void onExecute() 
   {
     Turret.getInstance().setMotorSpeedInPercent(OI.getInstance().getTurretTurn());
-    System.out.println("turret joystick value");
+   // System.out.println("turret joystick value" + OI.getInstance().getTurretTurn());
   }
 
   public long getPeriodOfCheckingForSwitchToJoystick() 

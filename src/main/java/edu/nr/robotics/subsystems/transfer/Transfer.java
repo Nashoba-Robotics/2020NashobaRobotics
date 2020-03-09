@@ -238,7 +238,7 @@ public class Transfer extends NRSubsystem {
             else if(EnabledSensors.getInstance().transferSensor.get())
             {
                 currentTimer = Timer.getFPGATimestamp();
-                if(currentTimer - falseTimer >= .1) // .15 before, can be higher
+                if(currentTimer - falseTimer >= .15) // .15 before, can be higher
                     return true;
             }
             //transfer not pushing the ball through to indexer because plate

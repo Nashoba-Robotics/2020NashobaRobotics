@@ -20,7 +20,7 @@ public class SetTurretLimelightCommand extends NRCommand
     @Override
     protected void onExecute()
     {
-        this.limeLightAngle = LimelightNetworkTable.getInstance().getHorizOffset();
+        SetTurretLimelightCommand.limeLightAngle = LimelightNetworkTable.getInstance().getHorizOffset();
         if(LimelightNetworkTable.getInstance().getBoxHeight() == 0)
         {
 

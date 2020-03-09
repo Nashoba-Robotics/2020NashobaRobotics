@@ -120,13 +120,13 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
     public static final double ONE_D_ACCEL_PERCENT = 0.8;
     public static final double TWO_D_ACCEL_PERCENT = 0.6;
 
-    public static double TURN_JOYSTICK_MULTIPLIER = .7;
+    public static double TURN_JOYSTICK_MULTIPLIER = .45;
     public static double MOVE_JOYSTICK_MULTIPLIER = 1;
 
     public static final double MAX_PROFILE_TURN_PERCENT = 1;
     public static final double MIN_PROFILE_TURN_PERCENT = 0.02;
 	
-    public static final Distance END_THRESHOLD = new Distance(3, Distance.Unit.INCH);
+    public static final Distance END_THRESHOLD = new Distance(3, Distance.Unit.INCH); // up this for making auto less 'doughnut-y'
     public static final Speed PROFILE_END_TURN_SPEED_THRESHOLD = MAX_SPEED_DRIVE.mul(MIN_PROFILE_TURN_PERCENT + 0.01);
     public static final Speed PROFILE_END_SPEED_THRESHOLD = MAX_SPEED_DRIVE.mul(0.10);
  

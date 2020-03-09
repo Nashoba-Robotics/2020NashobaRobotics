@@ -9,6 +9,7 @@ import jdk.jfr.Enabled;
 public class FireOneCommand extends NRCommand
 {
     boolean previousValue = EnabledSensors.getInstance().indexerShooterSensor.get();
+    
 
     public FireOneCommand()
     {

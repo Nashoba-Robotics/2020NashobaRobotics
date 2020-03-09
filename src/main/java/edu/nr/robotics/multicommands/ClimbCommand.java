@@ -22,8 +22,7 @@ public class ClimbCommand extends NRCommand
         Drive.MOVE_JOYSTICK_MULTIPLIER = 0.4;
         Drive.TURN_JOYSTICK_MULTIPLIER = 0.4;
         //Change to POS PID
-        //ClimbDeploy.getInstance().setMotorSpeedRaw(ClimbDeploy.RETRACT_PERCENT);
-        Winch.getInstance().setMotorSpeedRaw(0.3);
+        Winch.getInstance().setMotorSpeedRaw(Winch.WINCH_PERCENT);
     }
 
     @Override
@@ -35,7 +34,6 @@ public class ClimbCommand extends NRCommand
     @Override
     protected void onEnd()
     {
-        //ClimbDeploy.getInstance().setMotorSpeedRaw(0);
         Winch.getInstance().setMotorSpeedRaw(0);
     }
 }

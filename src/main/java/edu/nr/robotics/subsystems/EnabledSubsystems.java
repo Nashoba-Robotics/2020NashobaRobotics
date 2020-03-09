@@ -12,7 +12,7 @@ public class EnabledSubsystems {
     public static final boolean TURRET_SMARTDASHBOARD_BASIC_ENABLED              = false;
     public static final boolean TURRET_SMARTDASHBOARD_DEBUG_ENABLED              = false;
 
-    public static boolean LIMELIGHT_ENABLED                                      = false;
+    public static boolean LIMELIGHT_ENABLED                                      = true;
 
     public static final boolean SHOOTER_ENABLED                                  = true;
     public static final boolean SHOOTER_DUMB_ENABLED                             = false;

@@ -2,18 +2,15 @@ package edu.nr.robotics;
 
 import org.ietf.jgss.Oid; // what is this thing??? why? 
 
-import edu.nr.lib.commandbased.DoNothingCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.interfaces.Periodic;
 import edu.nr.lib.interfaces.SmartDashboardSource;
 import edu.nr.lib.network.LimelightNetworkTable;
 import edu.nr.lib.network.LimelightNetworkTable.Pipeline;
-import edu.nr.robotics.auton.automaps.DirectlyInFrontOfTrenchCommand;
-import edu.nr.robotics.auton.automaps.JustShootCommand;
-import edu.nr.robotics.auton.automaps.MiddleOfNowhereCommand;
-import edu.nr.robotics.auton.automaps.MiddleToThreeRendezvousAutoCommand;
-import edu.nr.robotics.auton.automaps.MiddleToTwoRendezvousCommand;
+import edu.nr.lib.units.Angle;
+import edu.nr.lib.units.Distance;
 import edu.nr.robotics.auton.automaps.SimpleMiddleAutoCommand;
+import edu.nr.robotics.auton.automaps.TestingAuto;
 import edu.nr.robotics.auton.autoroutes.AutoChoosers;
 import edu.nr.robotics.auton.autoroutes.AutoChoosers.ballLocation;
 import edu.nr.robotics.auton.autoroutes.AutoChoosers.startPos;
@@ -53,15 +50,12 @@ import edu.nr.robotics.subsystems.turret.SetTurretAngleSmartDashboardCommand;
 import edu.nr.robotics.subsystems.turret.SetTurretLimelightCommand;
 import edu.nr.robotics.subsystems.turret.SetTurretPercentCommand;
 import edu.nr.robotics.subsystems.turret.Turret;
-import edu.nr.robotics.subsystems.turret.TurretJoystickCommand;
-import edu.nr.robotics.subsystems.turret.ZeroTurretEncoderCommand;
 import edu.nr.robotics.subsystems.winch.SetWinchPositionCommand;
 import edu.nr.robotics.subsystems.winch.Winch;
 import edu.nr.robotics.subsystems.winch.WinchClimbRetractCommand;
 import edu.nr.robotics.subsystems.indexer.Indexer;
-
-/*import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.CameraServer;*/
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -116,22 +110,22 @@ public class Robot extends TimedRobot {
         robotCompressor.start();
 
         smartDashboardInit();
-        // CameraInit();
+        CameraInit();
 
-        LimelightNetworkTable.getInstance().lightLED(false);
         LimelightNetworkTable.getInstance().setPipeline(Pipeline.Target);
+        LimelightNetworkTable.getInstance().lightLED(false);
+
+        //SmartDashboard.putData(new SetHoodAngleSmartDashboardCommand());
 
         
         if(EnabledSubsystems.INDEXER_ENABLED)
         {
             Indexer.getInstance().setDefaultCommand(new IndexingProcedureCommand());
-            //System.out.println("The Indexer default command line has been passed");
         }
         if(EnabledSubsystems.TRANSFER_ENABLED)
         {
             //CommandScheduler.getInstance().setDefaultCommand(Transfer.getInstance(), new TransferProcedureCommand());
             Transfer.getInstance().setDefaultCommand(new TransferProcedureCommand());
-            //System.out.println("The Transfer default command line has been passed");
         }
 
         if(EnabledSubsystems.TURRET_ENABLED)
@@ -174,10 +168,18 @@ public class Robot extends TimedRobot {
     }
 
     public void smartDashboardInit() {
-
+        /*
         SmartDashboard.putData(new CSVSaverEnable());
         SmartDashboard.putData(new CSVSaverDisable());
         SmartDashboard.putNumber("Auto Wait Time", 0);
+        */
+
+        SmartDashboard.putNumber("Ball Count: ", Transfer.ballCount);
+        SmartDashboard.putNumber("Hood Angle: ", Hood.getAngle().get(Angle.Unit.DEGREE));
+        SmartDashboard.putNumber("Limelight Distance: ", LimelightNetworkTable.getInstance().getDistance().get(Distance.Unit.FOOT));        
+        //SmartDashboard.putData(new SimpleMiddleAutoCommand());
+        SmartDashboard.putBoolean("Intake Deployed: ", Intake.getInstance().isIntakeDeployed());
+        //SmartDashboard.putData(new TestingAuto());
 
         //SmartDashboard.putData(new IndexingProcedureCommand());
         //SmartDashboard.putData(new TransferProcedureCommand());
@@ -200,9 +202,9 @@ public class Robot extends TimedRobot {
         }
 
         if (EnabledSubsystems.TURRET_SMARTDASHBOARD_DEBUG_ENABLED) {
-            /*
+            
             SmartDashboard.putData(new SetTurretAngleSmartDashboardCommand());
-            SmartDashboard.putData(new DeltaTurretAngleSmartDashboardCommand());
+            /*SmartDashboard.putData(new DeltaTurretAngleSmartDashboardCommand());
             SmartDashboard.putData(new SetTurretLimelightCommand());
             SmartDashboard.putData(new SetTurretPercentCommand());
             SmartDashboard.putData(new ZeroTurretEncoderCommand());
@@ -243,6 +245,7 @@ public class Robot extends TimedRobot {
         }
 
         if(EnabledSubsystems.HOOD_ENABLED)
+
         {
             SmartDashboard.putData(new HoodPercentCommand());
             SmartDashboard.putData(new SetHoodAngleSmartDashboardCommand());
@@ -255,6 +258,7 @@ public class Robot extends TimedRobot {
         // SmartDashboard.putNumber("P TESTER", 0);
         // SmartDashboard.putNumber("MOTOR PERCENT", 0);
         // SmartDashboard.putNumber("TESTER SENSOR POSITION", 0);
+        
     }
 
     @Override
@@ -318,6 +322,9 @@ public class Robot extends TimedRobot {
             dtTot = 0;
             count = 0;
         }
+        SmartDashboard.putNumber("Ball Count: ", Transfer.ballCount);
+        SmartDashboard.putNumber("Hood Angle", Hood.getAngle().get(Angle.Unit.DEGREE));
+        SmartDashboard.putBoolean("Intake Deployed: ", Intake.getInstance().isIntakeDeployed());
 
       //  System.out.println(OI.getInstance().getManualMode() + "manual mode");
         //testSpark.set(SmartDashboard.getNumber("testSpark Percent", 0));
@@ -332,18 +339,15 @@ public class Robot extends TimedRobot {
         // tester.getSensorCollection().getIntegratedSensorPosition());
     }
 
-    /*
-     * public void CameraInit() { new Thread(() -> { UsbCamera camera =
-     * CameraServer.getInstance().startAutomaticCapture(); camera.setResolution(720,
-     * 1080);
-     * 
-     * }).start();
-     * 
-     * }
-     */
+    public void CameraInit() { new Thread(() -> { UsbCamera camera = CameraServer.getInstance().startAutomaticCapture(); 
+        camera.setResolution(180, 270);
+        camera.setFPS(30);
+    }).start();
+    }
 
     @Override
-    public void testPeriodic() {
+    public void testPeriodic() 
+    {
     }
 
     /*public void setAngle(Angle target) {

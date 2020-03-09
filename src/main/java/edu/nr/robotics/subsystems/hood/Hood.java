@@ -50,7 +50,7 @@ public class Hood extends NRSubsystem {
     public static double F_POS_HOOD = 0.01;
     public static double P_POS_HOOD = 0.01;
     public static double I_POS_HOOD = 0;
-    public static double D_POS_HOOD = 0;
+    public static double D_POS_HOOD = 0.02;
 
     public static final int PEAK_CURRENT_HOOD = 60;
     public static final int CONTINUOUS_CURRENT_LIMIT_HOOD = 40;
@@ -134,24 +134,21 @@ public class Hood extends NRSubsystem {
 
     public static Angle getAngle() {
         if (hoodSpark != null) {
-            return new Angle(hoodEncoder.getPosition(), Angle.Unit.ROTATION).add(startAngle);
+            return new Angle(hoodEncoder.getPosition() / motorRotationsPerHoodDegree, Angle.Unit.DEGREE).add(startAngle);
         }
         return Angle.ZERO;
     }
 
     public void setAngle(Angle target) {
+        
         if (hoodSpark != null) {
             //hoodSpark.set(target.get(Angle.Unit.DEGREE));
-
-            //System.out.println("CALLED" + target.get(Angle.Unit.ROTATION));
             //hoodSpark.getPIDController().setReference(target.get(Angle.Unit.ROTATION) * 1.815, ControlType.kPosition, POS_SLOT);
-            // System.out.println(setAngleHood.get(Angle.Unit.DEGREE) *
-            // Hood.HoodDegreePerMotorRotation);
             if (target.get(Angle.Unit.DEGREE) < 24) {
                 target = new Angle(24, Angle.Unit.DEGREE);
             }
             setAngleHood = target;
-            Angle a = new Angle(target.get(Angle.Unit.DEGREE) - 24, Angle.Unit.DEGREE);
+            Angle a = new Angle(target.get(Angle.Unit.DEGREE) - 24 + 0.2, Angle.Unit.DEGREE);
             double b = a.get(Angle.Unit.DEGREE) * motorRotationsPerHoodDegree;
             hoodSpark.getPIDController().setReference(b, ControlType.kPosition, POS_SLOT);
             // hoodSpark.getPIDController().seReference(setAngleHood.get(Angle.Unit.ROTATION),
@@ -174,7 +171,7 @@ public class Hood extends NRSubsystem {
             }
             
             double slope = (hoodAngles[i] - hoodAngles[i - 1]) / (limeLightDistances[i] - limeLightDistances[i - 1]);
-            double a = slope * (limeLightDistance - limeLightDistances[i - 1]);
+            double a = slope * (limeLightDistance - limeLightDistances[i - 1]) + hoodAngles[i - 1];
             return new Angle(a, Angle.Unit.DEGREE);
         }
 
@@ -206,6 +203,11 @@ public class Hood extends NRSubsystem {
             SmartDashboard.putBoolean("Lim Hood Upper", EnabledSensors.getInstance().LimHoodUpper.get());
             SmartDashboard.putNumber("Limelight Calculated Distance", LimelightNetworkTable.getInstance().getDistance().get(Distance.Unit.FOOT));
             }
+        //SmartDashboard.putNumber("F_POS_HOOD", F_POS_HOOD);
+        //SmartDashboard.putNumber("P_POS_HOOD", P_POS_HOOD);
+        //SmartDashboard.putNumber("Hood Goal Angle", goalAngleHood.get(Angle.Unit.DEGREE));
+        //SmartDashboard.putNumber("Hood Angle", Hood.getAngle().get(Angle.Unit.DEGREE));
+        //SmartDashboard.putNumber("Set Angle Hood", Hood.setAngleHood.get(Angle.Unit.DEGREE));
     }
 
     public void disable() {
@@ -295,8 +297,19 @@ public class Hood extends NRSubsystem {
                 deltaAngleHood = new Angle(SmartDashboard.getNumber("Hood Delta Angle", deltaAngleHood.get(Angle.Unit.DEGREE)), Angle.Unit.DEGREE);
                 SmartDashboard.putNumber("Limelight Calculated Distance", LimelightNetworkTable.getInstance().getDistance().get(Distance.Unit.FOOT));
                 }
+                SmartDashboard.putNumber("Hood Angle", Hood.getAngle().get(Angle.Unit.DEGREE));
         }
         // System.out.println("Hood angle" + goalAngleHood.get(Angle.Unit.DEGREE));
+        //F_POS_HOOD = SmartDashboard.getNumber("F_POS_HOOD", POS_SLOT);
+        //P_POS_HOOD = SmartDashboard.getNumber("P_POS_HOOD", POS_SLOT);
+        /*
+        hoodSpark.getPIDController().setFF(F_POS_HOOD, POS_SLOT);
+        hoodSpark.getPIDController().setP(P_POS_HOOD, POS_SLOT);
+
+        SmartDashboard.putNumber("Hood Angle", Hood.getAngle().get(Angle.Unit.DEGREE));
+        SmartDashboard.putNumber("Set Angle Hood", Hood.setAngleHood.get(Angle.Unit.DEGREE));
+        goalAngleHood = new Angle(SmartDashboard.getNumber("Hood Goal Angle", goalAngleHood.get(Angle.Unit.DEGREE)), Angle.Unit.DEGREE);
+        */
     }
 
     public double getCurrent() {

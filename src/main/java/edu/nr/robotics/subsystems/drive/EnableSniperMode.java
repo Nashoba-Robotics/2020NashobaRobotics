@@ -6,7 +6,7 @@ public class EnableSniperMode extends NRCommand {
 
 	private boolean bool;
 	
-	public static final double TURN_JOYSTICK_MULTIPLIER_LOW = 0.5;
+	public static final double TURN_JOYSTICK_MULTIPLIER_LOW = 0.3;
 	public static final double MOVE_JOYSTICK_MULTIPLIER_LOW = 0.6;
 	
 	public EnableSniperMode() {
@@ -23,7 +23,7 @@ public class EnableSniperMode extends NRCommand {
 
 	@Override
 	protected void onEnd(){
-		Drive.TURN_JOYSTICK_MULTIPLIER = .7;
+		Drive.TURN_JOYSTICK_MULTIPLIER = .45;
 		Drive.MOVE_JOYSTICK_MULTIPLIER = 1;
 	}
 

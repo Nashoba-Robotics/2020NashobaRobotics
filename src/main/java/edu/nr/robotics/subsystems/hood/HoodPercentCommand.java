@@ -12,7 +12,7 @@ public class HoodPercentCommand extends NRCommand
     @Override
     protected void onStart()
     {
-        Hood.getInstance().setMotorSpeedRaw(Hood.goalPercent);
+        //Hood.getInstance().setMotorSpeedRaw(Hood.goalPercent);
     }
 
     @Override

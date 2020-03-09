@@ -13,7 +13,7 @@ public class SetTurretAngleSmartDashboardCommand extends NRCommand
     @Override
     protected void onStart()
     {
-        System.out.println("setTurretAngle command was called: " + Turret.goalAngle.get(Angle.Unit.DEGREE));
+     //   System.out.println("setTurretAngle command was called: " + Turret.goalAngle.get(Angle.Unit.DEGREE));
         Turret.getInstance().setAngle(Turret.goalAngle);
     }
 

@@ -2,9 +2,7 @@ package edu.nr.robotics.multicommands;
 
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
-import edu.nr.lib.network.LimelightNetworkTable;
 import edu.nr.lib.units.Angle;
-import edu.nr.lib.units.AngularSpeed;
 import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
 import edu.nr.robotics.subsystems.hood.Hood;
@@ -33,6 +31,8 @@ public class ShootCommand extends NRCommand
         Turret.getInstance().setAngle(limeLightAngle.add(Turret.getInstance().getAngle()));
         */
         //Add hood stuff once HoodLimelightCommand is finished
+        Shooter.getInstance().setMotorSpeed(Shooter.SHOOT_SPEED);
+
     }
 
     @Override
@@ -42,7 +42,6 @@ public class ShootCommand extends NRCommand
         {
             lastBall = Timer.getFPGATimestamp();
         }
-        Shooter.getInstance().setMotorSpeed(Shooter.SHOOT_SPEED);
         /*if(Shooter.getInstance().getSpeedShooter1().get(Angle.Unit.ROTATION, Time.Unit.MINUTE) >= 0.85 * Shooter.SHOOT_SPEED.get(Angle.Unit.ROTATION, Time.Unit.MINUTE)){
             Indexer.getInstance().setMotorSpeedInPercent(1);
             Transfer.getInstance().setMotorSpeedInPercent(Transfer.TRANSFER_PERCENT);
@@ -51,16 +50,17 @@ public class ShootCommand extends NRCommand
             Transfer.getInstance().setMotorSpeedInPercent(0);
         }*/
 
-        Indexer.getInstance().setMotorSpeedInPercent(1);
-        Transfer.getInstance().setMotorSpeedInPercent(Transfer.TRANSFER_PERCENT);
-
+        if(Shooter.getInstance().getSpeedShooter1().get(Angle.Unit.ROTATION, Time.Unit.MINUTE) > 0.94 * Shooter.SHOOT_SPEED.get(Angle.Unit.ROTATION, Time.Unit.MINUTE)){
+            Indexer.getInstance().setMotorSpeedInPercent(1);
+            Transfer.getInstance().setMotorSpeedInPercent(Transfer.TRANSFER_PERCENT);
+        }
     }
 
     @Override
     protected boolean isFinishedNR()
     {
         current = Timer.getFPGATimestamp();
-        return current - lastBall >= 0.5;
+        return current - lastBall >= 0.7;
     }
 
     @Override

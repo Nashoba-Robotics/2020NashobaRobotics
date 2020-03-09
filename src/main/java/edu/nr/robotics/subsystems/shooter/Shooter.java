@@ -9,6 +9,7 @@ import edu.nr.lib.units.AngularAcceleration;
 import edu.nr.lib.units.Angle;
 import edu.nr.lib.units.Time;
 import edu.nr.lib.units.AngularSpeed;
+import edu.nr.lib.units.Speed;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -244,6 +245,7 @@ public class Shooter extends NRSubsystem {
     {
         shooterTalon1.neutralOutput();
         shooterTalon2.neutralOutput();
+        speedSetPointShooter = AngularSpeed.ZERO;
     }
 
     public void periodic()

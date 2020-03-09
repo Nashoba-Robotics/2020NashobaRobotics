@@ -69,6 +69,7 @@ public class ClimbDeploy extends NRSubsystem{
             climbDeployVictor = new VictorSPX(RobotMap.CLIMB_DEPLOY_VICTOR);
             //Might need to switch channels
            climbDeployEncoder = new Encoder(8,9, false, EncodingType.k2X);
+           climbDeployEncoder.setDistancePerPulse(1.0);
 
            pdp = new PowerDistributionPanel(RobotMap.PDP_ID);
 
@@ -80,7 +81,7 @@ public class ClimbDeploy extends NRSubsystem{
            climbDeployVictor.setNeutralMode(NEUTRAL_MODE_CLIMB_DEPLOY);
            climbDeployVictor.setSensorPhase(false);
            //TEST THIS
-           climbDeployVictor.setInverted(true);
+           climbDeployVictor.setInverted(false);
  
            climbDeployVictor.enableVoltageCompensation(true);
            climbDeployVictor.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL, DEFAULT_TIMEOUT);
@@ -131,7 +132,7 @@ public class ClimbDeploy extends NRSubsystem{
  
            SmartDashboard.putNumber("Set Distance Climb Deploy", DEPLOY_DISTANCE.get(Distance.Unit.INCH));
 
-           SmartDashboard.putNumber("Climb Deploy Encoder", climbDeployEncoder.getFPGAIndex());
+           //SmartDashboard.putNumber("Climb Deploy Encoder", climbDeployEncoder.getRaw());
  
            SmartDashboard.putNumber("Climb Deploy Position", getPosition().get(Distance.Unit.INCH));
            //SmartDashboard.putNumber("Climb Deploy Current", climbDeployTalon.getStatorCurrent());
@@ -139,6 +140,7 @@ public class ClimbDeploy extends NRSubsystem{
            //SmartDashboard.putNumber("Climb Deploy Current", pdp.getCurrent(RobotMap.CLIMB_DEPLOY_CHANNEL));
            SmartDashboard.putNumber("Goal Position Climb Deploy: ", ClimbDeploy.goalPositionClimb.get(Distance.Unit.INCH));
        }
+       SmartDashboard.putNumber("Climb Deploy Encoder", climbDeployEncoder.getDistance());
    }
  
    public Distance getPosition(){
@@ -201,7 +203,7 @@ public class ClimbDeploy extends NRSubsystem{
 
             SmartDashboard.putNumber("Set Distance Climb Deploy", DEPLOY_DISTANCE.get(Distance.Unit.INCH));
 
-            SmartDashboard.putNumber("Climb Deploy Encoder", climbDeployEncoder.getFPGAIndex());
+            SmartDashboard.putNumber("Climb Deploy Encoder", climbDeployEncoder.getRaw());
 
         //    SmartDashboard.getNumber("CLIMB DEPLOY PERCENT", 0);
 
@@ -214,6 +216,7 @@ public class ClimbDeploy extends NRSubsystem{
 
             goalPositionClimb = new Distance(SmartDashboard.getNumber("Goal Position Climb Deploy: ", goalPositionClimb.get(Distance.Unit.INCH)), Distance.Unit.INCH);
         }   
+        SmartDashboard.putNumber("Climb Deploy Encoder", climbDeployEncoder.getDistance());
       }
    }
 

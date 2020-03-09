@@ -28,7 +28,7 @@ public class TransferCommand extends NRCommand {
     @Override
     public boolean isFinishedNR(){
         currentTime = Timer.getFPGATimestamp();
-        System.out.println(currentTime - start);
+     //   System.out.println(currentTime - start);
         return (currentTime - start) > transferTime.get(Time.Unit.SECOND);
     }
 }

@@ -20,8 +20,8 @@ public class HoodJoystickCommand extends JoystickCommand {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void onExecute() {
-    if(!OI.climbMode)
-      Hood.getInstance().setMotorSpeedRaw(OI.getInstance().getOperatorLeftTurn());
+    if(!OI.climbMode){}
+      //Hood.getInstance().setMotorSpeedRaw(OI.getInstance().getOperatorLeftTurn());
   }
 
   public long getPeriodOfCheckingForSwitchToJoystick() {

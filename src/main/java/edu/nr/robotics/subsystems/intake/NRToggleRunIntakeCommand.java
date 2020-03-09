@@ -1,20 +1,15 @@
 package edu.nr.robotics.subsystems.intake;
 
 import edu.nr.lib.commandbased.NRCommand;
-import edu.nr.robotics.subsystems.transfer.Transfer;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ToggleRunIntakeCommand extends CommandBase
-{
-    public ToggleRunIntakeCommand()
-    {
-        addRequirements(Intake.getInstance());
+public class NRToggleRunIntakeCommand extends NRCommand{
+
+    public NRToggleRunIntakeCommand(){
+        super(Intake.getInstance());
     }
 
     @Override
-    public void execute()
-    {
-     //   System.out.println("Toggle Run Intake Motors has been called");
+    public void onExecute(){
         if(Intake.getInstance().isIntakeDeployed())
         {
             if(Intake.getInstance().getSetPercent() == 0)
@@ -25,8 +20,8 @@ public class ToggleRunIntakeCommand extends CommandBase
     }
 
     @Override
-    public boolean isFinished()
-    {
+    public boolean isFinishedNR(){
         return true;
     }
+
 }

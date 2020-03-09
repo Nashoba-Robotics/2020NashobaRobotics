@@ -3,6 +3,7 @@ package edu.nr.robotics;
 import edu.nr.lib.commandbased.DoNothingCommand;
 import edu.nr.lib.gyro.ResetGyroCommand;
 import edu.nr.lib.interfaces.SmartDashboardSource;
+import edu.nr.lib.network.LimelightNetworkTable;
 import edu.nr.lib.network.LimelightNetworkTable.Pipeline;
 import edu.nr.lib.units.Angle;
 import edu.nr.lib.units.Distance;
@@ -12,6 +13,7 @@ import edu.nr.robotics.multicommands.EmergencyBallStopCommand;
 import edu.nr.robotics.multicommands.PointBlankShotCommand;
 import edu.nr.robotics.multicommands.ProjectileVomitCommand;
 import edu.nr.robotics.multicommands.ShootCommand;
+import edu.nr.robotics.multicommands.SwitchLimelightFeed;
 import edu.nr.robotics.subsystems.bashbar.ToggleDeployBashBarCommand;
 import edu.nr.robotics.subsystems.climbdeploy.ClimbDeploy;
 import edu.nr.robotics.subsystems.climbdeploy.ClimbDeployCommand;
@@ -44,13 +46,15 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.nr.robotics.subsystems.turret.SetTurretCenterCommand;
 import edu.nr.robotics.subsystems.turret.SetTurretLimelightCommand;
+import edu.nr.robotics.subsystems.turret.TurretLeftButtonCommand;
+import edu.nr.robotics.subsystems.turret.TurretRightButtonCommand;
 import edu.nr.robotics.subsystems.turret.setTurretLeftCommand;
 import edu.nr.robotics.subsystems.turret.setTurretRightCommand;
 
 public class OI implements SmartDashboardSource {
 
     public static final double DRIVE_JOYSTICK_DEAD_ZONE = 0.3;
-    public static final double JOYSTICK_DEAD_ZONE = 0.3;
+    public static final double JOYSTICK_DEAD_ZONE = 0.5;
 
     public static final double SPEED_MULTIPLIER = 1.0;
 
@@ -74,16 +78,16 @@ public class OI implements SmartDashboardSource {
     private static final int EMERGENCY_MANUAL_SWITCH = 1;
     private static final int ACQUIRE_TARGET_NUMBER = 2; 
     private static final int TOGGLE_SHOOTER_NUMBER = 3;
-    private static final int FIRE_NUMBER = 7;
+    private static final int FIRE_NUMBER = 10;
     private static final int FIRE_ONE_NUMBER = 11;
-    private static final int POINT_BLANK_SHOT_NUMBER = 1;
+    private static final int POINT_BLANK_SHOT_NUMBER = 16;
 
-    private static final int BASH_BAR_NUMBER = 7;
+    //private static final int BASH_BAR_NUMBER = 7;
 
-    private static final int EMERGENCY_SUBSYSTEM_DISABLE_NUMBER = 9;
+    private static final int EMERGENCY_SUBSYSTEM_DISABLE_NUMBER = 2;
 
-    private static final int INCREMENT_HOOD_UP_NUMBER = 7;
-    private static final int INCREMENT_HOOD_DOWN_NUMBER = 1;
+    private static final int INCREMENT_HOOD_UP_NUMBER = 4;
+    private static final int INCREMENT_HOOD_DOWN_NUMBER = 6;
     private static final int ZERO_BALL_COUNT_NUMBER = 5;
 
     private static final int TURRET_LEFT_POSITION_NUMBER = 100;
@@ -95,15 +99,15 @@ public class OI implements SmartDashboardSource {
     private static final int DEPLOY_CLIMB_HIGH = 7;
     private static final int CLIMB_NUMBER = 2;
 
-    private static final int COLOR_WHEEL_SPIN_NUMBER = 100;
-    private static final int COLOR_WHEEL_FIND_COLOR_NUMBER = 100;
+    //private static final int COLOR_WHEEL_SPIN_NUMBER = 100;
+    //private static final int COLOR_WHEEL_FIND_COLOR_NUMBER = 100;
 
     private static final int PUKE_INTAKE_NUMBER = 6;
     private static final int TOGGLE_INTAKE_MOTORS_NUMBER = 3;
     private static final int TOGGLE_INTAKE_DEPLOYED_NUMBER = 5;
     private static final int TOGGLE_INTAKE_ROUTINE_NUMBER = 1;
 
-    private static final int STAY_IN_PLACE_MODE_NUMBER = 1;
+    //private static final int STAY_IN_PLACE_MODE_NUMBER = 1;
 
     private static final int PUKE_ALL_NUMBER = 4;
 
@@ -134,6 +138,7 @@ public class OI implements SmartDashboardSource {
 
     private JoystickButton acquireTargetButton;
     private JoystickButton shooterToggleButton;
+    private JoystickButton pointBlankButton;
 
     private JoystickButton emergencyDisableSwitch;
 
@@ -165,6 +170,8 @@ public class OI implements SmartDashboardSource {
     public void initDriveLeft() {
 
         new JoystickButton(driveLeft, 14).whenPressed(new ZeroBallCountCommand());
+
+        new JoystickButton(driveLeft, 1).whileActiveOnce(new EnableSniperMode());
         //new JoystickButton(driveLeft, SNIPER_MODE_NUMBER).whileActiveOnce(new EnableSniperMode());
         // buttons go here
 
@@ -182,7 +189,8 @@ public class OI implements SmartDashboardSource {
 
     public void initDriveRight() {
         //new JoystickButton(driveRight, 1).whileActiveOnce(new ShootCommand(), true);
-        new JoystickButton(driveRight, 16).whenPressed(new PointBlankShotCommand());
+        pointBlankButton = new JoystickButton(driveRight, POINT_BLANK_SHOT_NUMBER);
+        pointBlankButton.whileActiveOnce(new PointBlankShotCommand());
     }
 
     public void initOperatorLeft() {
@@ -192,42 +200,33 @@ public class OI implements SmartDashboardSource {
         new JoystickButton(operatorLeft, TOGGLE_INTAKE_DEPLOYED_NUMBER).whenPressed(new IntakeToggleDeployCommand());
         new JoystickButton(operatorLeft, PUKE_INTAKE_NUMBER).whileActiveOnce(new IntakePukeCommand(), true);
 
-        new JoystickButton(operatorLeft
-        , 3).whenPressed(new ToggleRunIntakeCommand());
-        new JoystickButton(operatorLeft, 11).whenPressed(new setTurretLeftCommand());
+        new JoystickButton(operatorLeft, TOGGLE_INTAKE_MOTORS_NUMBER).whenPressed(new ToggleRunIntakeCommand());
+        new JoystickButton(operatorLeft, 11).whileActiveOnce(new TurretLeftButtonCommand());
         new JoystickButton(operatorLeft, 9).whenPressed(new SetTurretCenterCommand());
 
-        new JoystickButton(operatorLeft, 10).whileActiveOnce(new FireCommand(), true);
-
-
+        new JoystickButton(operatorLeft, FIRE_NUMBER).whileActiveOnce(new FireCommand(), true);
 
         acquireTargetButton = new JoystickButton(operatorLeft, ACQUIRE_TARGET_NUMBER); 
         acquireTargetButton.whileActiveOnce(new AcquireTargetCommand(), true);
 
-       
-    
-
-/*        new JoystickButton(operatorLeft, INCREMENT_HOOD_UP_NUMBER).whileActiveOnce(new HoodUpButtonCommand());
-
-        new JoystickButton(operatorLeft, INCREMENT_HOOD_DOWN_NUMBER).whileActiveOnce(new HoodDownButtonCommand());
-
-        //new JoystickButton(operatorLeft, ZERO_HOOD_NUMBER).whenPressed(new ZeroHoodCommand());*/
+        //new JoystickButton(operatorLeft, ZERO_HOOD_NUMBER).whenPressed(new ZeroHoodCommand());
     }
 
     public void initOperatorRight() {
-        new JoystickButton(operatorRight, TURRET_RIGHT_POSITION_NUMBER).whenPressed(new setTurretRightCommand());
         //new JoystickButton(operatorRight, 1).whileActiveOnce(new IntakePukeCommand(), true);
         new JoystickButton(operatorRight, FIRE_ONE_NUMBER).whileActiveOnce(new FireOneCommand(), true);
-
+        new JoystickButton(operatorRight, INCREMENT_HOOD_UP_NUMBER).whileActiveOnce(new HoodUpButtonCommand());
+        new JoystickButton(operatorRight, INCREMENT_HOOD_DOWN_NUMBER).whileActiveOnce(new HoodDownButtonCommand());
 
         emergencyManualSwitch = new JoystickButton(operatorRight, EMERGENCY_MANUAL_SWITCH);
+        emergencyManualSwitch.whileActiveOnce(new SwitchLimelightFeed());
         new JoystickButton(operatorRight, EMERGENCY_SUBSYSTEM_DISABLE_NUMBER).whileActiveOnce(new EmergencyBallStopCommand(), false);
         
-        shooterToggleButton = new JoystickButton(operatorRight, TOGGLE_SHOOTER_NUMBER); 
-        shooterToggleButton.whileActiveOnce(new ShooterToggleCommand(), true);
+        new JoystickButton(operatorRight, TOGGLE_SHOOTER_NUMBER).whenPressed(new ShooterToggleCommand());
 
         new JoystickButton(operatorRight, ZERO_BALL_COUNT_NUMBER).whenPressed(new ZeroBallCountCommand());
 
+        new JoystickButton(operatorRight, TURRET_RIGHT_POSITION_NUMBER).whileActiveOnce(new TurretRightButtonCommand());
         
         new JoystickButton(operatorRight, CLIMB_NUMBER).whileActiveOnce(new ClimbCommand(), true);
         /*
@@ -297,7 +296,7 @@ public class OI implements SmartDashboardSource {
     }
 
     private static double snapDriveJoysticks(double value, double deadZone) {
-        System.out.println("snapdrive joysticks value in + " + value);
+        //System.out.println("snapdrive joysticks value in + " + value);
         if (Math.abs(value) < deadZone) {
             value = 0;
         } else if (value > 0) {
@@ -306,7 +305,7 @@ public class OI implements SmartDashboardSource {
             value += deadZone;
         }
         value /= 1 - deadZone;
-        System.out.println("snapdrive joysticks value out + " + value);
+        //System.out.println("snapdrive joysticks value out + " + value);
         return value;
     }
 
@@ -323,7 +322,7 @@ public class OI implements SmartDashboardSource {
     }
 
     public double getOperatorLeftTurn() {
-        return snapDriveJoysticks(operatorLeft.getX(), JOYSTICK_DEAD_ZONE);
+        return snapDriveJoysticks(operatorLeft.getX(), 0.5);
     }
 
     /*
@@ -369,7 +368,10 @@ public class OI implements SmartDashboardSource {
     }
 
     public boolean getManualMode() {
-        //return true;
+        if(emergencyManualSwitch.get() == true)
+        {
+            LimelightNetworkTable.getInstance().setPipeline(Pipeline.DriverCam);
+        }
         return emergencyManualSwitch.get();
     }
 
@@ -379,5 +381,10 @@ public class OI implements SmartDashboardSource {
 
     public boolean getShooterToggleHeld() {
         return shooterToggleButton.get();
+    }
+
+    public boolean getPointBlank()
+    {
+        return pointBlankButton.get();
     }
 }
