@@ -5,7 +5,6 @@ import edu.nr.lib.NRMath;
 /**
  * 
  *  A class doing the calculations to turn joystick values into motor input values.
- *  
  */
 
 public class DriveTypeCalculations {
@@ -58,15 +57,15 @@ public class DriveTypeCalculations {
         // Negative inertia!
         double negInertiaScalar;
         if (turn * negInertia > 0) {
-            // If we are moving away from 0.0, aka, trying to get more wheel.
+            //If we are moving away from 0.0, aka, trying to get more wheel
             if(isHighGear) {
-            	negInertiaScalar = highNegInertiaTurnScalar;
+				negInertiaScalar = highNegInertiaTurnScalar;
             } else {
             	negInertiaScalar = lowNegInertiaTurnScalar;
             }
             
         } else {
-            // Otherwise, we are attempting to go back to 0.0.
+			//Otherwise, we are attempting to go back to 0.0
             if (isHighGear) {
             	if (Math.abs(turn) > highNegInertiaThreshold) {
             		negInertiaScalar = highNegInertiaFarScalar;

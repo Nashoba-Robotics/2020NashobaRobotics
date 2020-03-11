@@ -161,8 +161,8 @@ public class OI implements SmartDashboardSource {
         initDriveLeft();
         initDriveRight();
 
-        initOperatorLeft();
-        initOperatorRight();
+        //initOperatorLeft();
+        //initOperatorRight();
 
         SmartDashboardSource.sources.add(this);
     }

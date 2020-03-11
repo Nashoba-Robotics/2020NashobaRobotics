@@ -122,7 +122,7 @@ public class ClimbDeploy extends NRSubsystem{
    }
  
    public void SmartDashboardInit(){
-       if(EnabledSubsystems.CLIMB_DEPLOY_SMARTDASHBOARD_DEBUG_ENABLED){
+       if(EnabledSubsystems.CLIMB_DEPLOY_SMARTDASHBOARD_DEBUG_ENABLED && EnabledSubsystems.CLIMB_DEPLOY_ENABLED){
            SmartDashboard.putNumber("F_POS_CLIMB_DEPLOY", F_POS_CLIMB_DEPLOY);
            SmartDashboard.putNumber("P_POS_CLIMB_DEPLOY", P_POS_CLIMB_DEPLOY);
            SmartDashboard.putNumber("I_POS_CLIMB_DEPLOY", I_POS_CLIMB_DEPLOY);
@@ -186,11 +186,11 @@ public class ClimbDeploy extends NRSubsystem{
           climbDeployVictor.set(ControlMode.PercentOutput, percent);
       }
    }
- 
+
    public void smartDashboardInfo(){
       if(climbDeployVictor != null)
       {
-        if(EnabledSubsystems.CLIMB_DEPLOY_SMARTDASHBOARD_DEBUG_ENABLED){
+        if(EnabledSubsystems.CLIMB_DEPLOY_SMARTDASHBOARD_DEBUG_ENABLED && EnabledSubsystems.CLIMB_DEPLOY_ENABLED){
             F_POS_CLIMB_DEPLOY = SmartDashboard.getNumber("F_POS_CLIMB_DEPLOY", F_POS_CLIMB_DEPLOY);
             P_POS_CLIMB_DEPLOY = SmartDashboard.getNumber("P_POS_CLIMB_DEPLOY", P_POS_CLIMB_DEPLOY);
             I_POS_CLIMB_DEPLOY = SmartDashboard.getNumber("I_POS_CLIMB_DEPLOY", I_POS_CLIMB_DEPLOY);

@@ -96,13 +96,13 @@ public class Robot extends TimedRobot {
         //ColorWheel.init();
 
         OI.init();
-        Winch.init();
-        ClimbDeploy.init();
+        //Winch.init();
+        //ClimbDeploy.init();
         Drive.init();
-        Turret.init();
-        Shooter.init();
-        Hood.init();
-        Intake.init();
+        //Turret.init();
+        //Shooter.init();
+        //Hood.init();
+        //Intake.init();
         Indexer.init();
         Transfer.init();
 

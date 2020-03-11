@@ -1,6 +1,7 @@
 package edu.nr.robotics.subsystems.turret;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -23,6 +24,8 @@ public class Turret extends NRSubsystem {
     private static double P_POS_TURRET = 1.7; // 0.2 before this
     private static double I_POS_TURRET = 0;
     private static double D_POS_TURRET = 0;
+
+    private static double MMfeedForward = 0;
 
     private static Angle setAngle = Angle.ZERO;
     public static Angle goalAngle = Angle.ZERO;
@@ -174,6 +177,7 @@ public class Turret extends NRSubsystem {
         }
     }
 
+
     public double getP(){
         return P_POS_TURRET;
     }
@@ -237,8 +241,4 @@ public class Turret extends NRSubsystem {
         turretTalon.setSelectedSensorPosition(0);
     }
 
-    public void setP()
-    {
-        
-    }
 }
